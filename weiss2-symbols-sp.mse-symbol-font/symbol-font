@@ -1,0 +1,176 @@
+mse version: 2.0.0
+version: 2013-12-15
+short name: normal2
+position hint: 000
+
+image font size: 13
+horizontal space: 1
+scale text: true
+
+# deprecated
+#symbol:
+#	code: act
+#	image: act.png
+#	enabled: true
+#symbol:
+#	code: auto
+#	image: auto.png
+#	enabled: true
+#symbol:
+#	code: cont
+#	image: cont.png
+#	enabled: true
+
+# better versions, works with justify, for some reason	
+symbol:
+	code: S
+	image: act.png
+	image font size: 103
+	enabled: true
+symbol:
+	code: A
+	image: auto.png
+	image font size: 103
+	enabled: true
+symbol:
+	code: C
+	image: cont.png
+	image font size: 103
+	enabled: true
+# activations
+symbol:
+	code: r
+	image: rest.png
+	enabled: true
+symbol:
+	code: v
+	image: reverse.png
+	enabled: true
+symbol:
+	code: s
+	image: stand.png
+	enabled: true
+# numbers	
+symbol:
+	code: 1
+	image: one.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 2
+	image: two.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 3
+	image: three.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 4
+	image: four.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 5
+	image: five.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 6
+	image: six.png
+	image font size: 13
+	enabled: true
+# traits
+symbol:
+	code: <
+	image: aleft.png
+	enabled: true
+symbol:
+	code: >
+	image: aright.png
+	enabled: true
+# special symbols
+symbol:
+	code: b
+	image: backupmini.png
+	enabled: true
+symbol:
+	code: c
+	image: clockshiftmini.png
+	enabled: true
+symbol:
+	code: x
+	image: cx_combo.png
+	image font size: 52
+	enabled: true
+# climax triggers
+symbol:
+	code: !
+	image: bouncetrigger.png
+	enabled: true
+symbol:
+	code: @
+	image: bagtrigger.png
+	enabled: true
+symbol:
+	code: #
+	image: booktrigger.png
+	enabled: true
+symbol:
+	code: $
+	image: burntrigger.png
+	enabled: true
+symbol:
+	code: %
+	image: doortrigger.png
+	enabled: true
+symbol:
+	code: ^
+	image: gatetrigger.png
+	enabled: true
+symbol:
+	code: &
+	image: goldtrigger.png
+	enabled: true
+symbol:
+	code: *
+	image: standbytrigger.png
+	enabled: true
+	
+insert symbol menu:
+	item:
+		type: submenu
+		name: Types of Abilities
+		item: S
+		item: A
+		item: C
+	item:
+		type: submenu
+		name: Effect Icons
+		item: x
+		item: r
+		item: v
+		item: s
+		item: b
+		item: c
+	item:
+		type: submenu
+		name: Trigger Icons
+		item: !
+		item: @
+		item: #
+		item: $
+		item: %
+		item: ^
+		item: &
+		item: *
+	item:
+		type: submenu
+		name: Pay Stock
+		item: 1
+		item: 2
+		item: 3
+		item: 4
+		item: 5
+		item: 6

@@ -1,0 +1,436 @@
+﻿numeric := filter_text@(match: "^[0123456789]+")
+rarity	:= filter_text@(match: "^[CRU]+")
+level_f := filter_text@(match: "^[0123]+")
+auto_bold :=
+{
+	temp := input
+	# Remove all size tags.
+	input := temp
+}
+
+remove_kw :=
+{
+	if contains(input, match: "<i-keyword>") then
+		"<sym-auto><i-keyword>" + remove_tags( filter_text(match: "<i-keyword>(.+)</i-keyword>", input) ) + "</i-keyword></sym-auto>"
+	else
+		"<sym-auto><i-keyword>" + input + "</i-keyword></sym-auto>"
+}
+
+color_to_word := [
+	g: "green"
+	r: "red"
+	y: "yellow"
+	b: "blue"
+]
+
+auto_fix := 
+	# Add Keywords
+	# step 1 : remove all automatic tags
+	remove_tag@(tag: "<sym-auto>") +
+	remove_tag@(tag: "<i-auto>")   +
+	remove_tag@(tag: "<b-auto>")   +
+	remove_tag@(tag: "<error-spelling") +
+	remove_tag@(tag: "<nospellcheck") +
+	remove_tag@(tag: "<color") +
+	remove_tag@(tag: "<size") +
+	
+	# step 2 : reminder text for keywords
+	# before: not contains(card.rules_text, match: "<i-keyword>") // and not used_placeholders
+	expand_keywords@(
+		condition: { correct_case and not used_placeholders  }, 
+		default_expand: { true },
+		combine: {
+		#	keyword  := "<nospellcheck>{keyword}</nospellcheck>"
+		#	reminder := process_english_hints(reminder)
+			if mode == "trigger" then if reminder == "standby" then "<i>({reminder})</i>" else "<i>(</i>.<i>{reminder})</i>"
+			else if mode == "cx_generics" then "{reminder}"
+			else if mode == "reminder" then "<i>({reminder})</i>"
+			else if mode == "symbol_shortcut" then "<sym>{reminder}</sym>"
+			else if mode == "rule_shortcut" then "{reminder}"
+			else "<atom-reminder-{mode}><i-auto>({reminder})</i-auto></atom-reminder-{mode}>"	
+		#	else keyword + if expand then "<atom-reminder-{mode}> ({reminder})</atom-reminder-{mode}>"
+		}
+		) +
+	# step 2b : move action keywords' reminder text to the end of the line
+	replace@(
+		match: "(<atom-reminder-action>(?:(?!<kw-).)*</atom-reminder-action></kw[^>]*>)(((?!<atom-reminder| ?<kw-)[^\n(])+)",
+		replace: "\\2\\1"
+		) +
+		
+	# step 2c : remove duplicate reminder text
+	replace@(
+		match: "(<atom-reminder-[^>]*>[^)]+[)]</atom-reminder-[^>]*>)([^\n]+)\\1",
+		replace: "\\2\\1"
+		)  +
+	
+	# step 3: revert back <kw-a>
+	#tag_contents@(
+	#	tag: "<kw-a>"
+	#	contents: remove_kw
+	#) +
+	#remove_tag@(tag: "<kw-a>") +
+		
+	# Step 3: Add color and size
+	replace@(match: "»", replace: "<color:rgba(0,0,0,255)>\\0<color:card.rules_text.color>") + 
+	replace@(match: "«", replace: "<color:rgba(0,0,0,255)>\\0<color:card.rules_text.color>") +
+	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
+	#replace@(match: "</i>", replace: "\\0<color:card.rules_text.color><size: 9.7>") +
+	replace@(match: "<b>", replace: "<size:9.2><color:rgba(0,0,0,240)>\\0") + 		# default font: 9.4
+	replace@(match: "</b>", replace: "\\0<color:card.rules_text.color><size:9.4>")
+	# it was 8.95 over 9.2
+	# Step 4: Debug Commands
+	# + trace@()
+
+
+auto_italic :=
+{
+	input := replace(to_text(input),match: "[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\.\\!\\?]", replace: "<i>\\0</i>")
+}
+
+using_sp_override :=
+{
+	if filter_text(match: "(\\w+)", in_context:"SP override: <match>", input:card.notes) == "true" then
+		true
+	else if card.rarity == "SP" or card.rarity == "SSP" then
+		true
+	else
+		false
+}
+
+card_colored_level :=
+{
+	if level != 0 then 
+		input := "level/" + color[0] + "l" + to_string(level) + ".png"
+	else 
+		input := "level/l0.png"
+}
+
+card_colored_soul :=
+{
+	if soul == "one - 2 traits"
+	then
+		input := "character/" + set.side + "/" + color[0] + "1s.png"
+	else if soul == "one - 1 trait"
+	then
+		input := "character/" + set.side + "/" + color[0] + "1s1t.png"
+	else if soul == "one - no trait"
+	then
+		input := "character/" + set.side + "/"  + color[0] + "1s0t.png"
+	else if soul ==	"two - 2 traits" 
+	then 
+		input := "character/" + set.side + "/" + color[0] + "2s.png"
+	else if soul ==	"two - 1 trait" 
+	then 
+		input := "character/" + set.side + "/" + color[0] + "2s1t.png"
+	else if soul ==	"two - no trait" 
+	then 
+		input := "character/"+ set.side + "/"  + color[0] + "2s0t.png"
+	else if soul == "three - 2 traits"
+	then
+		input := "character/"+ set.side + "/"  + color[0] + "3s.png"
+	else if soul == "three - 1 trait"
+	then
+		input := "character/"+ set.side + "/"  + color[0] + "3s1t.png"
+	else if soul == "three - no trait"
+	then
+		input := "character/" + set.side + "/" + color[0] + "3s0t.png"
+	else  input := "character/" + set.side + "/" + color[0] + "0s.png"
+}
+
+card_serial := 
+{
+	if card.rarity == "PR"
+	then
+		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d") + " " + card.rarity
+	else if card.rarity == "(Alternate Art)" and rarity_or_copy() == "PR"
+	then
+		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d") + " " + card.rarity
+	else if card.rarity == "TD"
+	then
+		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d") + " " + card.rarity
+	else if card.rarity == "(Alternate Art)" and rarity_or_copy() == "TD"
+	then
+		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + " " + rarity_or_copy()
+	else
+		input := set.set_id + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut() + " " + rarity_or_copy()
+}
+
+alt_pr_card_number :=
+{
+	for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
+		pr_card_number(card: found_card)
+}
+
+alt_td_card_number :=
+{
+	for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
+		td_card_number(card: found_card)
+}
+
+rarity_or_copy := 
+{
+	if (card.rarity == "(Alternate Art)") then
+		for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
+			found_card.rarity
+	else
+		card.rarity
+}
+
+pr_card_number :=
+{
+	position (
+		of: card
+		in: set
+		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + sort_name(card.cardname) }
+		filter: { card.rarity == "PR" }
+		) + 1
+}
+
+td_card_number :=
+{
+	position (
+		of: card
+		in: set
+		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + sort_name(card.cardname) }
+		filter: { card.rarity == "TD" }
+		) + 1
+}
+
+override_sort :=
+{
+	filter_text(match: "(\\w+)", in_context:"override sort: <match>", input:card.notes)
+}
+
+alt_art_override :=
+{
+	filter_text(match: "(\\w+)", in_context:"alt art override: <match>", input:card.notes)
+}
+
+using_alt_override :=
+{
+	if alt_art_override() == "" or contains(input.serial, match: alt_art_override()) then true
+	else false
+}
+
+alt_art_number :=
+{
+	for each found_value in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() })
+	do
+	    position (
+		of: found_value
+		in: set
+		order_by: {	override_sort() +
+			color_sort() +
+			type_sort() +
+			rarity_sort() +
+			level_sort() +
+			cost_sort() +
+			(to_string(card.power,format: "010d") or else "0000") +
+			sort_name(card.cardname)  }
+		filter: 
+		{
+			card.rarity == "RR+" or
+			card.rarity == "RR" or
+			card.rarity == "R" or
+			card.rarity == "U" or
+			card.rarity == "C" or
+			card.rarity == "CC" or
+			card.rarity == "CR"
+		}
+		) + 1
+}
+
+is_foil_or_alt_art :=
+{
+	if x.rarity == "SP" or x.rarity == "SSP" or x.rarity == "RRR" or x.rarity == "SR" or x.rarity == "(Alternate Art)"
+	then true
+	else false
+}
+
+is_pr_or_td :=
+{
+	if x.rarity == "TD" or x.rarity == "PR"
+	then true
+	else false
+}
+
+foil_shortcut :=
+{
+	if card.rarity == "SP" or 
+	   card.rarity == "SSP"
+	then
+		card.rarity
+	else if card.rarity == "RRR"
+	then
+		"R"
+	else if card.rarity == "SR"
+	then
+		"S"
+	else
+		""
+}
+level_sort := {
+	if card.level == "zero" then "000"
+	else if card.level == "one" then "001"
+	else if card.level == "two" then "002"
+	else if card.level == "three" then "003"
+	else "004"
+}
+cost_sort := {
+	if card.cost == "zero" then "000"
+	else if card.cost == "one" then "001"
+	else if card.cost == "two" then "002"
+	else if card.cost == "three" then "003"
+	else if card.cost == "four" then "004"
+	else if card.cost == "five" then "005"
+	else if card.cost == "six" then "006"
+	else if card.cost == "seven" then "007"
+	else if card.cost == "eight" then "008"
+	else if card.cost == "nine" then "009"
+	else if card.cost == "ten" then "010"
+	else if card.cost == "eleven" then "011"
+	else if card.cost == "twelve" then "012"
+	else if card.cost == "thirteen" then "013"
+	else if card.cost == "fourteen" then "014"
+	else if card.cost == "fifteen" then "015"
+	else if card.cost == "twenty" then "020"
+	else "999"
+}
+
+card_number :=
+{
+	if is_foil_or_alt_art(x: card)
+	then
+	    alt_art_number()
+	else
+	    position (
+		of: card
+		in: set
+		order_by: { 
+			override_sort() +
+			color_sort() +
+			type_sort() +
+			rarity_sort() +
+			level_sort() +
+			cost_sort() +
+			(to_string(card.power,format: "010d") or else "0000") +
+			sort_name(card.cardname) 
+			}
+		filter: 
+		{	card.rarity == "RR+" or
+			card.rarity == "RR" or
+			card.rarity == "R" or
+			card.rarity == "U" or
+			card.rarity == "C" or
+			card.rarity == "CC" or
+			card.rarity == "CR"
+		}
+		) + 1
+}
+
+color_sort :=
+{
+	if card.color == "yellow" then "A"
+	else if card.color == "green" then "B"
+	else if card.color == "red"	then "C"
+	else "D"
+}
+rarity_sort :=
+{
+	if card.rarity == "RR+" then "A"
+	else if card.rarity == "RR" then "B"
+	else if card.rarity == "R" then "C"
+	else if card.rarity == "U" then "D"
+	else if card.rarity == "C" then "E"
+	else if card.rarity == "CR" then "F"
+	else if card.rarity == "CC" then "G"
+	else "H"
+}
+type_sort :=
+{
+	if card.card_type == "character" then "A"
+	else if card.card_type == "event" then "B"
+	else if card.card_type == "climax" then "C"
+	else "D"
+}
+
+sort_name :=
+	# Remove "The", "A", and "And" at the beginning
+	replace@(match: "^(The|An?) ", replace: "") +
+	# Remove commas and apostrophes
+	replace@(match: "(,|'|’)", replace: "") +
+	# Remove bold and italic tags
+	replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") +
+	# Make lowercase
+	to_lower
+card_rules_height :=
+{
+	ceil(set.stylesheet.card_style.rules_text.content_height)
+}
+card_rules_height_2 :=
+{
+	ceil(set.stylesheet.extra_card_style.rules_text_copy1.content_height)
+}
+
+card_flavor_height :=
+{
+	set.stylesheet.card_style.flavor_text.content_height
+}
+ceil :=
+{
+	if input > to_int(input) then to_int(input) +1
+	else input
+}
+card_climax_rules_height :=
+{
+	set.stylesheet.card_style.climax_rules_text.content_height
+}
+card_climax_flavor_height :=
+{
+	set.stylesheet.card_style.climax_flavor_text.content_height
+}
+flavor_bottom :=
+{
+	if event then flavor_event(height: height, rules: rules)
+	else flavor_chara(height: height, rules: rules)
+}
+flavor_event :=
+{
+	if rules then 547 - height
+	else 557
+}
+flavor_chara :=
+{
+	if rules then 532 - height
+	else 547
+}
+card_color_bar :=
+{
+	if contains(card.rarity, match: "SP") then
+		input := "bars/SP_Blur/" + card.color + "bar.png"
+	else
+		input := "bars/" + card.color + "bar.png"
+}
+
+white_color_bar :=
+{
+	if contains(card.rarity, match: "SP") then
+		input := "bars/SP_Blur/whitebar.png"
+	else
+		input := "bars/whitebar.png"
+}
+
+climax_and_character_colored_card :=
+{
+	if type == "character" then input := card_colored_soul(soul: soul, color: color)
+	else if type == "climax" then input := "climax/" + set.side + "/"  + color + ".png"
+	else if type == "event" then input := "event/" + set.side + "/" + color + ".png"
+}
+
+sp_shadow :=
+{
+	if (contains(card.rarity, match: "SP")) then
+		rgb(255,255,255)
+	else
+		rgba(0,0,0,0)
+}

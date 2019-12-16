@@ -1,0 +1,7 @@
+# Ignore everything
+*
+# Whitelist all folders/files under weiss2
+!weiss2*/
+!weiss2*/**
+# Obviously add in .gitignore
+!.gitignore
