@@ -146,8 +146,8 @@ card field:
 card field:
 	type: text
 	name: replay text
-	mult line: true
-	description: The rules text for the replay for this card.
+	multi line: true
+	description: The rules text for the replay (or replays) for this card.
 	script: auto_fix(value)
 card field:
 	type: text
