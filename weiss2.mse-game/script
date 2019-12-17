@@ -371,11 +371,28 @@ card_rules_height_2 :=
 {
 	ceil(set.stylesheet.extra_card_style.rules_text_copy1.content_height)
 }
-
 card_flavor_height :=
 {
 	set.stylesheet.card_style.flavor_text.content_height
 }
+replay_text_height :=
+{
+	set.stylesheet.card_style.replay_text.content_height
+}
+replay_text_width :=
+{
+	set.stylesheet.card_style.replay_text.width - 2
+}
+
+replay_box_height :=
+{
+	if set.stylesheet.extra_card_style.replay_bar_1.visible == true then
+		set.stylesheet.extra_card_style.replay_bar_1.height + 7 # 7 is the padding 4 at top and 3 at bottom
+	else
+		0
+}
+
+
 ceil :=
 {
 	if input > to_int(input) then to_int(input) +1
