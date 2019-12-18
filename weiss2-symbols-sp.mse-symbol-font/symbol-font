@@ -1,6 +1,6 @@
 mse version: 2.0.0
 version: 2013-12-15
-short name: normal2
+short name: normal
 position hint: 000
 
 image font size: 13
@@ -36,6 +36,11 @@ symbol:
 	code: C
 	image: cont.png
 	image font size: 103
+	enabled: true
+symbol:
+	code: R
+	image: replay.png
+	image font size: 24
 	enabled: true
 # activations
 symbol:
@@ -102,7 +107,7 @@ symbol:
 symbol:
 	code: x
 	image: cx_combo.png
-	image font size: 52
+	image font size: 54
 	enabled: true
 # climax triggers
 symbol:
@@ -154,6 +159,7 @@ insert symbol menu:
 		item: s
 		item: b
 		item: c
+		item: y
 	item:
 		type: submenu
 		name: Trigger Icons

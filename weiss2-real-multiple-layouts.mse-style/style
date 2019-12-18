@@ -390,6 +390,7 @@ card style:
 		alignment: bottom left justify
 		font:
 			name: Vagabond
+			italic name: Vagabond Italic
 			size: 9.4
 			weight: normal
 			color: rgba(25, 25, 25, 240)
@@ -434,6 +435,7 @@ card style:
 		alignment: bottom left justify
 		font:
 			name: Vagabond
+			italic name: Vagabond Italic
 			size: 9.4
 			weight: normal
 			color: rgba(25, 25, 25, 240)
@@ -799,6 +801,7 @@ extra card style:
 		alignment: bottom left justify
 		font:
 			name: Vagabond
+			italic name: Vagabond Italic
 			size: 9.4
 			weight: normal
 			color:

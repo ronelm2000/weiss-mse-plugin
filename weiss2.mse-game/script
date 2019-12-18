@@ -76,7 +76,14 @@ auto_fix :=
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
 	#replace@(match: "</i>", replace: "\\0<color:card.rules_text.color><size: 9.7>") +
 	replace@(match: "<b>", replace: "<size:9.2><color:rgba(0,0,0,240)>\\0") + 		# default font: 9.4
-	replace@(match: "</b>", replace: "\\0<color:card.rules_text.color><size:9.4>")
+	replace@(match: "</b>", replace: "\\0<color:card.rules_text.color><size:9.4>") +
+	
+	# step 4: Add Support for Replay Text
+	replace@(
+		match: "(``)([\\d\\s\\w]+)(``)",
+		replace: "<replay>\\2</replay>"
+	) +
+	tag_contents@(tag: "<replay>", contents: { "<b-auto><color:rgba(255,0,0,240)>" + input + "</color:rgba(255,0,0,240)></b-auto>" })
 	# it was 8.95 over 9.2
 	# Step 4: Debug Commands
 	# + trace@()
