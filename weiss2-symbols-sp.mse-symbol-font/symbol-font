@@ -150,6 +150,7 @@ insert symbol menu:
 		item: S
 		item: A
 		item: C
+		item: R
 	item:
 		type: submenu
 		name: Effect Icons
@@ -159,7 +160,6 @@ insert symbol menu:
 		item: s
 		item: b
 		item: c
-		item: y
 	item:
 		type: submenu
 		name: Trigger Icons

@@ -335,7 +335,7 @@ card style:
 	flavor text:
 		bottom: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height(), rules: card.rules_text != "", event: card.card_type == "event")
+				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height(), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
 				else if card.card_type == "climax" then 227
 			}
 		left: 
@@ -366,13 +366,13 @@ card style:
 			{
 				if card.card_type == "character" then 543 - replay_box_height()
 				else if card.card_type == "event" then 557 - replay_box_height()
-				else if card.card_type == "climax" then 19 - replay_box_height()
+				else if card.card_type == "climax" then 19 # - replay_box_height()
 				# previous was 16
 			}
 		left:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 26
-				else if card.card_type == "climax" then 17
+				else if card.card_type == "climax" then 17 + replay_box_height()
 			}
 		width: 
 			{
@@ -408,7 +408,7 @@ card style:
 			{
 				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)
 				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then 8)
+				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)
 				#if card.card_type == "character" then 200
 				#else if card.card_type == "event" then 200
 				#else if card.card_type == "climax" then 19
@@ -417,7 +417,7 @@ card style:
 		left:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 26 + 6
-				else if card.card_type == "climax" then 17 + 6
+				else if card.card_type == "climax" then 17 + 8
 			}
 		width: 
 			{
@@ -588,7 +588,14 @@ extra card field:
 	type: text
 	multi line: true
 	name: rules text copy1
-	script:	remove_tag(tag:"<color", card.rules_text)
+	script:	card.rules_text
+	editable: false
+	save value: false
+extra card field:
+	type: text
+	multi line: true
+	name: replay text copy1
+	script:	card.replay_text
 	editable: false
 	save value: false
 extra card style:
@@ -617,7 +624,7 @@ extra card style:
 				else if card.card_type == "climax" then 90
 			}
 		render style: image
-		visible: { card.rules_text != "" }
+		visible: { card.rules_text != "" or card.replay_text != "" }
 		choice images:
 			default: { card_color_bar() }
 	top bar:
@@ -645,7 +652,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		visible: { card.rules_text != "" }
+		visible: { card.rules_text != "" or card.replay_text != "" }
 		choice images:
 			default: { card_color_bar() }
 	white bar:
@@ -668,7 +675,7 @@ extra card style:
 			}
 		height:
 			script:
-				if card.rules_text != "" then max(19, card_rules_height()) + replay_box_height()
+				if card.rules_text != "" or card.replay_text != "" then max(19, card_rules_height()) + replay_box_height()
 				else 0
 			
 		z index: 13
@@ -678,7 +685,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		visible: { card.rules_text != "" }
+		visible: { card.rules_text != "" or card.replay_text != "" }
 		choice images:
 			default: { white_color_bar() }
 	flavor bar:
@@ -689,7 +696,7 @@ extra card style:
 			}
 		bottom: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height(), rules: card.rules_text != "", event: card.card_type == "event")
+				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height(), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
 				else if card.card_type == "climax" then 227
 			}
 		width:
@@ -712,8 +719,16 @@ extra card style:
 			default: bars\flavorbar.png
 	## Replay Box ##
 	replay bar 1:
-		left: { set.stylesheet.card_style.replay_text.left - 7 }
-		bottom: { set.stylesheet.card_style.replay_text.bottom + 3 + 2 }
+		left: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then set.stylesheet.card_style.replay_text.left - 7
+				else set.stylesheet.card_style.replay_text.left - 3 - 2 - replay_text_height()
+			}
+		bottom:
+			{
+				if card.card_type == "character" or card.card_type == "event" then set.stylesheet.card_style.replay_text.bottom + 3 + 2
+				else set.stylesheet.card_style.replay_text.bottom - 7
+			}
 		width: 2
 		height: { replay_text_height() + 6 + 2 }
 		z index: 16
@@ -727,8 +742,16 @@ extra card style:
 		choice images:
 			default: bars\replay_border.png
 	replay bar 2:
-		left: { set.stylesheet.card_style.replay_text.left + replay_text_width() + 7 }
-		bottom: { set.stylesheet.card_style.replay_text.bottom + 3 + 2 }
+		left: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then set.stylesheet.card_style.replay_text.left + replay_text_width() + 7
+				else set.stylesheet.card_style.replay_text.left - 3 - 2 - replay_text_height()
+			}
+		bottom:
+			{
+				if card.card_type == "character" or card.card_type == "event" then set.stylesheet.card_style.replay_text.bottom + 3 + 2
+				else set.stylesheet.card_style.replay_text.bottom + replay_text_width() + 7
+			}
 		width: 2
 		height: { replay_text_height() + 6 + 2 }
 		z index: 16
@@ -742,8 +765,16 @@ extra card style:
 		choice images:
 			default: bars\replay_border.png
 	replay bar 3:
-		left: { set.stylesheet.card_style.replay_text.left - 7 }
-		bottom: { set.stylesheet.card_style.replay_text.bottom + 3 + 2 }
+		left: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then set.stylesheet.card_style.replay_text.left - 7
+				else set.stylesheet.card_style.replay_text.left - 3 - 2 - replay_text_height()
+			}
+		bottom: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then  set.stylesheet.card_style.replay_text.bottom + 3 + 2
+				else set.stylesheet.card_style.replay_text.bottom - 7
+			}
 		width: { replay_text_width() + 14 + 2 }
 		height: 2
 		z index: 16
@@ -757,8 +788,16 @@ extra card style:
 		choice images:
 			default: bars\replay_border.png
 	replay bar 4:
-		left: { set.stylesheet.card_style.replay_text.left - 7 }
-		bottom: { set.stylesheet.card_style.replay_text.bottom - replay_text_height() - 3 }
+		left: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then set.stylesheet.card_style.replay_text.left - 7
+				else set.stylesheet.card_style.replay_text.left + 3
+			}
+		bottom: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then  set.stylesheet.card_style.replay_text.bottom - replay_text_height() - 3
+				else set.stylesheet.card_style.replay_text.bottom - 7
+			}
 		width: { replay_text_width() + 14 + 2 }
 		height: 2
 		z index: 16
@@ -777,13 +816,13 @@ extra card style:
 			{
 				if card.card_type == "character" then 543 - replay_box_height()
 				else if card.card_type == "event" then 557 - replay_box_height()
-				else if card.card_type == "climax" then 19 - replay_box_height()
+				else if card.card_type == "climax" then 19
 				# previous was 16
 			}
 		left:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 26
-				else if card.card_type == "climax" then 17
+				else if card.card_type == "climax" then 17 + replay_box_height()
 			}
 		width: 
 			{
@@ -798,6 +837,7 @@ extra card style:
 				if card.card_type == "character" or card.card_type == "event" then 0
 				else if card.card_type == "climax" then 270
 			}
+		visible: { using_sp_override() }
 		alignment: bottom left justify
 		font:
 			name: Vagabond
@@ -818,4 +858,50 @@ extra card style:
 			shadow blur: 3
 		symbol font:
 			name: weiss2-symbols-sp
+			size: 12
+	replay text copy1:
+		bottom:
+			{
+				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)
+				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)
+				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)
+				#if card.card_type == "character" then 200
+				#else if card.card_type == "event" then 200
+				#else if card.card_type == "climax" then 19
+				# previous was 16
+			}
+		left:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 26 + 6
+				else if card.card_type == "climax" then 17 + 8
+			}
+		width: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				else if card.card_type == "climax" then 204 - 14 + 2
+				# previous was 209
+			}
+		height: { max(10, replay_text_height()) }
+		visible: { using_sp_override() }
+		z index: 18
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		alignment: bottom left justify
+		font:
+			name: Vagabond
+			italic name: Vagabond Italic
+			size: 9.4
+			weight: normal
+			color: rgba(25, 25, 25, 240)
+			shadow color:
+				script:
+					sp_shadow() 
+			shadow displacement x: 0
+			shadow displacement y: 0
+			shadow blur: 3
+		symbol font:
+			name: weiss2-symbols
 			size: 12

@@ -80,7 +80,7 @@ auto_fix :=
 	
 	# step 4: Add Support for Replay Text
 	replace@(
-		match: "(``)([\\d\\s\\w]+)(``)",
+		match: "(``)([\\d\\s\\w\\'\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)]+)(``)",
 		replace: "<replay>\\2</replay>"
 	) +
 	tag_contents@(tag: "<replay>", contents: { "<b-auto><color:rgba(255,0,0,240)>" + input + "</color:rgba(255,0,0,240)></b-auto>" })
@@ -394,7 +394,9 @@ replay_text_width :=
 replay_box_height :=
 {
 	if set.stylesheet.extra_card_style.replay_bar_1.visible == true then
-		set.stylesheet.extra_card_style.replay_bar_1.height + 7 # 7 is the padding 4 at top and 3 at bottom
+		replay_text_height() + 3 * 2 + 2 + 7 
+		# 3 = internal margin ; 2 = width of the box
+		# 7 is the padding 4 at top and 3 at bottom
 	else
 		0
 }
