@@ -342,6 +342,16 @@ keyword:
 	match: STANDBY`
 	mode: symbol_shortcut
 	reminder: *
+keyword:
+	keyword: Choice Trigger
+	match: CHOICE`
+	mode: symbol_shortcut
+	reminder: (
+keyword:
+	keyword: Soul Trigger
+	match: SOUL`
+	mode: symbol_shortcut
+	reminder: +
 ########
 # Rule Shortcuts
 ########
