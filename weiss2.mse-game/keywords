@@ -96,6 +96,11 @@ keyword:
 	match: standby
 	mode: trigger
 	reminder: <sym>*</sym>: When this card triggers, you may choose a character with a level equal to or less than your level+1 in your waiting room, and put it on any position of your stage as <sym>r</sym>.
+keyword:
+	keyword: choice
+	match: choice!
+	mode: trigger
+	reminder: <sym>(</sym>: When this card triggers, you may choose a character with <sym>+</sym> in your waiting room, and return it either into your hand or your stock.
 
 keyword:
 	keyword: cont +1000p +1soul

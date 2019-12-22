@@ -467,6 +467,7 @@ card style:
 			door: triggers\door.png
 			c-soul: triggers\climaxsoul.png
 			standby: triggers\standby.png
+			choice: triggers\choice.png
 	extra trigger:
 		top: 14
 		left: 333
@@ -492,6 +493,7 @@ card style:
 			door: triggers\door.png
 			c-soul: triggers\climaxsoul.png
 			standby: triggers\standby.png
+			choice: triggers\choice.png
 	card type:
 		top: 
 			{
