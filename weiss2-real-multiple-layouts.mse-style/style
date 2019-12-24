@@ -679,7 +679,6 @@ extra card style:
 			script:
 				if card.rules_text != "" or card.replay_text != "" then max(19, card_rules_height() + replay_box_height())
 				else 0
-			
 		z index: 13
 		angle:
 			{
@@ -713,6 +712,7 @@ extra card style:
 		z index: 14
 		angle:
 			{
+				# Test
 				if card.card_type == "character" or card.card_type == "event" then 0
 				else if card.card_type == "climax" then 270
 			}
@@ -849,7 +849,7 @@ extra card style:
 			color:
 				script:
 					if contains(card.rarity, match: "SP") then
-						color: rgba(20,20,20,240)
+						rgba(20,20,20,240)
 					else
 						rgba(0,0,0,0)
 			shadow color:
