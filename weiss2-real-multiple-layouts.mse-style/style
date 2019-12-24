@@ -387,13 +387,13 @@ card style:
 				if card.card_type == "character" or card.card_type == "event" then 0
 				else if card.card_type == "climax" then 270
 			}
-		alignment: bottom left justify
+		alignment: middle left justify
 		font:
 			name: Vagabond
 			italic name: Vagabond Italic
 			size: 9.4
 			weight: normal
-			color: rgba(25, 25, 25, 240)
+			color: rgba(0, 0, 0, 240)
 			shadow color:
 				script:
 					sp_shadow() 
@@ -438,7 +438,7 @@ card style:
 			italic name: Vagabond Italic
 			size: 9.4
 			weight: normal
-			color: rgba(25, 25, 25, 240)
+			color: rgba(0, 0, 0, 240)
 			shadow color:
 				script:
 					sp_shadow() 
@@ -840,7 +840,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		visible: { using_sp_override() }
-		alignment: bottom left justify
+		alignment: middle left justify
 		font:
 			name: Vagabond
 			italic name: Vagabond Italic
@@ -849,7 +849,7 @@ extra card style:
 			color:
 				script:
 					if contains(card.rarity, match: "SP") then
-						rgba(20,20,20,255)
+						color: rgba(20,20,20,240)
 					else
 						rgba(0,0,0,0)
 			shadow color:
@@ -891,13 +891,13 @@ extra card style:
 				if card.card_type == "character" or card.card_type == "event" then 0
 				else if card.card_type == "climax" then 270
 			}
-		alignment: bottom left justify
+		alignment: middle left justify
 		font:
 			name: Vagabond
 			italic name: Vagabond Italic
 			size: 9.4
 			weight: normal
-			color: rgba(25, 25, 25, 240)
+			color: rgba(20, 20, 20, 240)
 			shadow color:
 				script:
 					sp_shadow() 
