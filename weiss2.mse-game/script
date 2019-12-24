@@ -376,7 +376,8 @@ sort_name :=
 	to_lower
 card_rules_height :=
 {
-	ceil(set.stylesheet.card_style.rules_text.content_height)
+	if (card.rules_text != "") then max(19, ceil(set.stylesheet.card_style.rules_text.content_height))
+	else 0
 }
 card_rules_height_2 :=
 {
