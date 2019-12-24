@@ -538,14 +538,15 @@ card style:
 			}
 		alignment: top center stretch if-overflow
 		font:
-			name: Vagabond
-			size: 5
+			name: Open Sans Condensed
+			size: 6
 			weight: bold
-			color: rgb(244,244,0)
-			shadow color: rgb(0,0,0)
-			shadow displacement x: 0
-			shadow displacement y: 0
-			shadow blur: 3
+			color:
+				{
+					if set.side == "weiss" then rgb(122,122,39)
+					else if set.side == "schwarz" then rgb(244,244,0)
+					else rgb(244,244,0)
+				}
 extra card field:
 	type: choice
 	name: bottom bar
@@ -712,7 +713,6 @@ extra card style:
 		z index: 14
 		angle:
 			{
-				# Test
 				if card.card_type == "character" or card.card_type == "event" then 0
 				else if card.card_type == "climax" then 270
 			}
