@@ -3,15 +3,12 @@ full name: All Card Types
 short name: Standard
 icon: icon.png
 position hint: 1
-version: 2013-04-04
+version: 2019-12-25
 game: weiss2
 
 depends on:
 	package: weiss2.mse-game
-	version: 2013-04-04
-depends on:
-	package: weiss2.mse-game
-	version: 2013-04-04
+	version: 2019-12-25
 depends on: 
 	package: weiss2-symbols.mse-symbol-font
 depends on:
