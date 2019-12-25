@@ -234,6 +234,10 @@ set field:
 	choice: weiss
 	choice: schwarz
 	choice: both
+set field:
+	type: boolean
+	name: is using legacy card images
+	description: Turn this setting on to use the old dimensions for card images. Use this for old mse-sets.
 	
 #### sorting
 card list color script:
