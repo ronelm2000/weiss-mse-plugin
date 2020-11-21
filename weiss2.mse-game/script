@@ -69,7 +69,7 @@ auto_fix :=
 		replace: "<replay>\\2</replay>"
 	) +
 	tag_contents@(tag: "<replay>", contents: { "<b-auto><color:rgba(255,0,0,240)>" + input + "</color:rgba(255,0,0,240)></b-auto>" }) +
-	
+		
 	# step 3: revert back <kw-a>
 	#tag_contents@(
 	#	tag: "<kw-a>"
@@ -180,7 +180,8 @@ alt_td_card_number :=
 
 rarity_or_copy := 
 {
-	if (is_foil_or_alt_art(x: card)) then # .rarity == "(Alternate Art)" ) then
+	#if (is_foil_or_alt_art(x: card)) then
+	if (card.rarity == "(Alternate Art)" ) then
 		for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
 			found_card.rarity
 	else
@@ -192,17 +193,17 @@ pr_card_number :=
 	position (
 		of: card
 		in: set
-		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + sort_name(card.cardname) }
+		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + name_sort(card.cardname) }
 		filter: { card.rarity == "PR" }
 		) + 1
 }
 
 td_card_number :=
-{
+{	
 	position (
 		of: card
 		in: set
-		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + sort_name(card.cardname) }
+		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + name_sort(card.cardname) }
 		filter: { card.rarity == "TD" }
 		) + 1
 }
@@ -230,14 +231,7 @@ alt_art_number :=
 	    position (
 		of: found_value
 		in: set
-		order_by: {	override_sort() +
-			color_sort() +
-			type_sort() +
-			rarity_sort() +
-			level_sort() +
-			cost_sort() +
-			(to_string(card.power,format: "010d") or else "0000") +
-			sort_name(card.cardname)  }
+		order_by: {	main_sort() }
 		filter: 
 		{
 			card.rarity == "RR+" or
@@ -319,16 +313,7 @@ card_number :=
 	    position (
 		of: card
 		in: set
-		order_by: { 
-			override_sort() +
-			color_sort() +
-			type_sort() +
-			rarity_sort() +
-			level_sort() +
-			cost_sort() +
-			(to_string(card.power,format: "010d") or else "0000") +
-			sort_name(card.cardname) 
-			}
+		order_by: { main_sort() }
 		filter: 
 		{	card.rarity == "RR+" or
 			card.rarity == "RR" or
@@ -339,6 +324,19 @@ card_number :=
 			card.rarity == "CR"
 		}
 		) + 1
+}
+
+main_sort := 
+{
+		override_sort() 
+		+ 	color_sort()
+		+	type_sort()
+		+	rarity_sort()
+		+	level_sort()
+		+	cost_sort()
+		+	(to_string(card.power,format: "010d") or else "0000")
+		+ 	name_sort(card.cardname)			
+		#+ 	to_string(sort_name(card.cardname))
 }
 
 color_sort :=
@@ -367,15 +365,28 @@ type_sort :=
 	else "D"
 }
 
-sort_name :=
+name_sort :=
 	# Remove "The", "A", and "And" at the beginning
-	replace@(match: "^(The|An?) ", replace: "") +
+	replace@(match: "^(The|An?) ", replace: "")
 	# Remove commas and apostrophes
-	replace@(match: "(,|'|’)", replace: "") +
+	+	replace@(match: "(,|'|’)", replace: "")
 	# Remove bold and italic tags
-	replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") +
+	+	replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") 
 	# Make lowercase
-	to_lower
+	+	to_lower
+	# Replace all numbers with capital letters as number sorting is somehow broken in MSE2 (it sorts numbers last instead of letters.)
+	+	replace@(match: "(0)", "A")
+	+	replace@(match: "(1)", "B")
+	+	replace@(match: "(2)", "C")
+	+	replace@(match: "(3)", "D")
+	+	replace@(match: "(4)", "E")
+	+	replace@(match: "(5)", "F")
+	+	replace@(match: "(6)", "G")
+	+	replace@(match: "(7)", "H")
+	+	replace@(match: "(8)", "I")
+	+	replace@(match: "(9)", "J")
+	+	replace@(match: "(9)", "K")
+
 card_rules_height :=
 {
 	if (card.rules_text != "") then max(19, ceil(set.stylesheet.card_style.rules_text.content_height))
