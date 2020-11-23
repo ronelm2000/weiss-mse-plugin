@@ -180,8 +180,8 @@ alt_td_card_number :=
 
 rarity_or_copy := 
 {
-	#if (is_foil_or_alt_art(x: card)) then
-	if (card.rarity == "(Alternate Art)" ) then
+	if (is_foil_or_alt_art(x: card)) then
+	#if (card.rarity == "(Alternate Art)" ) then
 		for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
 			found_card.rarity
 	else
