@@ -63,14 +63,24 @@ card style:
 			}
 		height:  
 			{
-				if card.card_type == "character" or card.card_type == "event" then 626
-				else if card.card_type == "climax" then 448
+				if set.is_using_legacy_card_images then (
+					if card.card_type == "character" or card.card_type == "event" then 626
+					else if card.card_type == "climax" then 448
+				) else (
+					if card.card_type == "character" then 569
+					else if card.card_type == "event" then 578
+					else if card.card_type == "climax" then 407
+				)
 			}
 		mask:
 			{
-				if card.card_type == "character" then "character/mask.png"
-				else if card.card_type == "climax" then "climax/mask.png"
-				else if card.card_type == "event" then "event/mask.png"
+				if set.is_using_legacy_card_images then (
+					if card.card_type == "character" then "character/mask.png"
+					else if card.card_type == "climax" then "climax/mask.png"
+					else if card.card_type == "event" then "event/mask.png"
+				) else (
+					card.card_type + "/mask2.png"
+				)
 			}
 		z index: 1
 		angle:
