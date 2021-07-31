@@ -303,6 +303,11 @@ keyword:
 	mode: symbol_shortcut
 	reminder: >
 keyword:
+	keyword: Replay
+	match: LINKK
+	mode: symbol_shortcut
+	reminder: l
+keyword:
 	keyword: Bounce Trigger
 	match: BOUNCE`
 	mode: symbol_shortcut

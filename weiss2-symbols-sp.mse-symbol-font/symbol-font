@@ -109,6 +109,11 @@ symbol:
 	image: cx_combo.png
 	image font size: 54
 	enabled: true
+symbol:
+	code: l
+	image: link.png
+	image font size: 325
+	enabled: true
 # climax triggers
 symbol:
 	code: !
