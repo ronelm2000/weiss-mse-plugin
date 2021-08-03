@@ -17,7 +17,7 @@ depends on:
 card width: 448
 card height: 626
 card dpi: 178
-
+	
 card style:
 	color:
 		top: { 0 }
@@ -368,6 +368,10 @@ card style:
 			size: 11
 			weight: normal
 			color: rgb(0,0,0)
+			shadow color: rgb(255,255,255,120) 
+			shadow displacement x: 0
+			shadow displacement y: 0
+			shadow blur: 5
 	rules text:
 		bottom:
 			{
