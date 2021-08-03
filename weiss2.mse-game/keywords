@@ -100,7 +100,7 @@ keyword:
 	keyword: choice
 	match: choice!
 	mode: trigger
-	reminder: <sym>(</sym>: When this card triggers, you may choose a character with <sym>+</sym> trigger icon in your waiting room, and either return it into your hand or put it into your stock.
+	reminder: <sym>(</sym>: When this card triggers, you may choose a character with <sym>+</sym> in its trigger icon in your waiting room, and either return it into your hand or put it into your stock.
 
 keyword:
 	keyword: cont +1000p +1soul
