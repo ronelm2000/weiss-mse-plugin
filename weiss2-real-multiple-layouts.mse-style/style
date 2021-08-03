@@ -211,14 +211,14 @@ card style:
 	cardname:
 		top: 
 			{
-				if card.card_type == "character" then 557
-				else if card.card_type == "event" then 573
+				if card.card_type == "character" then 557 	+ card_name_sizing(card).top_adjustment
+				else if card.card_type == "event" then 573 	+ card_name_sizing(card).top_adjustment - 1
 				else if card.card_type == "climax" then 377
 			}
 		left:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 152
-				else if card.card_type == "climax" then 53
+				else if card.card_type == "climax" then 54 	- card_name_sizing(card).top_adjustment
 			}
 		height: 24
 		width: 204
@@ -231,7 +231,11 @@ card style:
 		alignment: top center stretch if-overflow
 		font:
 			name: Agfa Rotis Semi Serif
-			size: 16
+			size: 
+				{
+					card_name_sizing(card).size
+				}
+			weight: bold
 			color: rgb(255,255,255)
 			shadow color: rgb(0, 0, 0)
 			shadow displacement x: 1
