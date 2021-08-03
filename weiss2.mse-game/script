@@ -405,12 +405,12 @@ card_rules_height_2 :=
 card_flavor_height :=
 {
 #	card_style.flavor_text.content_height or else set.stylesheet.card_style.flavor_text.content_height
-	card_style.flavor_text.content_lines * line_height * 1.1
+	ceil(card_style.flavor_text.content_lines * line_height * 1.1)
 }
 replay_text_height :=
 {
 #	card_style.replay_text.content_height or else set.stylesheet.card_style.replay_text.content_height
-	card_style.replay_text.content_lines * line_height
+	ceil(card_style.replay_text.content_lines * line_height)
 }
 replay_text_width :=
 {
