@@ -568,7 +568,7 @@ pack type:
 	item:
 		name: rare
 		amount: 1
-	item
+	item:
 		name: foil common or rare
 		amount: 2
 	item:

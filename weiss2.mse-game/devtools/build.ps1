@@ -1,4 +1,4 @@
-.\..\..\..\mse.exe --create-installer weiss2.mse-game weiss2-real-multiple-layouts.mse-style weiss2-symbols.mse-symbol-font weiss2-symbols-sp.mse-symbol-font
+.\..\..\..\magicseteditor.exe --create-installer weiss2.mse-game weiss2-real-multiple-layouts.mse-style weiss2-symbols.mse-symbol-font weiss2-symbols-sp.mse-symbol-font
 $compress = @{
 Path= "..\..\weiss2-real-multiple-layouts.mse-style\font\*"
 CompressionLevel = "Fastest"

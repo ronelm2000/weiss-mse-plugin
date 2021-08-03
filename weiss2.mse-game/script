@@ -326,19 +326,6 @@ card_number :=
 		) + 1
 }
 
-main_sort := 
-{
-		override_sort() 
-		+ 	color_sort()
-		+	type_sort()
-		+	rarity_sort()
-		+	level_sort()
-		+	cost_sort()
-		+	(to_string(card.power,format: "010d") or else "0000")
-		+ 	name_sort(card.cardname)			
-		#+ 	to_string(sort_name(card.cardname))
-}
-
 color_sort :=
 {
 	if card.color == "yellow" then "A"
@@ -366,47 +353,68 @@ type_sort :=
 }
 
 name_sort :=
-	# Remove "The", "A", and "And" at the beginning
-	replace@(match: "^(The|An?) ", replace: "")
-	# Remove commas and apostrophes
-	+	replace@(match: "(,|'|’)", replace: "")
-	# Remove bold and italic tags
-	+	replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") 
-	# Make lowercase
-	+	to_lower
-	# Replace all numbers with capital letters as number sorting is somehow broken in MSE2 (it sorts numbers last instead of letters.)
-	+	replace@(match: "(0)", "A")
-	+	replace@(match: "(1)", "B")
-	+	replace@(match: "(2)", "C")
-	+	replace@(match: "(3)", "D")
-	+	replace@(match: "(4)", "E")
-	+	replace@(match: "(5)", "F")
-	+	replace@(match: "(6)", "G")
-	+	replace@(match: "(7)", "H")
-	+	replace@(match: "(8)", "I")
-	+	replace@(match: "(9)", "J")
-	+	replace@(match: "(9)", "K")
+	{ input }
+		# Remove "The", "A", and "And" at the beginning
+		+ replace@(match: "^(The|An?) ", replace: "")
+		# Remove commas and apostrophes
+		+ replace@(match: "(,|'|’)", replace: "")
+		# Remove bold and italic tags
+		+ replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") 
+		# Make lowercase
+		+ to_lower
+		# Replace all numbers with capital letters as number sorting is somehow broken in MSE2 (it sorts numbers last instead of letters.)
+		+ replace@(match: "(0)", replace: "A")
+		+ replace@(match: "(1)", replace: "B")
+		+ replace@(match: "(2)", replace: "C")
+		+ replace@(match: "(3)", replace: "D")
+		+ replace@(match: "(4)", replace: "E")
+		+ replace@(match: "(5)", replace: "F")
+		+ replace@(match: "(6)", replace: "G")
+		+ replace@(match: "(7)", replace: "H")
+		+ replace@(match: "(8)", replace: "I")
+		+ replace@(match: "(9)", replace: "J")
+		+ replace@(match: "(9)", replace: "K")
+
+main_sort := 
+{
+		override_sort() 
+		+ 	color_sort()
+		+	type_sort()
+		+	rarity_sort()
+		+	level_sort()
+		+	cost_sort()
+		+	(to_string(card.power,format: "010d") or else "0000")
+		+ 	name_sort(card.cardname)			
+		#+ 	to_string(sort_name(card.cardname))
+}
+
+line_height := 15.75
 
 card_rules_height :=
 {
-	if (card.rules_text != "") then max(19, ceil(set.stylesheet.card_style.rules_text.content_height))
+	if (card.rules_text != "") then 
+	#	max(19, ceil(card_style.rules_text.content_height or else set.stylesheet.card_style.rules_text.content_height))
+		max(19, ceil(card_style.rules_text.content_lines * line_height))
 	else 0
 }
 card_rules_height_2 :=
 {
-	ceil(set.stylesheet.extra_card_style.rules_text_copy1.content_height)
+#	set.stylesheet.extra_card_style.rules_text_copy1.content_height
+	set.stylesheet.extra_card_style.rules_text_copy1.content_lines * line_height
 }
 card_flavor_height :=
 {
-	set.stylesheet.card_style.flavor_text.content_height
+#	card_style.flavor_text.content_height or else set.stylesheet.card_style.flavor_text.content_height
+	card_style.flavor_text.content_lines * line_height * 1.1
 }
 replay_text_height :=
 {
-	set.stylesheet.card_style.replay_text.content_height
+#	card_style.replay_text.content_height or else set.stylesheet.card_style.replay_text.content_height
+	card_style.replay_text.content_lines * line_height
 }
 replay_text_width :=
 {
-	set.stylesheet.card_style.replay_text.width - 2
+	(card_style.replay_text.width or else set.stylesheet.card_style.replay_text.width) - 2
 }
 
 replay_box_height :=
@@ -427,11 +435,11 @@ ceil :=
 }
 card_climax_rules_height :=
 {
-	set.stylesheet.card_style.climax_rules_text.content_height
+	card_style.climax_rules_text.content_height or else set.stylesheet.card_style.climax_rules_text.content_height
 }
 card_climax_flavor_height :=
 {
-	set.stylesheet.card_style.climax_flavor_text.content_height
+	card_style.climax_flavor_text.content_height or else set.stylesheet.card_style.climax_flavor_text.content_height
 }
 flavor_bottom :=
 {
@@ -469,6 +477,7 @@ climax_and_character_colored_card :=
 	if type == "character" then input := card_colored_soul(soul: soul, color: color)
 	else if type == "climax" then input := "climax/" + set.side + "/"  + color + ".png"
 	else if type == "event" then input := "event/" + set.side + "/" + color + ".png"
+	else input := ""
 }
 
 sp_shadow :=
