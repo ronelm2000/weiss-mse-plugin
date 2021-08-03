@@ -44,7 +44,8 @@ auto_fix :=
 		combine: {
 		#	keyword  := "<nospellcheck>{keyword}</nospellcheck>"
 		#	reminder := process_english_hints(reminder)
-			if mode == "trigger" then if reminder == "standby" then "<i>({reminder})</i>" else "<i>(</i><hidden>.</hidden><i>{reminder})</i>"
+			if mode == "trigger" then "<i>({reminder})</i>"
+			#	else "<i>(</i><hidden>.</hidden><i>{reminder})</i>"
 			else if mode == "cx_generics" then "{reminder}"
 			else if mode == "reminder" then "<i>({reminder})</i>"
 			else if mode == "symbol_shortcut" then "<sym>{reminder}</sym>"
@@ -391,7 +392,7 @@ main_sort :=
 		#+ 	to_string(sort_name(card.cardname))
 }
 
-line_height := 15
+line_height := 15.2
 
 card_rules_height :=
 {
