@@ -33,6 +33,8 @@ auto_fix :=
 	remove_tag@(tag: "<nospellcheck") +
 	remove_tag@(tag: "<color") +
 	remove_tag@(tag: "<size") +
+	remove_tag@(tag: "<font") +
+	remove_tag@(tag: "<align") +
 	
 	# step 2 : reminder text for keywords
 	# before: not contains(card.rules_text, match: "<i-keyword>") // and not used_placeholders
@@ -85,6 +87,7 @@ auto_fix :=
 	#replace@(match: "<b>", replace: "<size:8.9><color:rgba(0,0,0,240)>\\0") + 		# default font: 9.4
 	#replace@(match: "</b>", replace: "\\0</color></size>")
 	#tag_contents@(tag: "<i", contents: { "<size:8.8>" + input + "</size>" }) +
+	
 	tag_contents@(tag: "<b", contents: { "<size:8.8>" + input + "</size>" }) +
 	tag_contents@(tag: "<hidden>", contents: { "<color:rgba(0,0,0,0)>" + input + "</color>" })
 	
@@ -388,7 +391,7 @@ main_sort :=
 		#+ 	to_string(sort_name(card.cardname))
 }
 
-line_height := 15.75
+line_height := 15
 
 card_rules_height :=
 {
