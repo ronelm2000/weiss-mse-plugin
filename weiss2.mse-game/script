@@ -23,18 +23,33 @@ color_to_word := [
 	b: "blue"
 ]
 
+list_utils := [
+	last: { input[length(input) - 1] }
+	first: { input[0] }
+]
+
+sp_auto_fix :=
+	remove_tag@(tag: "<color")
+
 auto_fix := 
 	# Add Keywords
 	# step 1 : remove all automatic tags
+	{
+		if (length(remove_tags(input)) < 1) then
+			""
+		else
+			input
+	} +
 	remove_tag@(tag: "<sym-auto>") +
 	remove_tag@(tag: "<i-auto>")   +
 	remove_tag@(tag: "<b-auto>")   +
 	remove_tag@(tag: "<error-spelling") +
 	remove_tag@(tag: "<nospellcheck") +
 	remove_tag@(tag: "<color") +
-	remove_tag@(tag: "<size") +
-	remove_tag@(tag: "<font") +
+	remove_tag@(tag: "<size-auto") +
+	remove_tag@(tag: "<font-auto") +
 	remove_tag@(tag: "<align") +
+	remove_tag@(tag: "<value") +
 	
 	# step 2 : reminder text for keywords
 	# before: not contains(card.rules_text, match: "<i-keyword>") // and not used_placeholders
@@ -71,7 +86,8 @@ auto_fix :=
 		match: "(``)([\\d\\s\\w\\'\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)]+)(``)",
 		replace: "<replay>\\2</replay>"
 	) +
-	tag_contents@(tag: "<replay>", contents: { "<b-auto><color:rgba(255,0,0,240)>" + input + "</color:rgba(255,0,0,240)></b-auto>" }) +
+	tag_contents@(tag: "<replay>", contents: { "<b-auto>" + input + "</b-auto>" }) +
+	tag_contents@(tag: "<replay>", contents: { "<color:rgba(225,25,25,240)>" + input + "</color>" }) +
 		
 	# step 3: revert back <kw-a>
 	#tag_contents@(
@@ -81,16 +97,46 @@ auto_fix :=
 	#remove_tag@(tag: "<kw-a>") +
 		
 	# Step 3: Add color and size
-	replace@(match: "»", replace: "<color:rgba(0,0,0,255)>\\0</color>") + 
-	replace@(match: "«", replace: "<color:rgba(0,0,0,255)>\\0</color>") +
+	replace@(match: "»", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") + 
+	replace@(match: "«", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
 	#replace@(match: "</i>", replace: "\\0<color:card.rules_text.color><size: 9.7>") +
-	#replace@(match: "<b>", replace: "<size:8.9><color:rgba(0,0,0,240)>\\0") + 		# default font: 9.4
+	#replace@(match: "<b>", replace: "<size-auto:8.9><color-auto:rgba(0,0,0,240)>\\0") + 		# default font: 9.4
 	#replace@(match: "</b>", replace: "\\0</color></size>")
 	#tag_contents@(tag: "<i", contents: { "<size:8.8>" + input + "</size>" }) +
 	
-	tag_contents@(tag: "<b", contents: { "<size:8.8>" + input + "</size>" }) +
-	tag_contents@(tag: "<hidden>", contents: { "<color:rgba(0,0,0,0)>" + input + "</color>" })
+	tag_contents@(tag: "<b", contents: { "<size-auto:8.75>" + input + "</size-auto>" }) +
+	tag_contents@(tag: "<hidden>", contents: { "<color:rgba(0,0,0,0)>" + input + "</color>" }) +
+	
+	# Step 4: Add Wingdings						
+	replace@(match: "\\(([1-7])\\)", replace: "<cost:\\1></cost:\\1>") +
+	replace@(match: "<cost:([1-7])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
+	tag_contents@(tag: "<cost" contents: {
+		get_cost := 	filter_text@(match: "<value:(\\d)>") 
+					+	filter_text@(match: "\\d")
+					+	to_int@()
+		cost := get_cost(input) 
+		(
+		if (cost == 1) then
+			"<size-auto:11><font-auto:Wingdings 2>j</font-auto></size-auto>"
+		else if (cost == 2) then
+			"<size-auto:11><font-auto:Wingdings>‚</font-auto></size-auto>"
+		else if (cost == 3) then
+			"<size:11><font-auto:Wingdings>ƒ</font></size>"
+		else if (cost == 4) then
+			"<size:11><font:Wingdings>„</font></size>" 
+		else if (cost == 5) then
+			"<size:11><font:Wingdings>…</font></size>"
+		else if (cost == 6) then
+			"<size:11><font:Wingdings 2>o</font></size>" 	# TODO: Replace with Wingdings as it's more accurate.
+		else if (cost == 7) then
+			"<size:11><font:Wingdings 2>p</font></size>"
+		else
+			""
+		) + "<value:" + cost + "></value:" + cost + ">"
+	}) +
+	
+	{ input }
 	
 	# it was 8.95 over 9.2
 	# Step 4: Debug Commands
@@ -104,7 +150,9 @@ auto_italic :=
 
 using_sp_override :=
 {
-	if filter_text(match: "(\\w+)", in_context:"SP override: <match>", input:card.notes) == "true" then
+	if styling.sp_override then
+		true
+	else if filter_text(match: "(\\w+)", in_context:"SP override: <match>", input:card.notes) == "true" then
 		true
 	else if card.rarity == "SP" or card.rarity == "SSP" then
 		true
@@ -156,40 +204,80 @@ card_serial :=
 {
 	if card.rarity == "PR"
 	then
-		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d") + " " + card.rarity
+		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else if card.rarity == "(Alternate Art)" and rarity_or_copy() == "PR"
 	then
-		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d") + " " + card.rarity
+		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else if card.rarity == "TD"
 	then
-		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d") + " " + card.rarity
+		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else if is_foil_or_alt_art(x: card) and rarity_or_copy() == "TD"
 	then
-		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut() + " " + rarity_or_copy()
+		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut() + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else
-		input := set.set_id + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut() + " " + rarity_or_copy()
+		input := set.set_id + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut() + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
+}
+
+foil_shortcut :=
+{
+	if length(styling.foil_shortcut_override) > 0 then
+		stlying.foil_shortcut_override
+	else if card.rarity == "SP" or card.rarity == "SSP" then
+		rarity_or_override_rarity(next_func: { card.rarity })
+	else if card.rarity == "RRR" then
+		"R"
+	else if card.rarity == "SR" then
+		"S"
+	else
+		""
+}
+
+rarity_or_override_rarity :=
+{
+	if length(styling.rarity_override) > 0 then
+		styling.rarity_override
+	else
+		next_func()
 }
 
 alt_pr_card_number :=
 {
-	for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
-		pr_card_number(card: found_card)
+	pr_card_number(card: find_original_card(card))
+	#for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
+	#	pr_card_number(card: found_card)
 }
 
 alt_td_card_number :=
 {
-	for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
-		td_card_number(card: found_card)
+	td_card_number(card: find_original_card(card))
+	#for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
+	#	td_card_number(card: found_card)
 }
 
 rarity_or_copy := 
 {
-	if (is_foil_or_alt_art(x: card)) then
-	#if (card.rarity == "(Alternate Art)" ) then
-		for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
-			found_card.rarity
+	if (is_foil_or_alt_art(x: card)) then # and card.rarity == "(Alternate Art)" ) then
+	{
+		original_card := find_original_card(card)
+		if (original_card.rarity == "TD" or original_card.rarity == "PR") then
+			result := original_card.rarity
+		else if (card.rarity == "(Alternate Art)") then
+			result := original_card.rarity
+		else
+			result := card.rarity
+		#for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
+		#	found_card.rarity
+		result
+	}()
 	else
 		card.rarity
+}
+
+find_original_card :=
+{
+	for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
+		found_card_list := [found_card]
+	list_utils.last(found_card_list)
 }
 
 pr_card_number :=
@@ -214,12 +302,18 @@ td_card_number :=
 
 override_sort :=
 {
-	filter_text(match: "(\\w+)", in_context:"override sort: <match>", input:card.notes)
+	if length(styling.serial_override) > 0 then
+		styling.serial_override
+	else
+		filter_text(match: "(\\w+)", in_context:"override sort: <match>", input:card.notes)
 }
 
 alt_art_override :=
 {
-	filter_text(match: "(\\w+)", in_context:"alt art override: <match>", input:card.notes)
+	if length(styling.alt_art_override) > 0 then
+		styling.alt_art_override
+	else
+		filter_text(match: "(\\w+)", in_context:"alt art override: <match>", input:card.notes)
 }
 
 using_alt_override :=
@@ -230,9 +324,29 @@ using_alt_override :=
 
 alt_art_number :=
 {
+	original_card := find_original_card(card)
+	result := position (
+		of: original_card
+		in: set
+		order_by: {	main_sort() }
+		filter: 
+		{
+			card.rarity == "RR+" or
+			card.rarity == "RR" or
+			card.rarity == "R" or
+			card.rarity == "U" or
+			card.rarity == "C" or
+			card.rarity == "CC" or
+			card.rarity == "CR"
+		}
+	) + 1
+}
+
+alt_art_number_old :=
+{
 	for each found_value in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() })
 	do
-	    position (
+	    result := position (
 		of: found_value
 		in: set
 		order_by: {	main_sort() }
@@ -265,21 +379,6 @@ is_pr_or_td :=
 	else false
 }
 
-foil_shortcut :=
-{
-	if card.rarity == "SP" or 
-	   card.rarity == "SSP"
-	then
-		card.rarity
-	else if card.rarity == "RRR"
-	then
-		"R"
-	else if card.rarity == "SR"
-	then
-		"S"
-	else
-		""
-}
 level_sort := {
 	if card.level == "zero" then "000"
 	else if card.level == "one" then "001"
@@ -485,7 +584,7 @@ flavor_chara :=
 }
 card_color_bar :=
 {
-	if contains(card.rarity, match: "SP") then
+	if contains(card.rarity, match: "SP") or using_sp_override() then
 		input := "bars/SP_Blur/" + card.color + "bar.png"
 	else
 		input := "bars/" + card.color + "bar.png"
@@ -493,7 +592,7 @@ card_color_bar :=
 
 white_color_bar :=
 {
-	if contains(card.rarity, match: "SP") then
+	if contains(card.rarity, match: "SP") or using_sp_override() then
 		input := "bars/SP_Blur/whitebar.png"
 	else
 		input := "bars/whitebar.png"

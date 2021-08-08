@@ -1,14 +1,14 @@
-﻿mse version: 2.0.0
+﻿mse version: 2.1.2
 full name: All Card Types
 short name: Standard
 icon: icon.png
 position hint: 1
-version: 2019-12-25
+version: 2021-08-08
 game: weiss2
 
 depends on:
 	package: weiss2.mse-game
-	version: 2019-12-25
+	version: 2021-08-08
 depends on: 
 	package: weiss2-symbols.mse-symbol-font
 depends on:
@@ -17,6 +17,35 @@ depends on:
 card width: 448
 card height: 626
 card dpi: 178
+	
+init script:
+	sp_specs := [
+		color: rgba(255,255,255,125)
+		width: 1
+	]
+	card_font_size := 9.2
+
+styling field:
+	type: boolean
+	name: sp override
+	description: Override default SP behavior and treat this card's display as an SP/SSP card.
+	initial: no
+styling field:
+	type: text
+	name: rarity override
+	description: Override the default rarity display (not behavior) and input a custom rarity.
+styling field:
+	type: text
+	name: foil shortcut override
+	description: Override the default rarity display (not behavior) and input a custom foil shortcut.
+styling field:
+	type: text
+	name: alt art override
+	description: Override the default algorithm for determining the alternate art number to use and just use the one on the specified number. (Useful for when you have multiple cards with diff. effects but same name.)
+styling field:
+	type: text
+	name: serial override
+	description: Override the serial sort for this card with your own sorting value. Put empty to continue on using the default serial sort.
 	
 card style:
 	color:
@@ -406,15 +435,9 @@ card style:
 		font:
 			name: Vagabond
 			italic name: Vagabond Condensed Italic
-			size: 9.2
+			size: { card_font_size }
 			weight: normal
 			color: rgba(0, 0, 0, 240)
-			shadow color:
-				script:
-					sp_shadow() 
-			shadow displacement x: 1
-			shadow displacement y: 1
-			shadow blur: 1
 		symbol font:
 			name: weiss2-symbols
 			size: 12
@@ -450,16 +473,10 @@ card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: 9.2
 			weight: normal
 			color: rgba(0, 0, 0, 240)
-			shadow color:
-				script:
-					sp_shadow() 
-			shadow displacement x: 1
-			shadow displacement y: 1
-			shadow blur: 1
 		symbol font:
 			name: weiss2-symbols
 			size: 12
@@ -554,7 +571,7 @@ card style:
 		alignment: top center stretch if-overflow
 		font:
 			name: Open Sans Condensed
-			size: 6
+			size: 7
 			weight: bold
 			color:
 				{
@@ -607,42 +624,56 @@ extra card field:
 	type: text
 	multi line: true
 	name: rules text copy1
-	script:	card.rules_text
+	script:	sp_auto_fix(card.rules_text)
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: rules text copy2
-	script:	card.rules_text
+	script:	sp_auto_fix(card.rules_text)
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: rules text copy3
-	script:	card.rules_text
+	script:	sp_auto_fix(card.rules_text)
+	editable: false
+	save value: false
+extra card field:
+	type: text
+	multi line: true
+	name: rules text copy4
+	script:	sp_auto_fix(card.rules_text)
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy1
-	script:	card.replay_text
+	script:	sp_auto_fix(card.replay_text)
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy2
-	script:	card.replay_text
+	script:	sp_auto_fix(card.replay_text)
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy3
-	script:	card.replay_text
+	script:	sp_auto_fix(card.replay_text)
+	editable: false
+	save value: false
+extra card field:
+	type: text
+	multi line: true
+	name: replay text copy4
+	script:	sp_auto_fix(card.replay_text)
 	editable: false
 	save value: false
 extra card style:
@@ -862,15 +893,15 @@ extra card style:
 	rules text copy1:
 		bottom:	
 			{
-				if card.card_type == "character" then 543 - replay_box_height()
-				else if card.card_type == "event" then 557 - replay_box_height()
-				else if card.card_type == "climax" then 19
+				if card.card_type == "character" then 543 	- replay_box_height() + sp_specs.width
+				else if card.card_type == "event" then 557 	- replay_box_height() +	sp_specs.width
+				else if card.card_type == "climax" then 19						  + sp_specs.width
 				# previous was 16
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26
-				else if card.card_type == "climax" then 17 + replay_box_height()
+				if card.card_type == "character" or card.card_type == "event" then 26 + sp_specs.width
+				else if card.card_type == "climax" then 17 + replay_box_height() + sp_specs.width
 			}
 		width: 
 			{
@@ -879,7 +910,7 @@ extra card style:
 				# previous was 209
 			}
 		height: { max(19, card_rules_height()) }
-		z index: 17
+		z index: 15
 		angle:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 0
@@ -889,36 +920,27 @@ extra card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
 			weight: normal
 			color:
 				script:
-					if contains(card.rarity, match: "SP") then
-						rgba(20,20,20,240)
-					else
-						rgba(0,0,0,0)
-			shadow color:
-				script:
-					sp_shadow() 
-			shadow displacement x: -1
-			shadow displacement y: -1
-			shadow blur: 1
+					sp_specs.color
 		symbol font:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy2:
 		bottom:	
 			{
-				if card.card_type == "character" then 543 - replay_box_height()
-				else if card.card_type == "event" then 557 - replay_box_height()
-				else if card.card_type == "climax" then 19
+				if card.card_type == "character" then 543 	- replay_box_height() - sp_specs.width
+				else if card.card_type == "event" then 557 	- replay_box_height() - sp_specs.width
+				else if card.card_type == "climax" then 19						  - sp_specs.width
 				# previous was 16
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26
-				else if card.card_type == "climax" then 17 + replay_box_height()
+				if card.card_type == "character" or card.card_type == "event" then 26 - sp_specs.width
+				else if card.card_type == "climax" then 17 	+ replay_box_height() - sp_specs.width
 			}
 		width: 
 			{
@@ -927,7 +949,7 @@ extra card style:
 				# previous was 209
 			}
 		height: { max(19, card_rules_height()) }
-		z index: 17
+		z index: 15
 		angle:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 0
@@ -937,36 +959,27 @@ extra card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
 			weight: normal
 			color:
 				script:
-					if contains(card.rarity, match: "SP") then
-						rgba(20,20,20,240)
-					else
-						rgba(0,0,0,0)
-			shadow color:
-				script:
-					sp_shadow() 
-			shadow displacement x: -1
-			shadow displacement y: -1
-			shadow blur: 0
+					sp_specs.color
 		symbol font:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy3:
 		bottom:	
 			{
-				if card.card_type == "character" then 543 - replay_box_height()
-				else if card.card_type == "event" then 557 - replay_box_height()
-				else if card.card_type == "climax" then 19
+				if card.card_type == "character" then 543 	- replay_box_height() + sp_specs.width
+				else if card.card_type == "event" then 557 	- replay_box_height() + sp_specs.width
+				else if card.card_type == "climax" then 19						  + sp_specs.width
 				# previous was 16
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26
-				else if card.card_type == "climax" then 17 + replay_box_height()
+				if card.card_type == "character" or card.card_type == "event" then 26 - sp_specs.width
+				else if card.card_type == "climax" then 17 + replay_box_height() - sp_specs.width
 			}
 		width: 
 			{
@@ -975,7 +988,7 @@ extra card style:
 				# previous was 209
 			}
 		height: { max(19, card_rules_height()) }
-		z index: 17
+		z index: 15
 		angle:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 0
@@ -985,21 +998,51 @@ extra card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
 			weight: normal
 			color:
 				script:
-					if contains(card.rarity, match: "SP") then
-						rgba(20,20,20,240)
-					else
-						rgba(0,0,0,0)
-			shadow color:
+					sp_specs.color
+		symbol font:
+			name: weiss2-symbols-sp
+			size: 12
+	rules text copy4:
+		bottom:	
+			{
+				if card.card_type == "character" then 543 	- replay_box_height() - sp_specs.width
+				else if card.card_type == "event" then 557 	- replay_box_height() - sp_specs.width
+				else if card.card_type == "climax" then 19						  - sp_specs.width
+				# previous was 16
+			}
+		left:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 26 + sp_specs.width
+				else if card.card_type == "climax" then 17 + replay_box_height() + sp_specs.width
+			}
+		width: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then 394
+				else if card.card_type == "climax" then 204
+				# previous was 209
+			}
+		height: { max(19, card_rules_height()) }
+		z index: 15
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		visible: { using_sp_override() }
+		alignment: middle left justify
+		font:
+			name: Vagabond
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
+			weight: normal
+			color:
 				script:
-					sp_shadow() 
-			shadow displacement x: 1
-			shadow displacement y: 1
-			shadow blur: 0
+					sp_specs.color
 		symbol font:
 			name: weiss2-symbols-sp
 			size: 12
@@ -1009,18 +1052,14 @@ extra card style:
 	replay text copy1:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)
-				#if card.card_type == "character" then 200
-				#else if card.card_type == "event" then 200
-				#else if card.card_type == "climax" then 19
-				# previous was 16
+				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8) 		+ sp_specs.width
+				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		+ sp_specs.width
+				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	+ sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6
-				else if card.card_type == "climax" then 17 + 8
+				if card.card_type == "character" or card.card_type == "event" then 26 + 6	+ sp_specs.width
+				else if card.card_type == "climax" then 17 + 8								+ sp_specs.width
 			}
 		width: 
 			{
@@ -1030,7 +1069,7 @@ extra card style:
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
-		z index: 18
+		z index: 16
 		angle:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 0
@@ -1039,34 +1078,26 @@ extra card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
 			weight: normal
-			color: rgba(20, 20, 20, 240)
-			shadow color:
+			color:
 				script:
-					sp_shadow() 
-			shadow displacement x: -1
-			shadow displacement y: -1
-			shadow blur: 1
+					sp_specs.color
 		symbol font:
-			name: weiss2-symbols
+			name: weiss2-symbols-sp
 			size: 12
 	replay text copy2:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)
-				#if card.card_type == "character" then 200
-				#else if card.card_type == "event" then 200
-				#else if card.card_type == "climax" then 19
-				# previous was 16
+				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)		- sp_specs.width
+				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		- sp_specs.width
+				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	- sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6
-				else if card.card_type == "climax" then 17 + 8
+				if card.card_type == "character" or card.card_type == "event" then 26 + 6	- sp_specs.width
+				else if card.card_type == "climax" then 17 + 8								- sp_specs.width
 			}
 		width: 
 			{
@@ -1076,7 +1107,7 @@ extra card style:
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
-		z index: 18
+		z index: 16
 		angle:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 0
@@ -1085,34 +1116,26 @@ extra card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
 			weight: normal
-			color: rgba(20, 20, 20, 240)
-			shadow color:
+			color:
 				script:
-					sp_shadow() 
-			shadow displacement x: -1
-			shadow displacement y: -1
-			shadow blur: 0
+					sp_specs.color
 		symbol font:
-			name: weiss2-symbols
+			name: weiss2-symbols-sp
 			size: 12
 	replay text copy3:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)
-				#if card.card_type == "character" then 200
-				#else if card.card_type == "event" then 200
-				#else if card.card_type == "climax" then 19
-				# previous was 16
+				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8) 		+ sp_specs.width
+				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		+ sp_specs.width
+				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	+ sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6
-				else if card.card_type == "climax" then 17 + 8
+				if card.card_type == "character" or card.card_type == "event" then 26 + 6	- sp_specs.width
+				else if card.card_type == "climax" then 17 + 8								- sp_specs.width
 			}
 		width: 
 			{
@@ -1122,7 +1145,7 @@ extra card style:
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
-		z index: 18
+		z index: 16
 		angle:
 			{
 				if card.card_type == "character" or card.card_type == "event" then 0
@@ -1131,16 +1154,50 @@ extra card style:
 		alignment: middle left justify
 		font:
 			name: Vagabond
-			italic name: Vagabond Italic
-			size: 9.4
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
 			weight: normal
-			color: rgba(20, 20, 20, 240)
-			shadow color:
+			color:
 				script:
-					sp_shadow() 
-			shadow displacement x: 1
-			shadow displacement y: 1
-			shadow blur: 0
+					sp_specs.color
 		symbol font:
-			name: weiss2-symbols
+			name: weiss2-symbols-sp
+			size: 12
+	replay text copy4:
+		bottom:
+			{
+				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8) 		- sp_specs.width
+				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		- sp_specs.width
+				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	- sp_specs.width
+			}
+		left:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 26 + 6	+ sp_specs.width
+				else if card.card_type == "climax" then 17 + 8								+ sp_specs.width
+			}
+		width: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				else if card.card_type == "climax" then 204 - 14 + 2
+				# previous was 209
+			}
+		height: { max(10, replay_text_height()) }
+		visible: { using_sp_override() }
+		z index: 16
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		alignment: middle left justify
+		font:
+			name: Vagabond
+			italic name: Vagabond Condensed Italic
+			size: { card_font_size }
+			weight: normal
+			color:
+				script:
+					sp_specs.color
+		symbol font:
+			name: weiss2-symbols-sp
 			size: 12
