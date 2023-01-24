@@ -119,10 +119,6 @@ card field:
 	type: choice
 	name: rarity
 	description: The rarity of the card.
-	choice: SSP
-	choice: SP
-	choice: RRR
-	choice: SR
 	choice: RR+
 	choice: RR
 	choice: R
@@ -133,6 +129,10 @@ card field:
 	choice: (Alternate Art)
 	choice: PR
 	choice: TD
+	choice: SSP
+	choice: SP
+	choice: RRR
+	choice: SR
 	card list column: 2
 	card list visible: true
 	card list width: 100
@@ -238,7 +238,7 @@ set field:
 	type: boolean
 	name: is using legacy card images
 	description: Turn this setting on to use the old dimensions for card images. Use this for old mse-sets.
-	
+
 #### sorting
 card list color script:
 	input := card.color

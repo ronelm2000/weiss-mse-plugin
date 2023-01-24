@@ -243,15 +243,11 @@ rarity_or_override_rarity :=
 alt_pr_card_number :=
 {
 	pr_card_number(card: find_original_card(card))
-	#for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
-	#	pr_card_number(card: found_card)
 }
 
 alt_td_card_number :=
 {
 	td_card_number(card: find_original_card(card))
-	#for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname }) do
-	#	td_card_number(card: found_card)
 }
 
 rarity_or_copy := 
@@ -275,9 +271,10 @@ rarity_or_copy :=
 
 find_original_card :=
 {
+	found_card_list := []
 	for each found_card in filter_list (set, filter: { (not is_foil_or_alt_art(x: input)) and input.cardname == card.cardname and using_alt_override() }) do
 		found_card_list := [found_card]
-	list_utils.last(found_card_list)
+	list_utils.last(found_card_list) or else card
 }
 
 pr_card_number :=

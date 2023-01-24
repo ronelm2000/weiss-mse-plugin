@@ -46,7 +46,7 @@ styling field:
 	type: text
 	name: serial override
 	description: Override the serial sort for this card with your own sorting value. Put empty to continue on using the default serial sort.
-	
+
 card style:
 	color:
 		top: { 0 }
