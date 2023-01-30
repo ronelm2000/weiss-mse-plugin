@@ -46,6 +46,10 @@ styling field:
 	type: text
 	name: serial override
 	description: Override the serial sort for this card with your own sorting value. Put empty to continue on using the default serial sort.
+styling field:
+	type: text
+	name: legacy card image override
+	description: Override the the default setting of having legacy card images on in the set settings (true or false). Put empty or an invalid value to continue on using the default serial sort.
 
 card style:
 	color:
@@ -92,7 +96,7 @@ card style:
 			}
 		height:  
 			{
-				if set.is_using_legacy_card_images then (
+				if is_using_legacy_card_image(card) then (
 					if card.card_type == "character" or card.card_type == "event" then 626
 					else if card.card_type == "climax" then 448
 				) else (
@@ -103,7 +107,7 @@ card style:
 			}
 		mask:
 			{
-				if set.is_using_legacy_card_images then (
+				if is_using_legacy_card_image(card) then (
 					if card.card_type == "character" then "character/mask.png"
 					else if card.card_type == "climax" then "climax/mask.png"
 					else if card.card_type == "event" then "event/mask.png"

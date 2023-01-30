@@ -48,6 +48,7 @@ auto_fix :=
 	remove_tag@(tag: "<color") +
 	remove_tag@(tag: "<size-auto") +
 	remove_tag@(tag: "<font-auto") +
+	remove_tag@(tag: "<font") +
 	remove_tag@(tag: "<align") +
 	remove_tag@(tag: "<value") +
 	
@@ -118,23 +119,25 @@ auto_fix :=
 		cost := get_cost(input) 
 		(
 		if (cost == 1) then
-			"<size-auto:11><font-auto:Wingdings 2>j</font-auto></size-auto>"
+			"<font-auto:Wingdings 2><size-auto:11>j</size-auto></font>"
 		else if (cost == 2) then
-			"<size-auto:11><font-auto:Wingdings>‚</font-auto></size-auto>"
+			"<font-auto:Wingdings><size-auto:11>‚</size-auto></font>"
 		else if (cost == 3) then
-			"<size:11><font-auto:Wingdings>ƒ</font></size>"
+			"<font-auto:Wingdings><size-auto:11>ƒ</size-auto></font>"
 		else if (cost == 4) then
-			"<size:11><font:Wingdings>„</font></size>" 
+			"<font-auto:Wingdings><size-auto:11>„</size-auto></font>" 
 		else if (cost == 5) then
-			"<size:11><font:Wingdings>…</font></size>"
+			"<font-auto:Wingdings><size-auto:11>…</size-auto></font>"
 		else if (cost == 6) then
-			"<size:11><font:Wingdings 2>o</font></size>" 	# TODO: Replace with Wingdings as it's more accurate.
+			"<font=auto:Wingdings 2><size-auto:11>o</size-auto></font>" 	# TODO: Replace with Wingdings as it's more accurate.
 		else if (cost == 7) then
-			"<size:11><font:Wingdings 2>p</font></size>"
+			"<font-auto:Wingdings 2><size-auto:11>p</size-auto></font>"
 		else
 			""
-		) + "<value:" + cost + "></value:" + cost + ">"
+		)
 	}) +
+	# tag_contents@(tag: "<font:Wingdings 2>", contents: { "<size-auto:11>" + input + "</size-auto>" }) +
+
 	
 	{ input }
 	
@@ -374,6 +377,14 @@ is_pr_or_td :=
 	if x.rarity == "TD" or x.rarity == "PR"
 	then true
 	else false
+}
+
+is_using_legacy_card_image :=
+{
+	if length(styling.legacy_card_image_override) > 0 then
+		styling.legacy_card_image_override == "true"
+	else
+		set.is_using_legacy_card_images
 }
 
 level_sort := {
