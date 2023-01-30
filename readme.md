@@ -10,4 +10,4 @@ This plugin for MSE2 (or Magic Set Editor 2) is designed to make custom cards fo
 
 This fork supports the newest mechanics, including "Link", "Choice", "Replay", "Standby", etc., but does not support "Japanese Text Name Bar" found exclusively in English Imported Sets. This set also supports foil/SP mechanics, but not SEC.
 
-![MSE UI](https://i.imgur.com/ItDhJpT.png)
+![MSE UI](https://i.imgur.com/Ts97YY3.png)
