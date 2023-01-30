@@ -3,5 +3,7 @@
 # Whitelist all folders/files under weiss2
 !weiss2*/
 !weiss2*/**
+# Whitelist readme.md
+!readme.md
 # Obviously add in .gitignore
 !.gitignore
