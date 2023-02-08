@@ -157,10 +157,17 @@ trigger_map := { # string input
 	else  								[input] 
 }
 
+as_multilang_trait := { # string input
+	if input == "" then
+		[]
+	else
+		[[en: input]]
+}
+
 to_map_from_card := { # (card input)
 	[ 	name: [en: input.cardname, jp: ""],
 		serial: input.api_serial,
-		traits: (if input.trait_one != "" then [input.trait_one] else []) + (if input.trait_two != "" then [input.trait_two] else []),
+		traits: as_multilang_trait(input.trait_one) + as_multilang_trait(input.trait_two),
 		type: input.card_type,
 		color: input.color,
 		side: set.side,
@@ -168,7 +175,7 @@ to_map_from_card := { # (card input)
 		level: position(of: [input.level], in: english_numbers),
 		cost: position(of: [input.cost], in: english_numbers),
 		soul: position(of: [split_text(input.soul, match: " - ")[0]], in: english_numbers),
-		power: input.power,
+		power: to_int(input.power),
 		triggers: trigger_map(input.trigger) + trigger_map(input.extra_trigger),
 		flavor: sanitize_for_export(input.flavor_text),
 		effect: split_text(sanitize_for_export(input.rules_text + (if input.replay_text != "" then ("\n" + input.replay_text) else "")), match: "\n")

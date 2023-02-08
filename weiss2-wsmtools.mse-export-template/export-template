@@ -7,7 +7,7 @@ version: 2023-02-06
 installer group: ronelm2000/weiss2/Export/wsmtools
 game: weiss2
 create directory: true
-file type: *.json
+file type: Weiss Schwarz Set (*.ws-set)|*.ws-set
 
 depends on:
 	package: weiss2.mse-game
