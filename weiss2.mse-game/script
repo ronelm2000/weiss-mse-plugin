@@ -150,6 +150,13 @@ is_card := {
 	input.cardname or else "" != "" 
 }
 
+trigger_map := { # string input
+	if input == "none" then				[]
+	else if input == "off" then 		[]
+	else if input == "c-soul" then 		["soul"]
+	else  								[input] 
+}
+
 to_map_from_card := { # (card input)
 	[ 	name: [en: input.cardname, jp: ""],
 		serial: input.api_serial,
@@ -162,9 +169,9 @@ to_map_from_card := { # (card input)
 		cost: position(of: [input.cost], in: english_numbers),
 		soul: position(of: [split_text(input.soul, match: " - ")[0]], in: english_numbers),
 		power: input.power,
-		triggers: (if input.trigger == "none" then [] else [input.trigger]) + (if input.extra_trigger == "off" then [] else [input.extra_trigger]),
-		flavor: input.flavor_text,
-		effect: split_text(input.rules_text + "\n" + input.replay_text, match: "\n")
+		triggers: trigger_map(input.trigger) + trigger_map(input.extra_trigger),
+		flavor: sanitize_for_export(input.flavor_text),
+		effect: split_text(sanitize_for_export(input.rules_text + (if input.replay_text != "" then ("\n" + input.replay_text) else "")), match: "\n")
 	]
 }
 
@@ -175,6 +182,97 @@ is_set := {
 to_array_from_set := { # (set input)
 	[] + (for each card in set.cards do [card])
 }
+
+####### Sanitizers #######
+sym_to_icons := [
+	"C": "[CONT]",
+	"A": "[AUTO]",
+	"S": "[ACT]",
+	"R": "[REPLAY]",
+	"r": "[REST]",
+	"v": "[REVERSE]",
+	"s": "[STAND]",
+	"1": "(1)",
+	"2": "(2)",
+	"3": "(3)",
+	"4": "(4)",
+	"5": "(5)",
+	"6": "(6)",
+	"7": "(7)",
+	"<": "<<",
+	">": ">>",
+	"b": "[COUNTER]",
+	"c": "[CLOCK]",
+	"x": "[CXC]",
+	"l": "[LINK]",
+	"!": "[BOUNCE]",
+	"@": "[BAG]",
+	"#": "[BOOK]",
+	"$": "[SHOT]",
+	"%": "[DOOR]",
+	"^": "[GATE]",
+	"&": "[GOLD]",
+	"*": "[STANDBY]",
+	"(": "[CHOICE]",
+	"+": "[SOUL]"
+]
+
+sanitize_for_export := { input } +
+	# Remove Automated Tags
+	remove_tag@(tag: "<sym-auto>") +
+	remove_tag@(tag: "<i-auto>")   +
+	remove_tag@(tag: "<b-auto>")   +
+	remove_tag@(tag: "<error-spelling") +
+	remove_tag@(tag: "<nospellcheck") +
+	remove_tag@(tag: "<color") +
+	remove_tag@(tag: "<size-auto") +
+	remove_tag@(tag: "<font-auto") +
+	remove_tag@(tag: "<font") +
+	remove_tag@(tag: "<align") +
+	
+	# Replace special tags
+	replace@(match: "<cost:([1-9])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
+	tag_contents@(tag: "<sym>", contents: {
+		text_input := to_text(input)
+		array := []
+		for i from 1 to length(text_input) do
+			array := array + [sym_to_icons[text_input[i-1]]] 
+		if array != [] then
+			list_utils.join(array, seperator: " ")
+		else
+			""
+	}) +
+	tag_contents@(tag: "<cost" contents: {
+		get_cost := 	filter_text@(match: "<value:(\\d)>") 
+					+	filter_text@(match: "\\d")
+					+	to_int@()
+		cost := get_cost(input)
+		"({ cost })"
+	}) +
+	tag_contents@(tag: "<replay>", contents: { "\{{ input }\}" }) +
+	tag_contents@(tag: "<hidden", contents: { "" }) +
+	
+	# Remove special tags
+	remove_tag@(tag: "<replay>") +
+	remove_tag@(tag: "<sym>") +
+	remove_tag@(tag: "<value") +
+	remove_tag@(tag: "<cost") +
+	remove_tag@(tag: "<hidden") +
+	
+	# Remove other tags
+	remove_tag@(tag: "<b") +
+	remove_tag@(tag: "<b") +
+	remove_tag@(tag: "<i") +
+	remove_tag@(tag: "<customita>") +
+	remove_tag@(tag: "<soft") +
+	
+	{ input }
+	;
+	
+sanitize_for_filename := { input } +
+	replace@(match: "/|-", replace: "_") +
+	{ input }
+	;
 	
 #####################
 
