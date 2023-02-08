@@ -680,6 +680,7 @@ extra card field:
 	script:	sp_auto_fix(card.replay_text)
 	editable: false
 	save value: false
+# # #
 extra card style:
 	bottom bar:
 		left: 

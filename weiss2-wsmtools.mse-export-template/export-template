@@ -1,0 +1,209 @@
+﻿mse version: 2.1.2
+short name: wsmtools
+full name: wsmtools Exporter
+position hint: 003
+icon: icon.png
+version: 2023-02-06
+installer group: ronelm2000/weiss2/Export/wsmtools
+game: weiss2
+create directory: true
+file type: *.json
+
+depends on:
+	package: weiss2.mse-game
+	version: 2021-08-08
+
+# By ronelm2000
+# Based on LackeyCCG Export by Pichoro and Innuendo, based on code by Idle Muse and Seeonee
+
+#option field:
+#	type: choice
+#	name: Remember!
+#	choice: Edit your setlist.txt file in LackeyCCG to add your new set!
+#option field:
+#	type: choice
+#	name: Notice!
+#	choice: Remember to rearrange the images and set list file to make your plugin work!
+#option field:
+#	type: text
+#	name: set code
+#	description: The three letter extension of your set name.
+#option field:
+#	type: choice
+#	name: dfc options
+#	description: Options for exporting DFCs.
+#	choice: Back faces (DFC-Exporter)
+#	choice: Front faces (DFC-Exporter)
+#	choice: Both faces (Standard)
+#option field:
+#	type: boolean
+#	name: unkeyworded clues
+#	initial: no
+#	description: check yes if you use Clue tokens but not Investigate
+#option field:
+#	type: choice
+#	name: export size
+#	choice: LackeyCCG Large
+#	choice: LackeyCCG Medium
+#	choice: MSE Standard
+#	description: LackeyCCG Large is 312x445. LackeyCCG Medium is 200x285. MSE Standard is 375x523.
+option field:
+	type: boolean
+	name: export images
+	description: Export images? This is required to export to Tabletop Simulator via wsmtools
+
+script:
+	#
+	# Reader Notes: Don't experience my pain. Start from the bottom going up.
+	#
+
+	to_json := {
+		if is_int(input) then
+			to_int(input)
+		else if is_real(input) then
+			to_real(input)
+		else if is_string(input) then
+			"\"{ json_escape(input) }\""
+		## Put JSON Extensions Here ##
+		else if is_card(input) then
+			to_map_json(to_map_from_card(input))
+		else if is_set(input) then
+			to_array_json(to_array_from_set(input))
+		###
+		else if is_list(input) then
+			to_array_json(input)
+		else if is_map(input) then
+			to_map_json(input)
+		else
+			"\"{ json_escape(input) }\""
+	}
+	
+	## Card JSON Extensions ##
+	is_card := {
+		input.cardname or else "" != "" 
+	}
+	
+	to_map_from_card := { # (card input)
+		[ 	name: [en: input.cardname, jp: ""],
+			serial: input.api_serial,
+			test: ""
+			traits: (if input.trait_one != "" then [input.trait_one] else []) + (if input.trait_two != "" then [input.trait_two] else []),
+			type: input.card_type,
+			color: input.color,
+			side: set.side,
+			rarity: input.api_rarity,
+			level: position(of: [input.level], in: english_numbers),
+			cost: position(of: [input.cost], in: english_numbers),
+			soul: position(of: [split_text(input.soul, match: " - ")[0]], in: english_numbers),
+			power: input.power,
+			triggers: (if input.trigger == "none" then [] else [input.trigger]) + (if input.extra_trigger == "off" then [] else [input.extra_trigger]),
+			flavor: input.flavor_text,
+			effect: split_text(sanitize_for_export(input.rules_text + (if input.replay_text != "" then ("\n" + input.replay_text) else "")), match: "\n")
+		]
+	}
+	
+	is_set := {
+		input == set
+	}
+	
+	to_array_from_set := { # (set input)
+		[] + (for each card in set.cards do [card])
+	}
+	
+	####### Sanitizers #######
+	sym_to_icons := [
+		"C": "[CONT]",
+		"A": "[AUTO]",
+		"S": "[ACT]",
+		"R": "[REPLAY]",
+		"r": "[REST]",
+		"v": "[REVERSE]",
+		"s": "[STAND]",
+		"1": "(1)",
+		"2": "(2)",
+		"3": "(3)",
+		"4": "(4)",
+		"5": "(5)",
+		"6": "(6)",
+		"7": "(7)",
+		"<": "<<",
+		">": ">>",
+		"b": "[COUNTER]",
+		"c": "[CLOCK]",
+		"x": "[CXC]",
+		"l": "[LINK]",
+		"!": "[BOUNCE]",
+		"@": "[BAG]",
+		"#": "[BOOK]",
+		"$": "[SHOT]",
+		"%": "[DOOR]",
+		"^": "[GATE]",
+		"&": "[GOLD]",
+		"*": "[STANDBY]",
+		"(": "[CHOICE]",
+		"+": "[SOUL]"
+	]
+	
+	sanitize_for_export := { input } +
+		# Remove Automated Tags
+		remove_tag@(tag: "<sym-auto>") +
+		remove_tag@(tag: "<i-auto>")   +
+		remove_tag@(tag: "<b-auto>")   +
+		remove_tag@(tag: "<error-spelling") +
+		remove_tag@(tag: "<nospellcheck") +
+		remove_tag@(tag: "<color") +
+		remove_tag@(tag: "<size-auto") +
+		remove_tag@(tag: "<font-auto") +
+		remove_tag@(tag: "<font") +
+		remove_tag@(tag: "<align") +
+		
+		# Replace special tags
+		replace@(match: "<cost:([1-9])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
+		tag_contents@(tag: "<sym>", contents: {
+			text_input := to_text(input)
+			array := []
+			for i from 1 to length(text_input) do
+				array := array + [sym_to_icons[text_input[i-1]]] 
+			if array != [] then
+				list_utils.join(array, seperator: " ")
+			else
+				""
+		}) +
+		tag_contents@(tag: "<cost" contents: {
+			get_cost := 	filter_text@(match: "<value:(\\d)>") 
+						+	filter_text@(match: "\\d")
+						+	to_int@()
+			cost := get_cost(input)
+			"({ cost })"
+		}) +
+		tag_contents@(tag: "<replay>", contents: { "\{{ input }\}" }) +
+		tag_contents@(tag: "<hidden", contents: { "" }) +
+		
+		# Remove special tags
+		remove_tag@(tag: "<replay>") +
+		remove_tag@(tag: "<sym>") +
+		remove_tag@(tag: "<value") +
+		remove_tag@(tag: "<cost") +
+		
+		# Remove other tags
+		remove_tag@(tag: "<b") +
+		remove_tag@(tag: "<b") +
+		remove_tag@(tag: "<i") +
+		remove_tag@(tag: "<customita>") +
+		
+		{ input }
+		;
+		
+	sanitize_for_filename := { input } +
+		replace@(match: "/|-", replace: "_") +
+		{ input }
+		;
+
+	# Starting Point
+	if options.export_images then (
+		for each card in cards do (
+			write_image_file(card, file:"{sanitize_for_filename(card.api_serial)}.png");
+		)
+	)
+	to_string(to_json(cards))
+	

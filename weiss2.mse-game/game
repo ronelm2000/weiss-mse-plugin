@@ -213,6 +213,23 @@ card field:
 	choice: no
 	choice: backup
 	choice: clockshift
+# # API # #
+# Used for wsmtools
+card field:
+	type: text
+	multi line: false
+	name: api serial
+	script: card_serial_no_rarity(card)
+	editable: false
+	save value: false
+card field:
+	type: text
+	multi line: false
+	name: api rarity
+	script: rarity(card)
+	editable: false
+	save value: false
+
 #### set fields
 
 set field:
