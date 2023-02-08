@@ -255,6 +255,11 @@ set field:
 	type: boolean
 	name: is using legacy card images
 	description: Turn this setting on to use the old dimensions for card images. Use this for old mse-sets.
+set field:
+	type: text
+	multi line: true
+	name: set notes
+	description: Designer notes for the set, like things to avoid, TD ratios, etc. that can't be put in an individual card note.
 
 #### sorting
 card list color script:
