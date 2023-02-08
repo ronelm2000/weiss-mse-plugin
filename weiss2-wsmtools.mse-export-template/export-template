@@ -86,7 +86,6 @@ script:
 	to_map_from_card := { # (card input)
 		[ 	name: [en: input.cardname, jp: ""],
 			serial: input.api_serial,
-			test: ""
 			traits: (if input.trait_one != "" then [input.trait_one] else []) + (if input.trait_two != "" then [input.trait_two] else []),
 			type: input.card_type,
 			color: input.color,
