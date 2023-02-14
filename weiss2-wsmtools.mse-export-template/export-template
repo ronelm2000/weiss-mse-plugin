@@ -16,46 +16,12 @@ depends on:
 # By ronelm2000
 # Based on LackeyCCG Export by Pichoro and Innuendo, based on code by Idle Muse and Seeonee
 
-#option field:
-#	type: choice
-#	name: Remember!
-#	choice: Edit your setlist.txt file in LackeyCCG to add your new set!
-#option field:
-#	type: choice
-#	name: Notice!
-#	choice: Remember to rearrange the images and set list file to make your plugin work!
-#option field:
-#	type: text
-#	name: set code
-#	description: The three letter extension of your set name.
-#option field:
-#	type: choice
-#	name: dfc options
-#	description: Options for exporting DFCs.
-#	choice: Back faces (DFC-Exporter)
-#	choice: Front faces (DFC-Exporter)
-#	choice: Both faces (Standard)
-#option field:
-#	type: boolean
-#	name: unkeyworded clues
-#	initial: no
-#	description: check yes if you use Clue tokens but not Investigate
-#option field:
-#	type: choice
-#	name: export size
-#	choice: LackeyCCG Large
-#	choice: LackeyCCG Medium
-#	choice: MSE Standard
-#	description: LackeyCCG Large is 312x445. LackeyCCG Medium is 200x285. MSE Standard is 375x523.
 option field:
 	type: boolean
 	name: export images
 	description: Export images? This is required to export to Tabletop Simulator via wsmtools
 
 script:
-	#
-	# Reader Notes: Don't experience my pain. Start from the bottom going up.
-	#
 
 	# Starting Point
 	if options.export_images then (
