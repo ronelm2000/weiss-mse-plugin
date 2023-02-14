@@ -318,7 +318,12 @@ auto_fix :=
 			if mode == "trigger" then "<i>({reminder})</i>"
 			#	else "<i>(</i><hidden>.</hidden><i>{reminder})</i>"
 			else if mode == "cx_generics" then "{reminder}"
-			else if mode == "reminder" then "<i>({reminder})</i>"
+			else if mode == "reminder" then (
+				if expand then 
+					"<color-auto:rgba(0,0,0,0)><size-auto:1><font-auto:Small Fonts>{keyword}</font-auto></size-auto></color-auto><atom-reminder-{mode}><i>({reminder})</i></atom-reminder-{mode}>"
+				else
+					"{keyword}"
+			)
 			else if mode == "symbol_shortcut" then "<sym>{reminder}</sym>"
 			else if mode == "rule_shortcut" then "{reminder}"
 			else "<atom-reminder-{mode}><i-auto>({reminder})</i-auto></atom-reminder-{mode}>"	
@@ -332,18 +337,17 @@ auto_fix :=
 		) +
 		
 	# step 2c : remove duplicate reminder text
-	replace@(
-		match: "(<atom-reminder-[^>]*>[^)]+[)]</atom-reminder-[^>]*>)([^\n]+)\\1",
-		replace: "\\2\\1"
-		)  +
+#	replace@(
+#		match: "(<atom-reminder-[^>]*>[^)]+[)]</atom-reminder-[^>]*>)([^\n]+)\\1",
+#		replace: "\\2\\1"
+#		)  +
 		
 	# step 2d: Add Support for Replay Text
 	replace@(
 		match: "(``)([\\d\\s\\w\\'\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)]+)(``)",
 		replace: "<replay>\\2</replay>"
 	) +
-	tag_contents@(tag: "<replay>", contents: { "<b-auto>" + input + "</b-auto>" }) +
-	tag_contents@(tag: "<replay>", contents: { "<color:rgba(225,25,25,240)>" + input + "</color>" }) +
+	tag_contents@(tag: "<replay>", contents: { "<b-auto><color:rgba(225,25,25,255)>{ input }</color></b-auto>" }) +
 		
 	# step 3: revert back <kw-a>
 	#tag_contents@(
@@ -363,6 +367,7 @@ auto_fix :=
 	
 	tag_contents@(tag: "<b", contents: { "<size-auto:8.75>" + input + "</size-auto>" }) +
 	tag_contents@(tag: "<hidden>", contents: { "<color:rgba(0,0,0,0)>" + input + "</color>" }) +
+	tag_contents@(tag: "<i", contents: { "<color:rgba(66,66,66,255)>{input}</color>" }) +
 	
 	# Step 4: Add Wingdings						
 	replace@(match: "\\(([1-7])\\)", replace: "<cost:\\1></cost:\\1>") +
@@ -374,19 +379,19 @@ auto_fix :=
 		cost := get_cost(input) 
 		(
 		if (cost == 1) then
-			"<font-auto:Wingdings 2><size-auto:11>j</size-auto></font>"
+			"<font-auto:Wingdings 2><size-auto:11>j</size-auto></font-auto>"
 		else if (cost == 2) then
-			"<font-auto:Wingdings><size-auto:11>‚</size-auto></font>"
+			"<font-auto:Wingdings><size-auto:11>‚</size-auto></font-auto>"
 		else if (cost == 3) then
-			"<font-auto:Wingdings><size-auto:11>ƒ</size-auto></font>"
+			"<font-auto:Wingdings><size-auto:11>ƒ</size-auto></font-auto>"
 		else if (cost == 4) then
-			"<font-auto:Wingdings><size-auto:11>„</size-auto></font>" 
+			"<font-auto:Wingdings><size-auto:11>„</size-auto></font-auto>" 
 		else if (cost == 5) then
-			"<font-auto:Wingdings><size-auto:11>…</size-auto></font>"
+			"<font-auto:Wingdings><size-auto:11>…</size-auto></font-auto>"
 		else if (cost == 6) then
-			"<font=auto:Wingdings 2><size-auto:11>o</size-auto></font>" 	# TODO: Replace with Wingdings as it's more accurate.
+			"<font-auto:Wingdings><size-auto:11>†</size-auto></font-auto>"
 		else if (cost == 7) then
-			"<font-auto:Wingdings 2><size-auto:11>p</size-auto></font>"
+			"<font-auto:Wingdings 2><size-auto:11>p</size-auto></font-auto>"
 		else
 			""
 		)
@@ -428,78 +433,66 @@ card_colored_level :=
 
 card_colored_soul :=
 {
-	if soul == "one - 2 traits"
-	then
-		input := "character/" + set.side + "/" + color[0] + "1s.png"
-	else if soul == "one - 1 trait"
-	then
-		input := "character/" + set.side + "/" + color[0] + "1s1t.png"
-	else if soul == "one - no trait"
-	then
-		input := "character/" + set.side + "/"  + color[0] + "1s0t.png"
-	else if soul ==	"two - 2 traits" 
-	then 
-		input := "character/" + set.side + "/" + color[0] + "2s.png"
-	else if soul ==	"two - 1 trait" 
-	then 
-		input := "character/" + set.side + "/" + color[0] + "2s1t.png"
-	else if soul ==	"two - no trait" 
-	then 
-		input := "character/"+ set.side + "/"  + color[0] + "2s0t.png"
-	else if soul == "three - 2 traits"
-	then
-		input := "character/"+ set.side + "/"  + color[0] + "3s.png"
-	else if soul == "three - 1 trait"
-	then
-		input := "character/"+ set.side + "/"  + color[0] + "3s1t.png"
-	else if soul == "three - no trait"
-	then
-		input := "character/" + set.side + "/" + color[0] + "3s0t.png"
-	else  input := "character/" + set.side + "/" + color[0] + "0s.png"
+	soul_pair := split_text(soul, match: " - ")
+	assert(length(soul_pair) <= 1)
+	fixed_soul := soul_pair[0]
+	if soul == "zero" then
+		input := "character/{set.side}/{color}.png"
+	else (
+		input := masked_blend(light: "character/{set.side}/{color}.png", 
+			dark: "souls/" + position(of: [fixed_soul], in: english_numbers) + "s.png", 
+			mask: "souls/" + position(of: [fixed_soul], in: english_numbers) + "s_mask.png"
+			)
+	)
+}
+
+overridable_set_id := {
+	if styling.set_override != "" then
+		styling.set_override
+	else
+		set.set_id
 }
 
 card_serial := 
 {
 	if card.rarity == "PR"
 	then
-		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
+		input := overridable_set_id() + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else if card.rarity == "(Alternate Art)" and rarity_or_copy() == "PR"
 	then
-		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
+		input := overridable_set_id() + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else if card.rarity == "TD"
 	then
-		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
+		input := overridable_set_id() + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d") + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else if is_foil_or_alt_art(x: card) and rarity_or_copy() == "TD"
 	then
-		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut() + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
+		input := overridable_set_id() + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut() + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 	else
-		input := set.set_id + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut() + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
+		input := overridable_set_id() + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut() + " " + rarity_or_override_rarity(next_func: rarity_or_copy)
 }
 
 card_serial_no_rarity := 
 {
 	if card.rarity == "PR"
 	then
-		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d")
+		input := overridable_set_id() + "/" + set.subset_id + "-" + "PE" + to_string(pr_card_number(), format: ".2d")
 	else if card.rarity == "(Alternate Art)" and rarity_or_copy() == "PR"
 	then
-		input := set.set_id + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d")
+		input := overridable_set_id() + "/" + set.subset_id + "-" + "PE" + to_string(alt_pr_card_number(), format: ".2d")
 	else if card.rarity == "TD"
 	then
-		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d")
+		input := overridable_set_id() + "/" + set.subset_id + "-TE" + to_string(td_card_number(), format: ".2d")
 	else if is_foil_or_alt_art(x: card) and rarity_or_copy() == "TD"
 	then
-		input := set.set_id + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut()
+		input := overridable_set_id() + "/" + set.subset_id + "-TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut()
 	else
-		input := set.set_id + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut()
+		input := overridable_set_id() + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut()
 }
 
 rarity :=
 {
 	input := rarity_or_override_rarity(next_func: rarity_or_copy)
 }
-
-
 
 foil_shortcut :=
 {
@@ -781,27 +774,29 @@ main_sort :=
 
 line_height := 15.25
 
+layout_height := # (field input)
+{
+	for each lh in input.layout.lines do lh.height
+}
 card_rules_height :=
 {
 	if (card.rules_text != "") then 
-	#	max(19, ceil(card_style.rules_text.content_height or else set.stylesheet.card_style.rules_text.content_height))
-		max(19, ceil(card_style.rules_text.content_lines * line_height))
+		max(19, ceil(layout_height(card_style.rules_text)))
 	else 0
 }
 card_rules_height_2 :=
 {
-#	set.stylesheet.extra_card_style.rules_text_copy1.content_height
-	set.stylesheet.extra_card_style.rules_text_copy1.content_lines * line_height
+	layout_height(card_style.rules_text)
 }
 card_flavor_height :=
 {
-#	card_style.flavor_text.content_height or else set.stylesheet.card_style.flavor_text.content_height
-	ceil(card_style.flavor_text.content_lines * line_height * 1.1)
+	ceil(layout_height(card_style.flavor_text))
 }
 replay_text_height :=
 {
 #	card_style.replay_text.content_height or else set.stylesheet.card_style.replay_text.content_height
-	ceil(card_style.replay_text.content_lines * line_height)
+#	ceil(card_style.replay_text.content_lines * line_height)
+	ceil(layout_height(card_style.replay_text))
 }
 replay_text_width :=
 {

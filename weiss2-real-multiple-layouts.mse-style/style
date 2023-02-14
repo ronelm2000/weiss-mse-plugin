@@ -24,6 +24,17 @@ init script:
 		width: 1
 	]
 	card_font_size := 9.2
+	trait_box_locations := [
+		regular: [ [left: 212, width: 90], [left: 314, width: 90], [left: 200, width: 10] ],
+		long_trait: [ [left: 199, width: 66], [left: 279, width: 146], [left: 189, width: 10] ],
+		triple_trait: [ [left: 199, width: 66], [left: 279, width: 66], [left: 359, width: 66] ]
+	]	
+	get_trait_box_style := {
+		if card.trait_three == "" then
+			replace(styling.trait_box_style, match: " ", replace: "_")
+		else
+			"triple_trait"
+	}
 
 styling field:
 	type: boolean
@@ -50,6 +61,17 @@ styling field:
 	type: text
 	name: legacy card image override
 	description: Override the the default setting of having legacy card images on in the set settings (true or false). Put empty or an invalid value to continue on using the default serial sort.
+styling field:
+	type: text
+	name: set override
+	description: Override the set id for this card (normally set via the set properties) with your own value. Used for collab sets like Bunko sets.	
+styling field:
+	type: choice
+	name: trait box style
+	choice: regular
+	choice: long trait
+	choice: triple trait
+	description: Determines the style of the trait boxes. Do note that, for long trait style, the IMS format is used instead of the Fubuki format. Note that entering any trait in the third trait locks you to triple trait style, regardless of this value.
 
 card style:
 	color:
@@ -276,8 +298,8 @@ card style:
 			shadow blur: 0
 	trait one:
 		top: 587
-		left: 212
-		width: 90
+		left: { trait_box_locations[get_trait_box_style()][0].left }
+		width: { trait_box_locations[get_trait_box_style()][0].width }
 		height: 14
 		z index: 6
 		visible:
@@ -293,8 +315,25 @@ card style:
 			color: rgb(0,0,0)
 	trait two:
 		top: 587
-		left: 314
-		width: 90
+		left: { trait_box_locations[get_trait_box_style()][1].left }
+		width: { trait_box_locations[get_trait_box_style()][1].width }
+		height: 14
+		z index: 7
+		visible:
+			{
+				if card.card_type == "character" then true
+				else if card.card_type == "climax" or card.card_type == "event" then false
+			}
+		alignment: top center stretch if-overflow
+		font:
+			name: Vagabond
+			size: 09
+			weight: bold
+			color: rgb(0,0,0)
+	trait three:
+		top: 587
+		left: { trait_box_locations[get_trait_box_style()][2].left }
+		width: { trait_box_locations[get_trait_box_style()][2].width }
 		height: 14
 		z index: 7
 		visible:
@@ -623,61 +662,126 @@ extra card field:
 	name: replay bar 4
 	editable: false
 	choice:	default
+# # Traits # #
+extra card field:
+	type: choice
+	name: trait bar left 1
+	editable: false
+	script:	if card.trait_one != "" then "default" else "none"
+	choice: default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar 1
+	editable: false
+	script:	if card.trait_one != "" then "default" else "none"
+	choice: default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar right 1
+	editable: false
+	script:	if card.trait_one != "" then "default" else "none"
+	choice: default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar left 2
+	script:	if card.trait_two != "" then "default" else "none"
+	editable: false
+	choice:	default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar 2
+	script:	if card.trait_two != "" then "default" else "none"
+	editable: false
+	choice:	default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar right 2
+	script:	if card.trait_two != "" then "default" else "none"
+	editable: false
+	choice:	default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar left 3
+	script:	if card.trait_three != "" then "default" else "none"
+	editable: false
+	choice:	default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar 3
+	script:	if card.trait_three != "" then "default" else "none"
+	editable: false
+	choice:	default
+	choice: none
+extra card field:
+	type: choice
+	name: trait bar right 3
+	editable: false
+	script:	if card.trait_three != "" then "default" else "none"
+	editable: false
+	choice:	default
+	choice: none
 # # SP # #
 extra card field:
 	type: text
 	multi line: true
 	name: rules text copy1
-	script:	sp_auto_fix(card.rules_text)
+	script:	card.api_sp_rules_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: rules text copy2
-	script:	sp_auto_fix(card.rules_text)
+	script:	card.api_sp_rules_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: rules text copy3
-	script:	sp_auto_fix(card.rules_text)
+	script:	card.api_sp_rules_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: rules text copy4
-	script:	sp_auto_fix(card.rules_text)
+	script:	card.api_sp_rules_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy1
-	script:	sp_auto_fix(card.replay_text)
+	script:	card.api_sp_replay_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy2
-	script:	sp_auto_fix(card.replay_text)
+	script:	card.api_sp_replay_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy3
-	script:	sp_auto_fix(card.replay_text)
+	script:	card.api_sp_replay_text
 	editable: false
 	save value: false
 extra card field:
 	type: text
 	multi line: true
 	name: replay text copy4
-	script:	sp_auto_fix(card.replay_text)
+	script:	card.api_sp_replay_text
 	editable: false
 	save value: false
 # # #
@@ -799,6 +903,169 @@ extra card style:
 		render style: image
 		choice images:
 			default: bars\flavorbar.png
+	# Traits
+	trait bar left 1:
+		left: 
+			{
+				card_style.trait_one.left - 8
+			}
+		bottom: 
+			{
+				card_style.trait_one.bottom + 3
+			}
+		width: 8
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_left.png
+			none: traits\trait_border_off_left.png
+	trait bar right 1:
+		left: 
+			{
+				card_style.trait_one.left + card_style.trait_one.width
+			}
+		bottom: 
+			{
+				card_style.trait_one.bottom + 3
+			}
+		width: 8
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_right.png
+			none: traits\trait_border_off_right.png
+	trait bar 1:
+		left: 
+			{
+				card_style.trait_one.left
+			}
+		bottom: 
+			{
+				card_style.trait_one.bottom + 3
+			}
+		width: { card_style.trait_one.width }
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_middle.png
+			none: traits\trait_border_off_middle.png
+	trait bar left 2:
+		left: 
+			{
+				card_style.trait_two.left - 8
+			}
+		bottom: 
+			{
+				card_style.trait_two.bottom + 3
+			}
+		width: 8
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_left.png
+			none: traits\trait_border_off_left.png
+	trait bar right 2:
+		left: 
+			{
+				card_style.trait_two.left + card_style.trait_two.width
+			}
+		bottom: 
+			{
+				card_style.trait_two.bottom + 3
+			}
+		width: 8
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_right.png
+			none: traits\trait_border_off_right.png
+	trait bar 2:
+		left: 
+			{
+				card_style.trait_two.left
+			}
+		bottom: 
+			{
+				card_style.trait_two.bottom + 3
+			}
+		width: { card_style.trait_two.width }
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_middle.png
+			none: traits\trait_border_off_middle.png
+	trait bar left 3:
+		left: 
+			{
+				card_style.trait_three.left - 8
+			}
+		bottom: 
+			{
+				card_style.trait_three.bottom + 3
+			}
+		width: 8
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" and get_trait_box_style() == "triple_trait" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_left.png
+			none: traits\trait_border_off_left.png
+	trait bar right 3:
+		left: 
+			{
+				card_style.trait_three.left + card_style.trait_three.width
+			}
+		bottom: 
+			{
+				card_style.trait_three.bottom + 3
+			}
+		width: 8
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" and get_trait_box_style() == "triple_trait" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_right.png
+			none: traits\trait_border_off_right.png
+	trait bar 3:
+		left: 
+			{
+				card_style.trait_three.left
+			}
+		bottom: 
+			{
+				card_style.trait_three.bottom + 3
+			}
+		width: { card_style.trait_three.width }
+		height: 18
+		z index: 5
+		angle: 0
+		visible: { card.card_type == "character" and get_trait_box_style() == "triple_trait" }
+		render style: image
+		choice images:
+			default: traits\trait_border_on_middle.png
+			none: traits\trait_border_off_middle.png
 	## Replay Box ##
 	replay bar 1:
 		left: 
@@ -812,7 +1079,7 @@ extra card style:
 				else set.stylesheet.card_style.replay_text.bottom - 7
 			}
 		width: 2
-		height: { replay_text_height() + 6 + 2 }
+		height: { replay_text_height() + 6 + 2 + 0.5 }
 		z index: 16
 		angle:
 			{
@@ -835,7 +1102,7 @@ extra card style:
 				else set.stylesheet.card_style.replay_text.bottom + replay_text_width() + 7
 			}
 		width: 2
-		height: { replay_text_height() + 6 + 2 }
+		height: { replay_text_height() + 6 + 2 + 0.5}
 		z index: 16
 		angle:
 			{

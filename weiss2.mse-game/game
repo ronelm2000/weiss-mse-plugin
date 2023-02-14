@@ -69,6 +69,10 @@ card field:
 card field:
 	type: choice
 	name: soul
+	choice: one
+	choice: two
+	choice: three
+	choice: zero
 	choice: one - 2 traits
 	choice: one - 1 trait
 	choice: one - no trait
@@ -96,6 +100,14 @@ card field:
 	card list alignment: center
 card field:
 	type: text
+	name: trait three
+	description: The third trait; useful for anniversary/collab sets.
+	card list column: 6
+	card list visible: true
+	card list width: 100
+	card list alignment: center
+card field:
+	type: text
 	name: power
 	script: numeric(value)
 	description: Power of the card.
@@ -111,7 +123,7 @@ card field:
 	identifying: true
 	script: card_serial()
 	description: Serial of the card.
-	card list column: 8
+	card list column: 7
 	card list visible: true
 	card list width: 100
 	card list alignment: center
@@ -227,6 +239,21 @@ card field:
 	multi line: false
 	name: api rarity
 	script: rarity(card)
+	editable: false
+	save value: false
+# Used for caching in styles
+card field:
+	type: text
+	multi line: true
+	name: api sp rules text
+	script:	sp_auto_fix(card.rules_text)
+	editable: false
+	save value: false
+card field:
+	type: text
+	multi line: true
+	name: api sp replay text
+	script:	sp_auto_fix(card.replay_text)
 	editable: false
 	save value: false
 

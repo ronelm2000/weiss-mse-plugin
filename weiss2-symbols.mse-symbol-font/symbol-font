@@ -99,10 +99,12 @@ symbol:
 symbol:
 	code: b
 	image: backupmini.png
+	image font size: 10
 	enabled: true
 symbol:
 	code: c
 	image: clockshiftmini.png
+	image font size: 10
 	enabled: true
 symbol:
 	code: x

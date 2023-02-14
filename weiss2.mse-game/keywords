@@ -18,15 +18,13 @@ keyword mode:
 	
 keyword parameter type:
 	name: number
-	match: [0-9]+
+	match: [0-9]+!
+	separator after is: !
+	eat separator: true
 	refer script:
 		name: normal
 		description: (1,2,3)
 		script: \{{input}\}
-	refer script:
-		name: as words
-		description: (one, two, three)
-		script: \{english_number({input})\}
 		
 keyword parameter type:
 	name: limited_number
@@ -50,7 +48,9 @@ keyword parameter type:
 		
 keyword parameter type:
 	name: name
-	match: \"(.+)\"
+	match: \"(.+)\"!
+	separator after is: !
+	eat separator: true
 	refer script:
 		name: normal
 		description: Puts the name inscribed in "quotes", complete.
@@ -156,7 +156,7 @@ keyword:
 	reminder: When this card is put into your waiting room from the stage, you may pay the cost. If you do, return this card to its previous stage position as <sym>r</sym>.
 keyword:
 	keyword: bond
-	match: bond~<atom-param>name</atom-param>~
+	match: bond<atom-param>name</atom-param>!
 	mode: reminder
 	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {param1} in your waiting room, and return it to your hand.
 keyword:
@@ -172,7 +172,7 @@ keyword:
 	rules: Color refers to a lowercase shortcut of "y", "g", "r", or "b".
 keyword:
 	keyword: backup
-	match: bkp<atom-param>number</atom-param>~
+	match: backup<atom-param>number</atom-param>!
 	mode: reminder
 	reminder: Choose one of your characters that is being frontal attacked, and that character gets +{param1} power until end of turn
 
