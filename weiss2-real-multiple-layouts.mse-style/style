@@ -23,7 +23,6 @@ init script:
 		color: rgba(255,255,255,125)
 		width: 1
 	]
-	card_font_size := 9.2
 	trait_box_locations := [
 		regular: [ [left: 212, width: 90], [left: 314, width: 90], [left: 200, width: 10] ],
 		long_trait: [ [left: 199, width: 66], [left: 279, width: 146], [left: 189, width: 10] ],
@@ -531,7 +530,7 @@ card style:
 		font:
 			name: Vagabond
 			italic name: Vagabond Condensed Italic
-			size: 9.2
+			size: { card_font_size }
 			weight: normal
 			color: rgba(0, 0, 0, 240)
 		symbol font:
@@ -1100,7 +1099,7 @@ extra card style:
 				else set.stylesheet.card_style.replay_text.bottom - 7
 			}
 		width: 2
-		height: { replay_text_height() + 6 + 2 + 0.5 }
+		height: { replay_text_height() + 6 + 2 }
 		z index: 16
 		angle:
 			{
@@ -1123,7 +1122,7 @@ extra card style:
 				else set.stylesheet.card_style.replay_text.bottom + replay_text_width() + 7
 			}
 		width: 2
-		height: { replay_text_height() + 6 + 2 + 0.5}
+		height: { replay_text_height() + 6 + 2 }
 		z index: 16
 		angle:
 			{

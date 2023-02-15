@@ -7,6 +7,11 @@ auto_bold :=
 	# Remove all size tags.
 	input := temp
 }
+built_in_keyword_starters := [["Sunder / "], ["Bond / "], ["Backup "], ["Shift,"]]
+built_in_keywords := [["Encore"], ["Accelerate"], ["Alarm"], ["Assist"], ["Great Performance"], ["Brainstorm"], ["Memory"], ["Experience"], ["Change"], ["Resonate"]]
+card_font_size := 9
+bold_font_size := card_font_size * 0.95
+bold_font_size_open_sans := bold_font_size - 0.1
 
 remove_kw :=
 {
@@ -27,6 +32,10 @@ list_utils := [
 	last: { input[length(input) - 1] }
 	first: { input[0] }
 	join: { substring( for each v in input do ((seperator+v) or else (seperator+v[0])), begin: length(seperator)) }@(seperator: ",")
+]
+
+str_utils := [
+	starts_with: { substring(input, end: length(with)) == with }
 ]
 
 map_utils := [
@@ -357,15 +366,15 @@ auto_fix :=
 	#remove_tag@(tag: "<kw-a>") +
 		
 	# Step 3: Add color and size
-	replace@(match: "»", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") + 
-	replace@(match: "«", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
+	replace@(match: "»|«", replace: "<font-auto:MS Reference Sans Serif>\\0</font-auto>") + 
+	#replace@(match: "", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
 	#replace@(match: "</i>", replace: "\\0<color:card.rules_text.color><size: 9.7>") +
 	#replace@(match: "<b>", replace: "<size-auto:8.9><color-auto:rgba(0,0,0,240)>\\0") + 		# default font: 9.4
 	#replace@(match: "</b>", replace: "\\0</color></size>")
 	#tag_contents@(tag: "<i", contents: { "<size:8.8>" + input + "</size>" }) +
 	
-	tag_contents@(tag: "<b", contents: { "<size-auto:8.75>" + input + "</size-auto>" }) +
+	tag_contents@(tag: "<b", contents: { "<size-auto:{bold_font_size}>{input}</size-auto>" } + replace@(match: "[0-1]+", replace: { "</size-auto><size-auto:{bold_font_size_open_sans}><font-auto:Open Sans Bold>{input}</font-auto></size-auto><size-auto:{bold_font_size}>" })) +	
 	tag_contents@(tag: "<hidden>", contents: { "<color:rgba(0,0,0,0)>" + input + "</color>" }) +
 	tag_contents@(tag: "<i", contents: { "<color:rgba(66,66,66,255)>{input}</color>" }) +
 	
