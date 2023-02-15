@@ -489,6 +489,24 @@ card_serial_no_rarity :=
 		input := overridable_set_id() + "/" + set.subset_id + "-E" + to_string(card_number(), format: ".3d") + foil_shortcut()
 }
 
+card_id := 
+{
+	if card.rarity == "PR"
+	then
+		input := "PE" + to_string(pr_card_number(), format: ".2d")
+	else if card.rarity == "(Alternate Art)" and rarity_or_copy() == "PR"
+	then
+		input := "PE" + to_string(alt_pr_card_number(), format: ".2d")
+	else if card.rarity == "TD"
+	then
+		input := "TE" + to_string(td_card_number(), format: ".2d")
+	else if is_foil_or_alt_art(x: card) and rarity_or_copy() == "TD"
+	then
+		input := "TE" + to_string(alt_td_card_number(), format: ".2d") + foil_shortcut()
+	else
+		input := "E" + to_string(card_number(), format: ".3d") + foil_shortcut()
+}
+
 rarity :=
 {
 	input := rarity_or_override_rarity(next_func: rarity_or_copy)
@@ -558,7 +576,7 @@ pr_card_number :=
 	position (
 		of: card
 		in: set
-		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + name_sort(card.cardname) }
+		order_by: { override_sort() + wave_id_sort() + color_sort() + type_sort() + rarity_sort() + name_sort(card.cardname) }
 		filter: { card.rarity == "PR" }
 		) + 1
 }
@@ -568,9 +586,16 @@ td_card_number :=
 	position (
 		of: card
 		in: set
-		order_by: { override_sort() + color_sort() + type_sort() + rarity_sort() + name_sort(card.cardname) }
+		order_by: { override_sort() + wave_id_sort() + color_sort() + type_sort() + rarity_sort() + level_sort() + name_sort(card.cardname) }
 		filter: { card.rarity == "TD" }
 		) + 1
+}
+
+wave_id_sort := {
+	if length(styling.wave_id) <= 0 then
+		"00000"
+	else
+		styling.wave_id
 }
 
 override_sort :=

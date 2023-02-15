@@ -241,6 +241,14 @@ card field:
 	script: rarity(card)
 	editable: false
 	save value: false
+# Used for filtering
+card field:
+	type: text
+	multi line: true
+	name: api id
+	script:	card_id(card)
+	editable: false
+	save value: false
 # Used for caching in styles
 card field:
 	type: text

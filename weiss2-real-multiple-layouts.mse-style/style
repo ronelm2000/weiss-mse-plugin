@@ -35,6 +35,16 @@ init script:
 		else
 			"triple_trait"
 	}
+	first_artist_name := {
+		result := ""
+		for each c in filter_list(set, filter: { card_id(card: input) == "E001" }) do
+			result := c.artist_name
+	}
+	first_logo := {
+		result := "clear\\c-clear.png"
+		for each c in filter_list(set, filter: { card_id(card: input) == "E001" }) do
+			result := c.logo		
+	}
 
 styling field:
 	type: boolean
@@ -65,6 +75,10 @@ styling field:
 	type: text
 	name: set override
 	description: Override the set id for this card (normally set via the set properties) with your own value. Used for collab sets like Bunko sets.	
+styling field:
+	type: text
+	name: wave id
+	description: Only applies in a Trial Deck or a PR. The default value is "00000" (5 digits). Assigns an ID for which this Trial Deck card or wave of PR it should belong to. Helps in sets with multiple Trial Decks and/or PR waves.
 styling field:
 	type: choice
 	name: trait box style
@@ -171,7 +185,7 @@ card style:
 				if card.card_type == "character" or card.card_type == "event" then 0
 				else if card.card_type == "climax" then 270
 			}
-		default: clear\c-clear.png
+		default: { first_logo() }
 	level:
 		top: 13
 		left: 16
@@ -784,6 +798,13 @@ extra card field:
 	script:	card.api_sp_replay_text
 	editable: false
 	save value: false
+extra card field:
+	type: text
+	name: default artist name
+	multi line: false
+	editable: false
+	save value: false
+	script: first_artist_name()
 # # #
 extra card style:
 	bottom bar:
@@ -1473,3 +1494,35 @@ extra card style:
 		symbol font:
 			name: weiss2-symbols-sp
 			size: 12
+	default artist name:
+		top: 
+			{
+				if card.card_type == "character" then 608
+				else if card.card_type == "event" then 608
+				else if card.card_type == "climax" then 260
+			}
+		left:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 61
+				else if card.card_type == "climax" then 19
+			}
+		height: 18
+		width: 323
+		z index: 20
+		visible: { card.artist_name == "" }
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		alignment: top center stretch if-overflow
+		font:
+			name: Open Sans Condensed
+			size: 7
+			weight: bold
+			color:
+				{
+					if set.side == "weiss" then rgb(122,122,39)
+					else if set.side == "schwarz" then rgb(244,244,0)
+					else rgb(244,244,0)
+				}
