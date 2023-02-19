@@ -322,7 +322,7 @@ auto_fix :=
 		condition: { correct_case and not used_placeholders  }, 
 		default_expand: { true },
 		combine: {
-		#	keyword  := "<nospellcheck>{keyword}</nospellcheck>"
+			keyword  := "<nospellcheck>{keyword}</nospellcheck>"
 		#	reminder := process_english_hints(reminder)
 			if mode == "trigger" then "<i>({reminder})</i>"
 			#	else "<i>(</i><hidden>.</hidden><i>{reminder})</i>"

@@ -25,17 +25,17 @@ scale text: true
 symbol:
 	code: S
 	image: act.png
-	image font size: 110
+	image font size: 44
 	enabled: true
 symbol:
 	code: A
 	image: auto.png
-	image font size: 110
+	image font size: 44
 	enabled: true
 symbol:
 	code: C
 	image: cont.png
-	image font size: 110
+	image font size: 44
 	enabled: true
 symbol:
 	code: R

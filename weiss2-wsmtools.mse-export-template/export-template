@@ -22,9 +22,8 @@ option field:
 	description: Export images? This is required to export to Tabletop Simulator via wsmtools
 
 script:
-
-	# Starting Point
-	if options.export_images then (
+	if options.export_images == "yes" then 
+	(
 		for each card in cards do (
 			write_image_file(card, file:"{sanitize_for_filename(card.api_serial)}.jpg", width: stylesheet.card_width * 3, height: stylesheet.card_height * 3);
 		)
