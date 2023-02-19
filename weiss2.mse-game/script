@@ -366,6 +366,9 @@ auto_fix :=
 	#remove_tag@(tag: "<kw-a>") +
 		
 	# Step 3: Add color and size
+	# TODO: Do not apply this if the language is japanese, I guess? But right now there's no support for JP cards.
+	replace@(match: "《", replace: "«") +
+	replace@(match: "》", replace: "»") +
 	replace@(match: "»|«", replace: "<font-auto:MS Reference Sans Serif>\\0</font-auto>") + 
 	#replace@(match: "", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
@@ -379,7 +382,7 @@ auto_fix :=
 	tag_contents@(tag: "<i", contents: { "<color:rgba(66,66,66,255)>{input}</color>" }) +
 	
 	# Step 4: Add Wingdings						
-	replace@(match: "\\(([1-7])\\)", replace: "<cost:\\1></cost:\\1>") +
+	replace@(match: "\\(([1-7])\\)", replace: "<atom-cost><cost:\\1></cost:\\1></atom-cost>") +
 	replace@(match: "<cost:([1-7])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
 	tag_contents@(tag: "<cost" contents: {
 		get_cost := 	filter_text@(match: "<value:(\\d)>") 
@@ -585,7 +588,7 @@ pr_card_number :=
 	position (
 		of: card
 		in: set
-		order_by: { override_sort() + wave_id_sort() + color_sort() + type_sort() + rarity_sort() + name_sort(card.cardname) }
+		order_by: { td_pr_main_sort() }
 		filter: { card.rarity == "PR" }
 		) + 1
 }
@@ -595,9 +598,19 @@ td_card_number :=
 	position (
 		of: card
 		in: set
-		order_by: { override_sort() + wave_id_sort() + color_sort() + type_sort() + rarity_sort() + level_sort() + name_sort(card.cardname) }
+		order_by: { td_pr_main_sort() }
 		filter: { card.rarity == "TD" }
 		) + 1
+}
+
+td_pr_main_sort := {
+	override_sort() + 
+	wave_id_sort() + 
+	color_sort() + 
+	type_sort() + 
+	rarity_sort() + 
+	level_sort() + 
+	name_sort(card.cardname)
 }
 
 wave_id_sort := {
