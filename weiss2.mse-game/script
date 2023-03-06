@@ -328,8 +328,12 @@ auto_fix :=
 			#	else "<i>(</i><hidden>.</hidden><i>{reminder})</i>"
 			else if mode == "cx_generics" then "{reminder}"
 			else if mode == "reminder" then (
-				if expand then 
-					"<color-auto:rgba(0,0,0,0)><size-auto:1><font-auto:Small Fonts>{keyword}</font-auto></size-auto></color-auto><atom-reminder-{mode}><i>({reminder})</i></atom-reminder-{mode}>"
+				if expand then (
+					if (length(filter_text(match: "finalize_reminders", card.notes)) > 0) then
+						"<atom-remindtext><i>({reminder})</i></atom-remindtext>"
+					else
+						"<color-auto:rgba(0,0,0,0)><size-auto:1><font-auto:Small Fonts>{keyword}</font-auto></size-auto></color-auto><atom-reminder-{mode}><i>({reminder})</i></atom-reminder-{mode}>"
+				)
 				else
 					"{keyword}"
 			)
@@ -367,8 +371,8 @@ auto_fix :=
 		
 	# Step 3: Add color and size
 	# TODO: Do not apply this if the language is japanese, I guess? But right now there's no support for JP cards.
-	replace@(match: "《", replace: "«") +
-	replace@(match: "》", replace: "»") +
+	replace@(match: "《|(\\[<]{2})", replace: "«") +
+	replace@(match: "》|([>]{2})", replace: "»") +
 	replace@(match: "»|«", replace: "<font-auto:MS Reference Sans Serif>\\0</font-auto>") + 
 	#replace@(match: "", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
@@ -446,7 +450,9 @@ card_colored_level :=
 card_colored_soul :=
 {
 	soul_pair := split_text(soul, match: " - ")
-	assert(length(soul_pair) <= 1)
+	if (set.old_soul_values == "no") then (
+		assert(length(soul_pair) <= 1)
+	)
 	fixed_soul := soul_pair[0]
 	if soul == "zero" then
 		input := "character/{set.side}/{color}.png"
@@ -527,7 +533,7 @@ rarity :=
 foil_shortcut :=
 {
 	if length(styling.foil_shortcut_override) > 0 then
-		stlying.foil_shortcut_override
+		styling.foil_shortcut_override
 	else if card.rarity == "SP" or card.rarity == "SSP" then
 		rarity_or_override_rarity(next_func: { card.rarity })
 	else if card.rarity == "RRR" then

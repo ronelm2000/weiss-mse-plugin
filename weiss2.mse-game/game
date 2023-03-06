@@ -268,6 +268,9 @@ card field:
 #### set fields
 
 set field:
+	type: info
+	name: Main
+set field:
 	type: text
 	name: set name
 	description: The name of the set.
@@ -295,6 +298,16 @@ set field:
 	multi line: true
 	name: set notes
 	description: Designer notes for the set, like things to avoid, TD ratios, etc. that can't be put in an individual card note.
+set field:
+	type: info
+	name: deprecation
+	description: These notes have been added to force the user to specify that the following functionalities will be removed in a future update. You will need to manually set these to true in your older sets so that you can change them, because MSE cannot set internal values by itself. Because.
+set field:
+	type: boolean
+	name: old soul values
+	description: If you set this to yes, you recognize that only "one", "two", "three", and "zero" should be used for soul values, and the older values will be removed in a future update.
+	initial: no
+	save value: false
 
 #### sorting
 card list color script:
