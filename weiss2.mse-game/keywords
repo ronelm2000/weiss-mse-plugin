@@ -55,6 +55,17 @@ keyword parameter type:
 		name: normal
 		description: Puts the name inscribed in "quotes", complete.
 		script: \{{input}\}
+		
+keyword parameter type:
+	name: name2
+	match: \<([a-ZA-Z0-9 ]+)\>
+	separator before is: \>
+	separator after is: \<
+	eat separator: true
+	refer script:
+		name: normal
+		description: Puts the name not inscribed in "quotes", complete.
+		script: \{{input}\}
 
 keyword:
 	keyword: book
@@ -375,3 +386,8 @@ keyword:
 	match: musashi?
 	mode: rule_shortcut
 	reminder: <sym>A</sym>During the turn that this card is placed on the stage from your hand, when damage dealt by this card is canceled, put the top card of your deck into your waiting room, and deal X damage to your opponent. X is equal to that card's level +1. <i>(Climax are regarded as level 0. This damage may be canceled)</i>
+keyword:
+	keyword: Trait
+	match: trait!
+	mode: rule_shortcut
+	reminder: «»
