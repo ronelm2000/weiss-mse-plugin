@@ -220,22 +220,22 @@ keyword:
 	keyword: Continous Effect
 	match: CONT
 	mode: symbol_shortcut
-	reminder: C
+	reminder: C|
 keyword:
 	keyword: Automatic Effect
 	match: AUTO
 	mode: symbol_shortcut
-	reminder: A
+	reminder: A|
 keyword:
 	keyword: Startup / Activated Effect
 	match: ACT
 	mode: symbol_shortcut
-	reminder: S
+	reminder: S|
 keyword:
 	keyword: Replay
 	match: REPLAY
 	mode: symbol_shortcut
-	reminder: R
+	reminder: R|
 	
 keyword:
 	keyword: 1 Stock
@@ -272,7 +272,7 @@ keyword:
 	keyword: CX Combo
 	match:CXC
 	mode: symbol_shortcut
-	reminder: x
+	reminder: x|
 keyword:
 	keyword: Rest
 	match: REST

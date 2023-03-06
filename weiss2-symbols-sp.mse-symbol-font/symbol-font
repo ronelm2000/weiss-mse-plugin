@@ -157,7 +157,10 @@ symbol:
 	code: +
 	image: soultrigger.png
 	enabled: true
-	
+symbol:
+	code: |
+	image: spacer.png
+	enabled: true
 insert symbol menu:
 	item:
 		type: submenu
@@ -197,3 +200,7 @@ insert symbol menu:
 		item: 4
 		item: 5
 		item: 6
+	item:
+		type: submenu
+		name: Special
+		item: |
