@@ -117,48 +117,48 @@ keyword:
 	keyword: cont +1000p +1soul
 	match: cxg1k1
 	mode: cx_generics
-	reminder: <sym>C</sym>All of your characters get +1000 power and +1 soul.
+	reminder: <sym>C|</sym>All of your characters get +1000 power and +1 soul.
 keyword:
 	keyword: cont +2soul
 	match: cxg2s
 	mode: cx_generics
-	reminder: <sym>C</sym>All of your characters get +2 soul.
+	reminder: <sym>C|</sym>All of your characters get +2 soul.
 keyword:
 	keyword: auto +2000p +1soul
 	match: cxg2k1
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from hand, draw a card, choose one of your characters, and that character gets +2000 power and +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, draw a card, choose one of your characters, and that character gets +2000 power and +1 soul until end of turn.
 keyword:
 	keyword: auto top deck to stock and +1 soul
 	match: cxgts
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from hand, put the top card of your deck into your stock, and all of your characters get +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, put the top card of your deck into your stock, and all of your characters get +1 soul until end of turn.
 keyword:
 	keyword: auto salvage a color to stock and +1 soul
 	match: cxgss<atom-param>color</atom-param>
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from your hand, choose up to one {color_to_word[remove_tags(param1)]} card in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, choose up to one {color_to_word[remove_tags(param1)]} card in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn.
 	rules: Color refers to a lowercase shortcut of "y", "g", "r", or "b".
 keyword:
 	keyword: auto draw a card and +1000 power
 	match: cxg1k+1
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from hand, draw a card, and all of your characters get +1000 power until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, draw a card, and all of your characters get +1000 power until end of turn.
 keyword:
 	keyword: auto draw a card and +3 soul
 	match: cxg3s
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from hand, draw a card, choose one of your characters, and that character gets +3 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, draw a card, choose one of your characters, and that character gets +3 soul until end of turn.
 keyword:
 	keyword: auto do the standby
 	match: cxgds
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from your hand, perform the <sym>*</sym> effect.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>*</sym> effect.
 keyword:
 	keyword: auto split soul
 	match: cxg1ss
 	mode: cx_generics
-	reminder: <sym>A</sym>When this card is placed on your climax area from your hand, draw a card, choose two of your characters, and those characters get +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, draw a card, choose two of your characters, and those characters get +1 soul until end of turn.
 	
 keyword:
 	keyword: encore
@@ -196,7 +196,7 @@ keyword:
 	keyword: no encore rule either (you)
 	match: youn_e
 	mode: reminder
-	reminder: You cannot use the "<sym>A</sym> <b>Encore</b> [<sym>3</sym>]" rule either
+	reminder: You cannot use the "<sym>A|</sym><b>Encore</b> [<sym>3</sym>]" rule either
 keyword:
 	keyword: otherwise, return on top
 	match: or_top
