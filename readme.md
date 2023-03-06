@@ -8,6 +8,6 @@ Weiss Schwarz ©bushiroad All Rights Reserved.
 
 This plugin for MSE2 (or Magic Set Editor 2) is designed to make custom cards for Weiss Schwarz, a TCG from Bushiroad. There's actually 2 major card forks for this plugin; one is by Benitez and is currently developed by Chairman, and the other (which is the the older one from sion) is currently this fork.
 
-This fork supports the newest mechanics, including "Link", "Choice", "Replay", "Standby", etc., but does not support "Japanese Text Name Bar" found exclusively in English Imported Sets. This set also supports foil/SP mechanics, but not SEC.
+This fork supports the newest mechanics, including "Link", "Choice", "Replay", "Standby", three traits, long 2nd trait, etc., but does not support "Japanese Text Name Bar" found exclusively in English Imported Sets. This set also supports foil/SP mechanics, but not SEC.
 
-![MSE UI](https://i.imgur.com/Ts97YY3.png)
+![MSE UI](https://user-images.githubusercontent.com/12634987/220225328-485ba3ae-0c9a-410a-9770-bf1b8f4ca2dc.png)
