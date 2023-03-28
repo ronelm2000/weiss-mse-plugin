@@ -85,6 +85,11 @@ styling field:
 	choice: long trait
 	choice: triple trait
 	description: Determines the style of the trait boxes. Do note that, for long trait style, the IMS format is used instead of the Fubuki format. Note that entering any trait in the third trait locks you to triple trait style, regardless of this value.
+styling field:
+	type: boolean
+	name: show replay
+	description: Show the replay text box
+	initial: no
 
 card style:
 	color:
@@ -515,7 +520,8 @@ card style:
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				if not styling.show_replay then 0
+				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
 				else if card.card_type == "climax" then 204 - 14 + 2
 				# previous was 209
 			}
@@ -1107,7 +1113,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		visible: { card.replay_text != "" }
+		visible: { styling.show_replay and card.replay_text != "" }
 		choice images:
 			default: bars\replay_border.png
 	replay bar 2:
@@ -1130,7 +1136,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		visible: { card.replay_text != "" }
+		visible: { styling.show_replay and card.replay_text != "" }
 		choice images:
 			default: bars\replay_border.png
 	replay bar 3:
@@ -1153,7 +1159,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		visible: { card.replay_text != "" }
+		visible: { styling.show_replay and card.replay_text != "" }
 		choice images:
 			default: bars\replay_border.png
 	replay bar 4:
@@ -1176,7 +1182,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		visible: { card.replay_text != "" }
+		visible: { styling.show_replay and card.replay_text != "" }
 		choice images:
 			default: bars\replay_border.png
 	## ## ## ## ## ##
@@ -1355,7 +1361,8 @@ extra card style:
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				if not styling.show_replay then 0
+				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
 				else if card.card_type == "climax" then 204 - 14 + 2
 				# previous was 209
 			}
@@ -1393,7 +1400,8 @@ extra card style:
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				if not styling.show_replay then 0
+				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
 				else if card.card_type == "climax" then 204 - 14 + 2
 				# previous was 209
 			}
@@ -1431,7 +1439,8 @@ extra card style:
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				if not styling.show_replay then 0
+				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
 				else if card.card_type == "climax" then 204 - 14 + 2
 				# previous was 209
 			}
@@ -1469,7 +1478,8 @@ extra card style:
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				if not styling.show_replay then 0
+				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
 				else if card.card_type == "climax" then 204 - 14 + 2
 				# previous was 209
 			}

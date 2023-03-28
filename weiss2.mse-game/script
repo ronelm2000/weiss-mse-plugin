@@ -533,7 +533,7 @@ rarity :=
 foil_shortcut :=
 {
 	if length(styling.foil_shortcut_override) > 0 then
-		styling.foil_shortcut_override
+		stlying.foil_shortcut_override
 	else if card.rarity == "SP" or card.rarity == "SSP" then
 		rarity_or_override_rarity(next_func: { card.rarity })
 	else if card.rarity == "RRR" then
@@ -849,11 +849,17 @@ replay_text_height :=
 {
 #	card_style.replay_text.content_height or else set.stylesheet.card_style.replay_text.content_height
 #	ceil(card_style.replay_text.content_lines * line_height)
-	ceil(layout_height(card_style.replay_text))
+	if styling.show_replay then
+		ceil(layout_height(card_style.replay_text))
+	else
+		0
 }
 replay_text_width :=
 {
-	(card_style.replay_text.width or else set.stylesheet.card_style.replay_text.width) - 2
+	if styling.show_replay then
+		(card_style.replay_text.width or else set.stylesheet.card_style.replay_text.width) - 2
+	else
+		0
 }
 
 replay_box_height :=
