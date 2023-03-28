@@ -533,7 +533,7 @@ rarity :=
 foil_shortcut :=
 {
 	if length(styling.foil_shortcut_override) > 0 then
-		stlying.foil_shortcut_override
+		styling.foil_shortcut_override
 	else if card.rarity == "SP" or card.rarity == "SSP" then
 		rarity_or_override_rarity(next_func: { card.rarity })
 	else if card.rarity == "RRR" then
