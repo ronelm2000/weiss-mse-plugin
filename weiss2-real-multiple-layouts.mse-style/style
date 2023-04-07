@@ -89,7 +89,7 @@ styling field:
 	type: boolean
 	name: show replay
 	description: Show the replay text box
-	initial: no
+	initial: yes
 
 card style:
 	color:
