@@ -42,6 +42,20 @@ map_utils := [
 	keys: { [] + ( for each k:v in input do [k] ) }
 ]
 
+card_utils := [
+	notes: {
+		#input: the in_context match
+		#filter_text(match: "(bond)((\\w|\\s|[:punct:]|\\\\|:|\"|'|!|,|.)+)((\n)?)", in_context: "<match>", card.notes)
+		initial_regex :=  "(" + regex_escape(input) + ": )"
+		result := filter_text(match: initial_regex + "((\\w|\\s|:|\"|'|!|,|\\.)+)(\\n)", in_context: "<match>", card.notes)
+		if (result == "") then
+			result := filter_text(match: "(" + regex_escape(input) + ": )((\\w|\\s|:|\"|'|!|,|\\.)+)", in_context: "<match>", card.notes)
+		result := replace(match: "^" + initial_regex, replace: "", result)
+		result := replace(match: "(\\n)$", replace: "", result)
+		result
+		# filter_text(match: "((\\w|\\s|[:punct:])+)(?:[\n]?)", in_context: "<match>", input:card.notes)
+	}
+]
 
 ######################
 
@@ -371,8 +385,8 @@ auto_fix :=
 		
 	# Step 3: Add color and size
 	# TODO: Do not apply this if the language is japanese, I guess? But right now there's no support for JP cards.
-	replace@(match: "《|(\\[<]{2})", replace: "«") +
-	replace@(match: "》|([>]{2})", replace: "»") +
+	replace@(match: "《", replace: "«") +
+	replace@(match: "》", replace: "»") +
 	replace@(match: "»|«", replace: "<font-auto:MS Reference Sans Serif>\\0</font-auto>") + 
 	#replace@(match: "", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +

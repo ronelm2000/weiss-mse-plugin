@@ -58,9 +58,8 @@ keyword parameter type:
 		
 keyword parameter type:
 	name: name2
-	match: \<([a-ZA-Z0-9 ]+)\>
-	separator before is: \>
-	separator after is: \<
+	match: ([a-ZA-Z0-9 \\-]+)!
+	separator after is: !
 	eat separator: true
 	refer script:
 		name: normal
@@ -171,6 +170,11 @@ keyword:
 	mode: reminder
 	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {param1} in your waiting room, and return it to your hand.
 keyword:
+	keyword: bond (Noted Names)
+	match: bonds!
+	mode: reminder
+	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {card_utils.notes("bond")} in your waiting room, and return it to your hand.
+keyword:
 	keyword: great performance
 	match: gp_e
 	mode: reminder
@@ -185,7 +189,7 @@ keyword:
 	keyword: backup
 	match: backup<atom-param>number</atom-param>!
 	mode: reminder
-	reminder: Choose one of your characters that is being frontal attacked, and that character gets +{param1} power until end of turn
+	reminder: Choose 1 of your characters that is being frontal attacked, and that character gets +{param1} power until end of turn
 
 keyword:
 	keyword: no encore rule either (opponent)
@@ -211,7 +215,12 @@ keyword:
 	keyword: cancellable damage
 	match: c_d
 	mode: reminder
-	reminder: This damage may be canceled
+	reminder: Damage may be canceled
+keyword:
+	keyword: Climax are Level 0
+	match: cx0!
+	mode: reminder
+	reminder: Climax are regarded as level 0 this way
 
 ###################
 # Symbol Shortcuts
@@ -385,9 +394,9 @@ keyword:
 	keyword: Musashi & Friends
 	match: musashi?
 	mode: rule_shortcut
-	reminder: <sym>A</sym>During the turn that this card is placed on the stage from your hand, when damage dealt by this card is canceled, put the top card of your deck into your waiting room, and deal X damage to your opponent. X is equal to that card's level +1. <i>(Climax are regarded as level 0. This damage may be canceled)</i>
+	reminder: <sym>A|</sym>During the turn that this card is placed on the stage from your hand, when damage dealt by this card is canceled, put the top card of your deck into your waiting room, and deal X damage to your opponent. X is equal to that card's level +1. <i>(Climax are regarded as level 0. Damage may be canceled)</i>
 keyword:
 	keyword: Trait
-	match: trait!
+	match: t:<atom-param>name2</atom-param>!
 	mode: rule_shortcut
-	reminder: «»
+	reminder: «{param1}»
