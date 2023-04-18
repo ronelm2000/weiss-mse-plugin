@@ -385,8 +385,8 @@ auto_fix :=
 		
 	# Step 3: Add color and size
 	# TODO: Do not apply this if the language is japanese, I guess? But right now there's no support for JP cards.
-	replace@(match: "《", replace: "«") +
-	replace@(match: "》", replace: "»") +
+	replace@(match: "《|(\<\<)", replace: "«") +
+	replace@(match: "》|(>>)", replace: "»") +
 	replace@(match: "»|«", replace: "<font-auto:MS Reference Sans Serif>\\0</font-auto>") + 
 	#replace@(match: "", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
