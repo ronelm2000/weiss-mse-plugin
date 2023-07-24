@@ -75,6 +75,15 @@ styling field:
 	name: set override
 	description: Override the set id for this card (normally set via the set properties) with your own value. Used for collab sets like Bunko sets.	
 styling field:
+	type: choice
+	name: side override
+	choice: default
+	choice: weiss
+	choice: schwarz
+	choice: both
+	initial: default
+	description: Provides an override for the side that should be displayed for this card.
+styling field:
 	type: text
 	name: wave id
 	description: Only applies in a Trial Deck or a PR. The default value is "00000" (5 digits). Assigns an ID for which this Trial Deck card or wave of PR it should belong to. Helps in sets with multiple Trial Decks and/or PR waves.
@@ -637,8 +646,8 @@ card style:
 			weight: bold
 			color:
 				{
-					if set.side == "weiss" then rgb(122,122,39)
-					else if set.side == "schwarz" then rgb(244,244,0)
+					if get_side() == "weiss" then rgb(122,122,39)
+					else if get_side() == "schwarz" then rgb(244,244,0)
 					else rgb(244,244,0)
 				}
 extra card field:
@@ -1531,7 +1540,7 @@ extra card style:
 			weight: bold
 			color:
 				{
-					if set.side == "weiss" then rgb(122,122,39)
-					else if set.side == "schwarz" then rgb(244,244,0)
+					if get_side() == "weiss" then rgb(122,122,39)
+					else if get_side() == "schwarz" then rgb(244,244,0)
 					else rgb(244,244,0)
 				}

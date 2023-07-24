@@ -139,6 +139,11 @@ keyword:
 	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, choose up to one {color_to_word[remove_tags(param1)]} card in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn.
 	rules: Color refers to a lowercase shortcut of "y", "g", "r", or "b".
 keyword:
+	keyword: auto salvage a level 1 or lower to stock and +1 soul
+	match: cxgss1
+	mode: cx_generics
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, choose up to 1 level 1 or lower character in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn. 
+keyword:
 	keyword: auto draw a card and +1000 power
 	match: cxg1k+1
 	mode: cx_generics
@@ -220,7 +225,7 @@ keyword:
 	keyword: Climax are Level 0
 	match: cx0!
 	mode: reminder
-	reminder: Climax are regarded as level 0 this way
+	reminder: Climax are regarded as level 0
 
 ###################
 # Symbol Shortcuts
@@ -400,3 +405,13 @@ keyword:
 	match: t:<atom-param>name2</atom-param>!
 	mode: rule_shortcut
 	reminder: «{param1}»
+keyword:
+	keyword: Multiplied By
+	match: multiplied_by!
+	mode: rule_shortcut
+	reminder:×
+keyword:
+	keyword: On-Death Akatsuki
+	match: akatsuki2!
+	mode: rule_shortcut
+	reminder: <sym>A|</sym>[Put 1 card from your hand into your waiting room] When this card is put into your waiting room from the stage, you may pay the cost. If you do, look at up to 4 cards from the top of your deck, choose up to 1 level 1 or higher card from among them, reveal it to your opponent, put it into your hand, and put the rest into your waiting room.cx0!

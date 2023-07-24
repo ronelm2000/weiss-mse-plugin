@@ -193,7 +193,7 @@ to_map_from_card := { # (card input)
 		traits: as_multilang_trait(input.trait_one) + as_multilang_trait(input.trait_two),
 		type: input.card_type,
 		color: input.color,
-		side: set.side,
+		side: get_side(card: input),
 		rarity: input.api_rarity,
 		level: position(of: [input.level], in: english_numbers),
 		cost: position(of: [input.cost], in: english_numbers),
@@ -375,6 +375,9 @@ auto_fix :=
 		replace: "<replay>\\2</replay>"
 	) +
 	tag_contents@(tag: "<replay>", contents: { "<b-auto><color:rgba(225,25,25,255)>{ input }</color></b-auto>" }) +
+	
+	# step 3d: Add support for some special fonts
+	tag_contents@(tag: "<greek>", contents: { "<font-auto:Arial>{ input }</font-auto>" })+
 		
 	# step 3: revert back <kw-a>
 	#tag_contents@(
@@ -469,9 +472,9 @@ card_colored_soul :=
 	)
 	fixed_soul := soul_pair[0]
 	if soul == "zero" then
-		input := "character/{set.side}/{color}.png"
+		input := "character/{get_side()}/{color}.png"
 	else (
-		input := masked_blend(light: "character/{set.side}/{color}.png", 
+		input := masked_blend(light: "character/{get_side()}/{color}.png", 
 			dark: "souls/" + position(of: [fixed_soul], in: english_numbers) + "s.png", 
 			mask: "souls/" + position(of: [fixed_soul], in: english_numbers) + "s_mask.png"
 			)
@@ -957,8 +960,8 @@ white_color_bar :=
 climax_and_character_colored_card :=
 {
 	if type == "character" then input := card_colored_soul(soul: soul, color: color)
-	else if type == "climax" then input := "climax/" + set.side + "/"  + color + ".png"
-	else if type == "event" then input := "event/" + set.side + "/" + color + ".png"
+	else if type == "climax" then input := "climax/" + get_side() + "/"  + color + ".png"
+	else if type == "event" then input := "event/" + get_side() + "/" + color + ".png"
 	else input := ""
 }
 
@@ -968,4 +971,12 @@ sp_shadow :=
 		rgb(255,255,255)
 	else
 		rgba(0,0,0,0)
+}
+
+get_side :=
+{
+	if styling.side_override == "default" then
+		set.side
+	else
+		styling.side_override
 }
