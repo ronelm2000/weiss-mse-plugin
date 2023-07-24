@@ -3,7 +3,7 @@ full name: All Card Types
 short name: Standard
 icon: icon.png
 position hint: 1
-version: 2021-08-08
+version: 2023-07-24
 game: weiss2
 
 depends on:
