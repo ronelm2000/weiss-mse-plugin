@@ -244,7 +244,9 @@ sym_to_icons := [
 	"&": "[GOLD]",
 	"*": "[STANDBY]",
 	"(": "[CHOICE]",
-	"+": "[SOUL]"
+	"+": "[SOUL]",
+	"|": " ",
+	"\n": " "
 ]
 
 sanitize_for_export := { input } +
@@ -288,6 +290,7 @@ sanitize_for_export := { input } +
 	remove_tag@(tag: "<value") +
 	remove_tag@(tag: "<cost") +
 	remove_tag@(tag: "<hidden") +
+	remove_tag@(tag: "<greek>") +
 	
 	# Remove other tags
 	remove_tag@(tag: "<b") +
