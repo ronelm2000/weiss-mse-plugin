@@ -333,6 +333,16 @@ auto_fix :=
 	remove_tag@(tag: "<align") +
 	remove_tag@(tag: "<value") +
 	
+	# Step 0: Only use in emergencies
+	{
+		if (set.nuke_magic_text == "yes" or styling.nuke_magic_text == "yes") then
+			(	
+				remove_tag@(tag: "<sym>")
+			)(input)
+		else
+			input
+	} +
+	
 	# step 2 : reminder text for keywords
 	# before: not contains(card.rules_text, match: "<i-keyword>") // and not used_placeholders
 	expand_keywords@(
@@ -391,8 +401,8 @@ auto_fix :=
 		
 	# Step 3: Add color and size
 	# TODO: Do not apply this if the language is japanese, I guess? But right now there's no support for JP cards.
-	replace@(match: "《|(\<\<)", replace: "«") +
-	replace@(match: "》|(>>)", replace: "»") +
+	replace@(match: "《|(\<\<\<)", replace: "«") +
+	replace@(match: "》|(>>>)", replace: "»") +
 	replace@(match: "»|«", replace: "<font-auto:MS Reference Sans Serif>\\0</font-auto>") + 
 	#replace@(match: "", replace: "<size-auto:9.3><font-auto:MS Reference Sans Serif>\\0</font-auto></size-auto>") +
 	#replace@(match: "<i>", replace: "<size:8.9><color:rgba(33,33,33,200)>\\0") +
