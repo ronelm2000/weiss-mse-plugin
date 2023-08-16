@@ -86,15 +86,6 @@ symbol:
 	image: six.png
 	image font size: 13
 	enabled: true
-# traits
-symbol:
-	code: <
-	image: aleft.png
-	enabled: true
-symbol:
-	code: >
-	image: aright.png
-	enabled: true
 # special symbols
 symbol:
 	code: b
