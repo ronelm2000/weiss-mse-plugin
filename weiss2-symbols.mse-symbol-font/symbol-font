@@ -1,0 +1,232 @@
+mse version: 2.1.2
+version: 2021-08-08
+short name: normal
+position hint: 000
+
+image font size: 13
+horizontal space: 1
+scale text: true
+
+# deprecated
+#symbol:
+#	code: act
+#	image: act.png
+#	enabled: true
+#symbol:
+#	code: auto
+#	image: auto.png
+#	enabled: true
+#symbol:
+#	code: cont
+#	image: cont.png
+#	enabled: true
+
+# better versions, works with justify, for some reason	
+symbol:
+	code: S
+	image: act.png
+	image font size: 44
+	enabled: true
+symbol:
+	code: A
+	image: auto.png
+	image font size: 44
+	enabled: true
+symbol:
+	code: C
+	image: cont.png
+	image font size: 44
+	enabled: true
+symbol:
+	code: R
+	image: replay.png
+	image font size: 275
+	enabled: true
+# activations
+symbol:
+	code: r
+	image: rest.png
+	enabled: true
+symbol:
+	code: v
+	image: reverse.png
+	enabled: true
+symbol:
+	code: s
+	image: stand.png
+	enabled: true
+# numbers	
+symbol:
+	code: 1
+	image: one.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 2
+	image: two.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 3
+	image: three.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 4
+	image: four.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 5
+	image: five.png
+	image font size: 13
+	enabled: true
+symbol:
+	code: 6
+	image: six.png
+	image font size: 13
+	enabled: true
+# traits
+symbol:
+	code: <
+	image: aleft.png
+	enabled: true
+symbol:
+	code: >
+	image: aright.png
+	enabled: true
+# special symbols
+symbol:
+	code: b
+	image: backupmini.png
+	image font size: 10
+	enabled: true
+symbol:
+	code: c
+	image: clockshiftmini.png
+	image font size: 10
+	enabled: true
+symbol:
+	code: x
+	image: cx_combo.png
+	image font size: 54
+	enabled: true
+symbol:
+	code: l
+	image: link.png
+	image font size: 325
+	enabled: true
+# climax triggers
+symbol:
+	code: !
+	image: bouncetrigger.png
+	enabled: true
+symbol:
+	code: @
+	image: bagtrigger.png
+	enabled: true
+symbol:
+	code: #
+	image: booktrigger.png
+	enabled: true
+symbol:
+	code: $
+	image: burntrigger.png
+	enabled: true
+symbol:
+	code: %
+	image: doortrigger.png
+	enabled: true
+symbol:
+	code: ^
+	image: gatetrigger.png
+	enabled: true
+symbol:
+	code: &
+	image: goldtrigger.png
+	enabled: true
+symbol:
+	code: *
+	image: standbytrigger.png
+	enabled: true
+symbol:
+	code: (
+	image: choicetrigger.png
+	enabled: true
+symbol:
+	code: )
+	image: magnifytrigger.png
+	enabled: true
+symbol:
+	code: =
+	image: banktrigger.png
+	enabled: true
+symbol:
+	code: N
+	image: anchortrigger.png
+	enabled: true
+symbol:
+	code: T
+	image: tickettrigger.png
+	enabled: true
+symbol:
+	code: W
+	image: wheeltrigger.png
+	enabled: true
+symbol:
+	code: +
+	image: soultrigger.png
+	enabled: true
+symbol:
+	code: |
+	image: spacer.png
+	enabled: true
+insert symbol menu:
+	item:
+		type: submenu
+		name: Types of Abilities
+		item: S
+		item: A
+		item: C
+		item: R
+	item:
+		type: submenu
+		name: Effect Icons
+		item: x
+		item: r
+		item: v
+		item: s
+		item: b
+		item: c
+		item: l
+	item:
+		type: submenu
+		name: Trigger Icons
+		item: !
+		item: @
+		item: #
+		item: $
+		item: %
+		item: ^
+		item: &
+		item: *
+		item: (
+		item: )
+		item: =
+		item: N
+		item: T
+		item: W
+		item: +
+	item:
+		type: submenu
+		name: Pay Stock
+		item: 1
+		item: 2
+		item: 3
+		item: 4
+		item: 5
+		item: 6
+	item:
+		type: submenu
+		name: Special
+		item: |
