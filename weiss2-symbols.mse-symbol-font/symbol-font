@@ -86,6 +86,15 @@ symbol:
 	image: six.png
 	image font size: 13
 	enabled: true
+# traits
+symbol:
+	code: <
+	image: aleft.png
+	enabled: true
+symbol:
+	code: >
+	image: aright.png
+	enabled: true
 # special symbols
 symbol:
 	code: b
@@ -145,6 +154,26 @@ symbol:
 	image: choicetrigger.png
 	enabled: true
 symbol:
+	code: )
+	image: magnifytrigger.png
+	enabled: true
+symbol:
+	code: =
+	image: banktrigger.png
+	enabled: true
+symbol:
+	code: N
+	image: anchortrigger.png
+	enabled: true
+symbol:
+	code: T
+	image: tickettrigger.png
+	enabled: true
+symbol:
+	code: W
+	image: wheeltrigger.png
+	enabled: true
+symbol:
 	code: +
 	image: soultrigger.png
 	enabled: true
@@ -182,6 +211,11 @@ insert symbol menu:
 		item: &
 		item: *
 		item: (
+		item: )
+		item: =
+		item: N
+		item: T
+		item: W
 		item: +
 	item:
 		type: submenu

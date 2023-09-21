@@ -36,14 +36,14 @@ keyword parameter type:
 
 keyword parameter type:
 	name: color
-	match: [rgby]
+	match: [rgbyp]
 	refer script:
 		name: normal
-		description: (r for red, g for green, b for blue, and y for yellow)
+		description: (r for red, g for green, b for blue, y for yellow, and p for purple)
 		script: \{{input}\}
 	refer script:
 		name: as words
-		description: (red, green, blue, yellow), in lowercase
+		description: (red, green, blue, yellow, purple), in lowercase
 		script: \{color_to_word[remove_tags(param1)]}\}
 		
 keyword parameter type:
@@ -111,7 +111,31 @@ keyword:
 	match: choice!
 	mode: trigger
 	reminder: <sym>(</sym>: When this card triggers, you may choose a character with <sym>+</sym> in its trigger icon in your waiting room, and either return it into your hand or put it into your stock.
-
+keyword:
+	keyword: magnify
+	match: mag!
+	mode: trigger
+	reminder: <sym>)</sym>: When this card triggers, you may search your deck for up to 1 character with a level equal to or less than your level +1, reveal it to your opponent, put it into your hand, and shuffle your deck.
+keyword:
+	keyword: bank
+	match: bank
+	mode: trigger
+	reminder: <sym>=</sym>: When this card triggers, you may search your stock for a card, add it to your hand, shuffle your stock, and put the top card of your deck into your stock. Then put this card into your stock.
+keyword:
+	keyword: anchor
+	match: anchor
+	mode: trigger
+	reminder: <sym>N</sym>: When this card triggers, you may choose 1 of your opponent's characters. If you do, your opponent chooses 1 level X or lower character in their waiting room with a different name from the character you chose, and exchanges them. X is equal to your level.
+keyword:
+	keyword: ticket
+	match: ticket
+	mode: trigger
+	reminder: <sym>T</sym>: When this card triggers, you may reveal any number of cards from your hand, shuffle those cards into your deck, then draw X cards. X is equal to the number of cards revealed during this card's trigger check.
+keyword:
+	keyword: wheel
+	match: wheel
+	mode: trigger
+	reminder: <sym>W</sym>: When this card triggers, put this card at the bottom of your deck. You may put the top card of your deck into your stock. Shuffle your deck.
 keyword:
 	keyword: cont +1000p +1soul
 	match: cxg1k1
@@ -137,7 +161,7 @@ keyword:
 	match: cxgss<atom-param>color</atom-param>
 	mode: cx_generics
 	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, choose up to one {color_to_word[remove_tags(param1)]} card in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn.
-	rules: Color refers to a lowercase shortcut of "y", "g", "r", or "b".
+	rules: Color refers to a lowercase shortcut of "y", "g", "r","b", "p".
 keyword:
 	keyword: auto salvage a level 1 or lower to stock and +1 soul
 	match: cxgss1
@@ -159,11 +183,20 @@ keyword:
 	mode: cx_generics
 	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>*</sym> effect.
 keyword:
+	keyword: auto do the magnify
+	match: cxgdm
+	mode: cx_generics
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>)</sym> effect, choose 1 of your characters, and that character gets +1 soul until end of turn.
+keyword:
+	keyword: auto do the anchor
+	match: cxgda
+	mode: cx_generics
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>N</sym> effect.
+keyword:
 	keyword: auto split soul
 	match: cxg1ss
 	mode: cx_generics
 	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, draw a card, choose two of your characters, and those characters get +1 soul until end of turn.
-	
 keyword:
 	keyword: encore
 	match: encore_e
@@ -189,7 +222,7 @@ keyword:
 	match: shift_<atom-param>color</atom-param>
 	mode: reminder
 	reminder: At the beginning of your main phase, you may choose a {color_to_word[remove_tags(param1)]} card in your hand and this card in your clock, and exchange them.
-	rules: Color refers to a lowercase shortcut of "y", "g", "r", or "b".
+	rules: Color refers to a lowercase shortcut of "y", "g", "r", "b", or "p".
 keyword:
 	keyword: backup
 	match: backup<atom-param>number</atom-param>!
@@ -377,6 +410,31 @@ keyword:
 	match: CHOICE`
 	mode: symbol_shortcut
 	reminder: (
+keyword:
+	keyword: Magnify Trigger
+	match: MAGNIFY`
+	mode: symbol_shortcut
+	reminder: )
+keyword:
+	keyword: Bank Trigger
+	match: BANK`
+	mode: symbol_shortcut
+	reminder: =
+keyword:
+	keyword: Anchor Trigger
+	match: ANCHOR`
+	mode: symbol_shortcut
+	reminder: N
+keyword:
+	keyword: Ticket Trigger
+	match: TICKET`
+	mode: symbol_shortcut
+	reminder: T
+keyword:
+	keyword: Wheel Trigger
+	match: WHEEL`
+	mode: symbol_shortcut
+	reminder: W
 keyword:
 	keyword: Soul Trigger
 	match: SOUL`
