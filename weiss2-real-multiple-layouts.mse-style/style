@@ -99,15 +99,6 @@ styling field:
 	name: show replay
 	description: Show the replay text box
 	initial: yes
-styling field:
-	type: info
-	name: debug info
-styling field:
-	type: boolean
-	name: nuke magic text
-	description: Nuke all magic text in the card text; note that toggling this causes permanent changes in the card text.
-	initial: no
-	save value: false
 
 card style:
 	color:
@@ -140,6 +131,8 @@ card style:
 			green: { climax_and_character_colored_card(soul: card.soul, color: "green", type: card.card_type) }
 			red: { climax_and_character_colored_card(soul: card.soul, color: "red", type: card.card_type) }
 			blue: { climax_and_character_colored_card(soul: card.soul, color: "blue", type: card.card_type) }
+			purple: { climax_and_character_colored_card(soul: card.soul, color: "purple", type: card.card_type) }
+
 	image:
 		top: 0
 		left: 
@@ -580,6 +573,12 @@ card style:
 			c-soul: triggers\climaxsoul.png
 			standby: triggers\standby.png
 			choice: triggers\choice.png
+			magnify: triggers\magnify.png
+			bank: triggers\bank.png
+			anchor: triggers\anchor.png
+			ticket: triggers\ticket.png
+			wheel: triggers\wheel.png
+
 	extra trigger:
 		top: 14
 		left: 333
@@ -606,6 +605,11 @@ card style:
 			c-soul: triggers\climaxsoul.png
 			standby: triggers\standby.png
 			choice: triggers\choice.png
+			magnify: triggers\magnify.png
+			bank: triggers\bank.png
+			anchor: triggers\anchor.png
+			ticket: triggers\ticket.png
+			wheel: triggers\wheel.png
 	card type:
 		top: 
 			{
