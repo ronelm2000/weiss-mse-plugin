@@ -190,7 +190,7 @@ as_multilang_trait := { # string input
 to_map_from_card := { # (card input)
 	[ 	name: [en: input.cardname, jp: ""],
 		serial: input.api_serial,
-		traits: as_multilang_trait(input.trait_one) + as_multilang_trait(input.trait_two),
+		traits: as_multilang_trait(input.trait_one) + as_multilang_trait(input.trait_two) + as_multilang_trait(input.trait_three),
 		type: input.card_type,
 		color: input.color,
 		side: get_side(card: input),
@@ -248,6 +248,12 @@ sym_to_icons := [
 	"|": " ",
 	"\n": " "
 ]
+	
+filter_reminder := { input }
+	+ tag_contents@(tag: "<atom", contents: remove_tags@()) 
+	+ filter_text@(match: "(<atom[^>]*>)([^)]+[)])(</atom[^>]*>)")
+	+ { " " + input }
+	;
 
 sanitize_for_export := { input } +
 	# Remove Automated Tags
@@ -255,12 +261,15 @@ sanitize_for_export := { input } +
 	remove_tag@(tag: "<i-auto>")   +
 	remove_tag@(tag: "<b-auto>")   +
 	remove_tag@(tag: "<error-spelling") +
-	remove_tag@(tag: "<nospellcheck") +
 	remove_tag@(tag: "<color") +
 	remove_tag@(tag: "<size-auto") +
 	remove_tag@(tag: "<font-auto") +
 	remove_tag@(tag: "<font") +
 	remove_tag@(tag: "<align") +
+	
+	# Remove <nospellcheck> special rules
+	tag_contents@(tag: "<nospellcheck" contents: replace@(match:"<kw-A>|<kw-a>|<kw-1>", replace: "")) +
+	remove_tag@(tag: "<nospellcheck") +
 	
 	# Replace special tags
 	replace@(match: "<cost:([1-9])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
@@ -281,10 +290,13 @@ sanitize_for_export := { input } +
 		cost := get_cost(input)
 		"({ cost })"
 	}) +
+	tag_contents@(tag: "<kw", contents: filter_reminder) +
 	tag_contents@(tag: "<replay>", contents: { "\{{ input }\}" }) +
 	tag_contents@(tag: "<hidden", contents: { "" }) +
 	
 	# Remove special tags
+	remove_tag@(tag: "<kw") +
+	remove_tag@(tag: "<atom") +
 	remove_tag@(tag: "<replay>") +
 	remove_tag@(tag: "<sym>") +
 	remove_tag@(tag: "<value") +
@@ -294,14 +306,16 @@ sanitize_for_export := { input } +
 	
 	# Remove other tags
 	remove_tag@(tag: "<b") +
-	remove_tag@(tag: "<b") +
 	remove_tag@(tag: "<i") +
 	remove_tag@(tag: "<customita>") +
 	remove_tag@(tag: "<soft") +
 	
+	# Remove double spaces
+	replace@(match: "  ", replace: " ") +
+	
 	{ input }
 	;
-	
+
 sanitize_for_filename := { input } +
 	replace@(match: "/|-", replace: "_") +
 	{ input }
