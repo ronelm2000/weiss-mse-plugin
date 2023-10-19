@@ -20,12 +20,17 @@ option field:
 	type: boolean
 	name: export images
 	description: Export images? This is required to export to Tabletop Simulator via wsmtools
-
+option field:
+	type: text
+	name: zoom multiplier
+	default: 1.25
+	description: Zoom multiplier for the exported images.
 script:
+	zoom_int := to_number(options.zoom_multiplier)
 	if options.export_images == "yes" then 
 	(
 		for each card in cards do (
-			write_image_file(card, file:"{sanitize_for_filename(card.api_serial)}.jpg", width: stylesheet.card_width * 3, height: stylesheet.card_height * 3);
+			write_image_file(card, file:"{sanitize_for_filename(card.api_serial)}.jpg", width: stylesheet.card_width * zoom_int, height: stylesheet.card_height * zoom_int);
 		)
 	)
 	to_string(to_json(cards))

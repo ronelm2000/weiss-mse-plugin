@@ -214,7 +214,7 @@ to_array_from_set := { # (set input)
 }
 
 ####### Sanitizers #######
-sym_to_icons := [
+sym_to_icons_array := [
 	"C": "[CONT]",
 	"A": "[AUTO]",
 	"S": "[ACT]",
@@ -248,7 +248,11 @@ sym_to_icons := [
 	"|": " ",
 	"\n": " "
 ]
-	
+
+sym_to_icons := { # (character input)
+	sym_to_icons_array[input] or else " "
+}
+
 filter_reminder := { input }
 	+ tag_contents@(tag: "<atom", contents: remove_tags@()) 
 	+ filter_text@(match: "(<atom[^>]*>)([^)]+[)])(</atom[^>]*>)")
@@ -277,7 +281,7 @@ sanitize_for_export := { input } +
 		text_input := to_text(input)
 		array := []
 		for i from 1 to length(text_input) do
-			array := array + [sym_to_icons[text_input[i-1]]] 
+			array := array + [sym_to_icons(text_input[i-1])] 
 		if array != [] then
 			list_utils.join(array, seperator: " ")
 		else
