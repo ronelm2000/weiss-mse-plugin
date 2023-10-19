@@ -99,6 +99,15 @@ styling field:
 	name: show replay
 	description: Show the replay text box
 	initial: yes
+styling field:
+	type: info
+	name: debug info
+styling field:
+	type: boolean
+	name: nuke magic text
+	description: Nuke all magic text in the card text; note that toggling this causes permanent changes in the card text.
+	initial: no
+	save value: false
 
 card style:
 	color:

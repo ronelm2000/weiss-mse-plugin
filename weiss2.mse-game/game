@@ -319,15 +319,26 @@ set field:
 	description: If you set this to yes, you recognize that only "one", "two", "three", and "zero" should be used for soul values, and the older values will be removed in a future update.
 	initial: no
 	save value: false
+set field:
+	type: info
+	name: debug
+	description: Only use in case of emergencies or if told to do so, as it forces irreperable changes to the set to fix certain issues when updating sets
+set field:
+	type: boolean
+	name: nuke magic text
+	description: Removes all <sym> tags on card text when used. After enabling this option, you'll still need to load all card text to reflect all changes.
+	initial: no
+	save value: false
 
 #### sorting
 card list color script:
 	input := card.color
 	if      input == "yellow" then rgb(140,126,0)
-	else if input == "blue"  then rgb(0,64,168)
-	else if input == "red"   then rgb(168,0,0)
-	else if input == "green" then rgb(0,168,0)
-	else if input == "green" then rgb(140,0,140)
+	else if input == "blue"   then rgb(0,64,168)
+	else if input == "red"    then rgb(168,0,0)
+	else if input == "green"  then rgb(0,168,0)
+	else if input == "purple" then rgb(140,0,140)
+
 #### card scripts
 add cards script:
 	name: &Extra Booster Yellow

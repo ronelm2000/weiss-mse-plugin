@@ -186,7 +186,7 @@ keyword:
 	keyword: auto do the magnify
 	match: cxgdm
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>)</sym> effect, choose 1 of your characters, and that character gets +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>M</sym> effect, choose 1 of your characters, and that character gets +1 soul until end of turn.
 keyword:
 	keyword: auto do the anchor
 	match: cxgda
@@ -414,12 +414,12 @@ keyword:
 	keyword: Magnify Trigger
 	match: MAGNIFY`
 	mode: symbol_shortcut
-	reminder: )
+	reminder: M
 keyword:
 	keyword: Bank Trigger
 	match: BANK`
 	mode: symbol_shortcut
-	reminder: =
+	reminder: B
 keyword:
 	keyword: Anchor Trigger
 	match: ANCHOR`
