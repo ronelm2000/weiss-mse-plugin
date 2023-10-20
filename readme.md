@@ -11,3 +11,43 @@ This plugin for MSE2 (or Magic Set Editor 2) is designed to make custom cards fo
 This fork supports the newest mechanics, including "Link", "Choice", "Replay", "Standby", three traits, long 2nd trait, etc., but does not support "Japanese Text Name Bar" found exclusively in English Imported Sets. This set also supports foil/SP mechanics, but not SEC.
 
 ![MSE UI](https://user-images.githubusercontent.com/12634987/220225328-485ba3ae-0c9a-410a-9770-bf1b8f4ca2dc.png)
+
+
+## Installation
+1. Get the latest release [here](https://github.com/ronelm2000/weiss-mse-plugin/releases)
+2. Run downloaded `weiss2.mse-installer` in [Magic Set Editor](https://github.com/twanvl/MagicSetEditor2/releases/) (2.1.2 is required.) Follow the instructions to all items in the provided plugin.
+3. Download provided `fonts.zip` and install all fonts in it.
+
+## Usage
+1. After creating a new set with `RWeiss > Standard`, you can create cards with the `Add Card` button.
+2. You can click on any of the following to change its card stats:
+   - Level Icon
+   - Cost Icon
+   - Trigger
+   - Icons Under the Cost (Counter or Alarm)
+   - The area where `CH` is (Card Type)
+   - The area on the right of the serial (Card Rarity)
+   - Soul Icon
+   - Logo
+   - Art
+3. Blank inputs provide the following information:
+   - Flavor Text
+   - Rules Text
+   - Replay Text (Separate from the Rules Text)
+   - Traits (Traits 1, 2, and 3) (Only avaiable for Characters)
+   - Copyright Text
+4. Click on `Style` Tab to change specific details for Weiss cards
+   *Note: To change the style of only 1 card, be sure to check `Options specific to this card`.
+5. Click on `Set Info` tab to change details pertaining to the set.
+   - Set ID and Subset ID changes the Serial Prefix used for each card
+   - Side changes the default Side color used for the set (can be overrided from `Style` settings)
+   - `Is using legacy card images` is for compatibility for older sets
+6. When typing on `Rules Text` and `Flavor Text`, the following features are also available:
+   - As with MSE2, Bold, Italics, and Symbols are provided for usage, including their keyboard shortcuts.
+   - If you type \`\``Replay Text`\`\`, it will be replaced with Red Bold Text (Used for Replay and Rules Text involving Replay)
+   - If you type `(1)`, it will be replaced with the corresponding symbol for stock.
+   - If you type `<<<` and `>>>`, it will be replaced with the corresponding trait symbol.
+   - If you type `AUTO`, it will be replaced with `<sym>A|</sym>` which outputs the AUTO symbol text. Further rules are provided in the `Keywords`.
+
+
+
