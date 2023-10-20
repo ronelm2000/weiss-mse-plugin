@@ -1,4 +1,4 @@
-﻿numeric := filter_text@(match: "^[0123456789]+")
+numeric := filter_text@(match: "^[0123456789]+")
 rarity	:= filter_text@(match: "^[CRU]+")
 level_f := filter_text@(match: "^[0123]+")
 auto_bold :=
@@ -26,6 +26,7 @@ color_to_word := [
 	r: "red"
 	y: "yellow"
 	b: "blue"
+	p: "purple"
 ]
 
 list_utils := [
@@ -813,11 +814,14 @@ card_number :=
 
 color_sort :=
 {
-	if card.color == "yellow" then "A"
-	else if card.color == "green" then "B"
-	else if card.color == "red"	then "C"
-	else "D"
+	if card.color == "yellow" 		then "A"
+	else if card.color == "green" 	then "B"
+	else if card.color == "red"		then "C"
+	else if card.color == "blue" 	then "D"
+	else if card.color == "purple" 	then "E"
+	else "F"
 }
+
 rarity_sort :=
 {
 	if card.rarity == "RR+" then "A"
@@ -829,6 +833,7 @@ rarity_sort :=
 	else if card.rarity == "CC" then "G"
 	else "H"
 }
+
 type_sort :=
 {
 	if card.card_type == "character" then "A"
@@ -1010,4 +1015,3 @@ get_side :=
 		set.side
 	else
 		styling.side_override
-}

@@ -149,6 +149,26 @@ symbol:
 	image: soultrigger.png
 	enabled: true
 symbol:
+	code: M
+	image: magnifytrigger.png
+	enabled: true
+symbol:
+	code: B
+	image: banktrigger.png
+	enabled: true
+symbol:
+	code: N
+	image: anchortrigger.png
+	enabled: true
+symbol:
+	code: T
+	image: tickettrigger.png
+	enabled: true
+symbol:
+	code: W
+	image: wheeltrigger.png
+	enabled: true
+symbol:
 	code: |
 	image: spacer.png
 	enabled: true
@@ -182,6 +202,11 @@ insert symbol menu:
 		item: &
 		item: *
 		item: (
+		item: M
+		item: B
+		item: N
+		item: T
+		item: W
 		item: +
 	item:
 		type: submenu

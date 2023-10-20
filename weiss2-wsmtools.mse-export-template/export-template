@@ -1,4 +1,4 @@
-﻿mse version: 2.1.2
+mse version: 2.1.2
 short name: wsmtools
 full name: wsmtools Exporter
 position hint: 003
@@ -34,4 +34,3 @@ script:
 		)
 	)
 	to_string(to_json(cards))
-	

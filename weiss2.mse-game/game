@@ -21,6 +21,7 @@ card field:
 	choice: green
 	choice: red
 	choice: blue
+	choice: purple
 card field:
 	type: image
 	name: image
@@ -187,6 +188,11 @@ card field:
 	choice: c-soul
 	choice: standby
 	choice: choice
+	choice: magnify
+	choice: bank
+	choice: anchor
+	choice: ticket
+	choice: wheel
 card field:
 	type: choice
 	name: extra trigger
@@ -204,6 +210,11 @@ card field:
 	choice: c-soul
 	choice: standby
 	choice: choice
+	choice: magnify
+	choice: bank
+	choice: anchor
+	choice: ticket
+	choice: wheel
 card field:
 	type: choice
 	name: card type
@@ -323,10 +334,11 @@ set field:
 card list color script:
 	input := card.color
 	if      input == "yellow" then rgb(140,126,0)
-	else if input == "blue"  then rgb(0,64,168)
-	else if input == "red"   then rgb(168,0,0)
-	else if input == "green" then rgb(0,168,0)
-	
+	else if input == "blue"   then rgb(0,64,168)
+	else if input == "red"    then rgb(168,0,0)
+	else if input == "green"  then rgb(0,168,0)
+	else if input == "purple" then rgb(140,0,140)
+
 #### card scripts
 add cards script:
 	name: &Extra Booster Yellow
@@ -576,6 +588,9 @@ pack type:
 	name: double rare red
 	filter: card.rarity == "RR" and card.color == "red"	
 pack type:
+	name: double rare purple
+	filter: card.rarity == "RR" and card.color == "purple"	
+pack type:
 	name: climax rare yellow
 	filter: card.rarity == "CR" and card.color == "yellow"
 pack type:
@@ -587,6 +602,9 @@ pack type:
 pack type:
 	name: climax rare red
 	filter: card.rarity == "CR" and card.color == "red"	
+pack type:
+	name: climax rare purple
+	filter: card.rarity == "CR" and card.color == "purple"	
 
 pack type:
 	name: double rare or rare
