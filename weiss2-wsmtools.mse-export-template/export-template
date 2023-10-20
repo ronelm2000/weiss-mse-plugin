@@ -3,7 +3,7 @@ short name: wsmtools
 full name: wsmtools Exporter
 position hint: 003
 icon: icon.png
-version: 2023-02-06
+version: 2023-10-20
 installer group: ronelm2000/weiss2/Export/wsmtools
 game: weiss2
 create directory: true
@@ -11,7 +11,6 @@ file type: Weiss Schwarz Set (*.ws-set)|*.ws-set
 
 depends on:
 	package: weiss2.mse-game
-	version: 2021-08-08
 
 # By ronelm2000
 # Based on LackeyCCG Export by Pichoro and Innuendo, based on code by Idle Muse and Seeonee
