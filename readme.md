@@ -47,7 +47,7 @@ This fork supports the newest mechanics, including "Link", "Choice", "Replay", "
    - Set ID and Subset ID changes the Serial Prefix used for each card
    - Side changes the default Side color used for the set (can be overrided from `Style` settings)
    - `Is using legacy card images` is for compatibility for older sets
-6. When typing on `Rules Text` and `Flavor Text`, the following features are also available:
+6. When typing on `Rules Text` and `Replay Text`, the following features are also available:
    - As with MSE2, Bold, Italics, and Symbols are provided for usage, including their keyboard shortcuts.
    - If you type \`\``Replay Text`\`\`, it will be replaced with Red Bold Text (Used for Replay and Rules Text involving Replay)
    - If you type `(1)`, it will be replaced with the corresponding symbol for stock.
