@@ -211,7 +211,7 @@ keyword:
 	keyword: bond (Noted Names)
 	match: bonds!
 	mode: reminder
-	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {card_utils.notes("bond")} in your waiting room, and return it to your hand.
+	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {if styling.bond_targets != "" then styling.bond_targets else card_utils.notes("bond")} in your waiting room, and return it to your hand.
 keyword:
 	keyword: great performance
 	match: gp_e
