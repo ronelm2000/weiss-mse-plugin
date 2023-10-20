@@ -14,9 +14,14 @@ This fork supports the newest mechanics, including "Link", "Choice", "Replay", "
 
 
 ## Installation
-1. Get the latest release [here](https://github.com/ronelm2000/weiss-mse-plugin/releases)
+### Stable
+1. Get the latest release [here](https://github.com/ronelm2000/weiss-mse-plugin/releases).
 2. Run downloaded `weiss2.mse-installer` in [Magic Set Editor](https://github.com/twanvl/MagicSetEditor2/releases/) (2.1.2 is required.) Follow the instructions to all items in the provided plugin.
 3. Download provided `fonts.zip` and install all fonts in it.
+### From Source
+1. Download the latest source file [here](https://github.com/ronelm2000/weiss-mse-plugin/archive/refs/heads/master.zip).
+2. Extract the Files on the data folder of your Magic Set Editor installation (release binaries on the link above)
+3. Go to `\data\weiss2-real-multiple-layouts.mse-style\font` and install all fonts on that folder.
 
 ## Usage
 1. After creating a new set with `RWeiss > Standard`, you can create cards with the `Add Card` button.
