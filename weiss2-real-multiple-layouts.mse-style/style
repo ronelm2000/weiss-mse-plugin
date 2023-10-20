@@ -72,6 +72,10 @@ styling field:
 	description: Override the the default setting of having legacy card images on in the set settings (true or false). Put empty or an invalid value to continue on using the default serial sort.
 styling field:
 	type: text
+	name: bond targets
+	description: Displays the bond targets that should be displayed when you use bonds! keyword
+styling field:
+	type: text
 	name: set override
 	description: Override the set id for this card (normally set via the set properties) with your own value. Used for collab sets like Bunko sets.	
 styling field:

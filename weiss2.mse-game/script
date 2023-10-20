@@ -1015,3 +1015,4 @@ get_side :=
 		set.side
 	else
 		styling.side_override
+}
