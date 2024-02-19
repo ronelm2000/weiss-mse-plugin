@@ -473,3 +473,13 @@ keyword:
 	match: akatsuki2!
 	mode: rule_shortcut
 	reminder: <sym>A|</sym>[Put 1 card from your hand into your waiting room] When this card is put into your waiting room from the stage, you may pay the cost. If you do, look at up to 4 cards from the top of your deck, choose up to 1 level 1 or higher card from among them, reveal it to your opponent, put it into your hand, and put the rest into your waiting room.cx0!
+keyword:
+	keyword: Copy Original Card's Rule Text
+	match: original_rules_text!
+	mode: rule_shortcut
+	reminder: {find_original_card(card).rules_text}
+keyword:
+	keyword: Copy Original Card's Replay Text
+	match: original_replay_text!
+	mode: rule_shortcut
+	reminder: {find_original_card(card).replay_text}	
