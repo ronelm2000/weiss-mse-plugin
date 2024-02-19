@@ -48,9 +48,9 @@ card_utils := [
 		#input: the in_context match
 		#filter_text(match: "(bond)((\\w|\\s|[:punct:]|\\\\|:|\"|'|!|,|.)+)((\n)?)", in_context: "<match>", card.notes)
 		initial_regex :=  "(" + regex_escape(input) + ": )"
-		result := filter_text(match: initial_regex + "((\\w|\\s|:|\"|'|!|,|\\.)+)(\\n)", in_context: "<match>", card.notes)
+		result := filter_text(match: initial_regex + "((\\w|\\s|:|\"|'|\\!|\\?|,|\\.)+)(\\n)", in_context: "<match>", card.notes)
 		if (result == "") then
-			result := filter_text(match: "(" + regex_escape(input) + ": )((\\w|\\s|:|\"|'|!|,|\\.)+)", in_context: "<match>", card.notes)
+			result := filter_text(match: "(" + regex_escape(input) + ": )((\\w|\\s|:|\"|'|\\!|\\?|,|\\.)+)", in_context: "<match>", card.notes)
 		result := replace(match: "^" + initial_regex, replace: "", result)
 		result := replace(match: "(\\n)$", replace: "", result)
 		result
