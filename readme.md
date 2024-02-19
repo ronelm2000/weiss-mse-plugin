@@ -54,5 +54,9 @@ This fork supports the newest mechanics, including "Link", "Choice", "Replay", "
    - If you type `<<<` and `>>>`, it will be replaced with the corresponding trait symbol.
    - If you type `AUTO`, it will be replaced with `<sym>A|</sym>` which outputs the AUTO symbol text. Further rules are provided in the `Keywords`.
 
+## Known Issues
+#### I cannot type in Korean/Japanese!
+This has been reported to be a [known issue](https://github.com/twanvl/MagicSetEditor2/issues/121) in MSE 2.1.2. In order to resolve this issue, please instead download [this version of MSE](https://github.com/haganbmj/MagicSetEditor2/releases/tag/v2.2.2) while waiting for an update that hopefully fixes the issue. I have not created this plugin with these languages in mind tho, so if you need to request some adjustments, please file a issue and attach your `.mse-set` file so I can work on it.
+
 
 
