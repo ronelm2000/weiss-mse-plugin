@@ -470,6 +470,13 @@ auto_fix :=
 	# Step 4: Debug Commands
 	# + trace@()
 
+import_benitez_name_text := { input } 
+	+ {
+		if (import != "" and input == "") then
+			import
+		else
+			input
+	}
 
 auto_italic :=
 {
@@ -496,12 +503,13 @@ card_colored_level :=
 		input := "level/l0.png"
 }
 
+is_soul_legacy := {
+	length(split_text(soul, match: " - ")) > 1
+}
+
 card_colored_soul :=
 {
 	soul_pair := split_text(soul, match: " - ")
-	if (set.old_soul_values == "no") then (
-		assert(length(soul_pair) <= 1)
-	)
 	fixed_soul := soul_pair[0]
 	if soul == "zero" then
 		input := "character/{get_side()}/{color}.png"
@@ -880,51 +888,6 @@ main_sort :=
 
 line_height := 15.25
 
-layout_height := # (field input)
-{
-	for each lh in input.layout.lines do lh.height
-}
-card_rules_height :=
-{
-	if (card.rules_text != "") then 
-		max(19, ceil(layout_height(card_style.rules_text)))
-	else 0
-}
-card_rules_height_2 :=
-{
-	layout_height(card_style.rules_text)
-}
-card_flavor_height :=
-{
-	ceil(layout_height(card_style.flavor_text))
-}
-replay_text_height :=
-{
-#	card_style.replay_text.content_height or else set.stylesheet.card_style.replay_text.content_height
-#	ceil(card_style.replay_text.content_lines * line_height)
-	if styling.show_replay then
-		ceil(layout_height(card_style.replay_text))
-	else
-		0
-}
-replay_text_width :=
-{
-	if styling.show_replay then
-		(card_style.replay_text.width or else set.stylesheet.card_style.replay_text.width) - 2
-	else
-		0
-}
-
-replay_box_height :=
-{
-	if set.stylesheet.extra_card_style.replay_bar_1.visible == true then
-		replay_text_height() + 3 * 2 + 2 + 7 
-		# 3 = internal margin ; 2 = width of the box
-		# 7 is the padding 4 at top and 3 at bottom
-	else
-		0
-}
-
 card_name_sizing := 
 {
 	if length(card.cardname) < 28 then
@@ -981,8 +944,13 @@ card_color_bar :=
 {
 	if contains(card.rarity, match: "SP") or using_sp_override() then
 		input := "bars/SP_Blur/" + card.color + "bar.png"
+	else if contains(card.color, match: " - ") then
+		input := "bars/yellowbar.png"
 	else
 		input := "bars/" + card.color + "bar.png"
+}
+card_jp_name_color_bar := {
+	"bars/jp_name_bar/" + bar_type + "/" + card.color + ".png"
 }
 
 white_color_bar :=
@@ -995,7 +963,8 @@ white_color_bar :=
 
 climax_and_character_colored_card :=
 {
-	if type == "character" then input := card_colored_soul(soul: soul, color: color)
+	if contains(card.color, match: " - ") then input := card.card_type + "/" + get_side() + "/yellow.png"
+	else if type == "character" then input := card_colored_soul(soul: soul, color: color)
 	else if type == "climax" then input := "climax/" + get_side() + "/"  + color + ".png"
 	else if type == "event" then input := "event/" + get_side() + "/" + color + ".png"
 	else input := ""
@@ -1016,3 +985,45 @@ get_side :=
 	else
 		styling.side_override
 }
+
+absolute_position := {
+	position (
+		of: card
+		in: set
+	)
+}
+
+##########
+# Warnings
+##########
+
+find_card_warnings := {
+	if contains(card.color, match: " - ") and set.benitez_migration == "no" then
+		input := "yes"
+	else if is_soul_legacy(soul:card.soul) then
+		input := "yes"
+	else
+		input := "no"
+}
+
+benitez_fork_warning := {
+	"Benitez fork has been detected, and the following data has been lost.\n" +
+	"If you wish to continue, check the following data for each card and reassign/check them.\n" +
+	"- Soul\n" +
+	"- Color\n" +
+	"- Keyword Symbols in Rules Text\n" +
+	"\n" +
+	"If you're using the JP name text box, you can re-enable it by going to Styles and changing the card meta type to \"JP Import\". \n" +
+	"JP names should be imported successfully this way."
+}
+
+if (length(filter_list(set, filter: { contains(input.color, match: " - ") })) > 0 and set.benitez_migration == "no") then (
+	warning(benitez_fork_warning())
+	benitez_fork_warning_flag := true
+)
+if (length(filter_list(set, filter: { is_soul_legacy(soul:input.soul) })) > 0 and set.old_soul_values == "no") then (
+	warning(
+		"Detected cards whose Soul value is deprecated and will be removed in future versions.\n" +
+		"Please double-check for any cards and ensure all of them only contain: zero, one, two, and three."
+		)
+)

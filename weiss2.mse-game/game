@@ -235,7 +235,13 @@ card field:
 	description: 2. backup / clockshift?
 	choice: no
 	choice: backup
-	choice: clockshift
+	choice: clockshift	
+card field:
+	type: text
+	name: export cardname
+	multi line: false
+	script: import_benitez_name_text(value, import: card.name_text)
+	description: The other name for this card (if it was an English import, it will be the original English name, and vice versa for a Japanese Import card.)
 # # API # #
 # Used for wsmtools
 card field:
@@ -273,6 +279,29 @@ card field:
 	multi line: true
 	name: api sp replay text
 	script:	sp_auto_fix(card.replay_text)
+	editable: false
+	save value: false
+# Benitez Import
+card field:
+	type: text
+	name: name text
+	multi line: false
+	description: The Japanese name for the card. (Deprecated and will be replaced by export cardname)
+	editable: false
+	save value: false
+card field:
+	type: text
+	name: traits
+	multi line: false
+	description: The number of traits for the card (Is only read for Benitez compatibility, but will not be saved.)
+	editable: false
+	save value: false
+# Used for displaying card warnings
+card field:
+	type: boolean
+	name: has warnings
+	description: Checks if a card has any deprecation / lost data warnings
+	script: find_card_warnings(card)
 	editable: false
 	save value: false
 

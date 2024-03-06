@@ -18,6 +18,57 @@ card height: 626
 card dpi: 178
 	
 init script:
+	layout_height := # (field input)
+	{
+		length(input.layout.lines) * input.layout.lines[0].height
+	}
+	card_rules_height :=
+	{
+		if (card.rules_text != "") then 
+			max(19, ceil(layout_height(card_style.rules_text))) + 4
+		else 0
+	}
+	card_rules_height_2 :=
+	{
+		layout_height(card_style.rules_text) + 4
+	}
+	card_flavor_height :=
+	{
+		ceil(layout_height(card_style.flavor_text))
+	}
+	replay_text_height :=
+	{
+	#	card_style.replay_text.content_height or else set.stylesheet.card_style.replay_text.content_height
+	#	ceil(card_style.replay_text.content_lines * line_height)
+		if styling.show_replay then
+			ceil(layout_height(card_style.replay_text))
+		else
+			0
+	}
+	replay_text_width :=
+	{
+		if styling.show_replay then
+			(card_style.replay_text.width or else set.stylesheet.card_style.replay_text.width) - 2
+		else
+			0
+	}
+	replay_box_height :=
+	{
+		if set.stylesheet.extra_card_style.replay_bar_1.visible == true then
+			replay_text_height() + 3 * 2 + 2 + 7 
+			# 3 = internal margin ; 2 = width of the box
+			# 7 is the padding 4 at top and 3 at bottom
+		else
+			0
+	}
+	other_name_bar_height := {
+		if card.replay_text != "" and card.card_type != "climax" then
+			0
+		else if styling.card_meta_type == "JP/EN import" then
+			other_name_bar_locations[card.card_type].height
+		else
+			0
+	}
 	sp_specs := [
 		color: rgba(255,255,255,125)
 		width: 1
@@ -26,7 +77,32 @@ init script:
 		regular: [ [left: 212, width: 90], [left: 314, width: 90], [left: 200, width: 10] ],
 		long_trait: [ [left: 199, width: 66], [left: 279, width: 146], [left: 189, width: 10] ],
 		triple_trait: [ [left: 199, width: 66], [left: 279, width: 66], [left: 359, width: 66] ]
-	]	
+	]
+	other_name_bar_locations := [
+		climax: [type: "climax", left: 63, bottom: 250, width: 350, height: 25, name_bottom: 360, name_left: 69, name_width: 130],
+		event: [type: "other", left: 35, bottom: 570, width: 378, height: 21, name_bottom: 565, name_left: 130, name_width: 238],
+		character: [type: "other", left: 35, bottom: 555, width: 378, height: 21, name_bottom: 550, name_left: 130, name_width: 238]
+	]
+	rules_text_computations := [
+		default_style: [
+			character: [
+				bottom: { 543 - replay_box_height() - (other_name_bar_height() / 2) },
+				left: { 26 },
+				width: { 394 }
+			],
+			event: [
+				bottom: { 557 - replay_box_height() - (other_name_bar_height() / 2) },
+				left: { 26 },
+				width: { 394 }
+			],
+			climax: [
+				bottom: { 19 },
+				left: { 17 + replay_box_height() },
+				width: { 204 }
+			],
+			height: { max(19, ceil(lines_height)) + 4 } # lines_height should always be computed in the field itself or it will be unoptimized
+		]
+	]
 	get_trait_box_style := {
 		if card.trait_three == "" then
 			replace(styling.trait_box_style, match: " ", replace: "_")
@@ -102,6 +178,13 @@ styling field:
 	name: show replay
 	description: Show the replay text box
 	initial: yes
+styling field:
+	type: choice
+	name: card meta type
+	description: Determines the type of card this card is supposed to be; if it's an English/Japanese original, JP import, or EN import.
+	choice: original
+	choice: JP/EN import
+	initial: original
 styling field:
 	type: info
 	name: debug info
@@ -459,13 +542,13 @@ card style:
 	flavor text:
 		bottom: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height(), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
+				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height() + (other_name_bar_height() / 2), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
 				else if card.card_type == "climax" then 227
 			}
 		left: 
 			{
 				if card.card_type == "character" or card.card_type == "event" then 20
-				else if card.card_type == "climax" then 65
+				else if card.card_type == "climax" then (65 + other_name_bar_height())
 			}
 		width: 
 			{
@@ -490,25 +573,10 @@ card style:
 			shadow displacement y: 0
 			shadow blur: 5
 	rules text:
-		bottom:
-			{
-				if card.card_type == "character" then 543 - replay_box_height()
-				else if card.card_type == "event" then 557 - replay_box_height()
-				else if card.card_type == "climax" then 19 # - replay_box_height()
-				# previous was 16
-			}
-		left:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 26
-				else if card.card_type == "climax" then 17 + replay_box_height()
-			}
-		width: 
-			{
-				if card.card_type == "character" or card.card_type == "event" then 394
-				else if card.card_type == "climax" then 204
-				# previous was 209
-			}
-		height: { max(19, card_rules_height()) }
+		bottom: { rules_text_computations["default_style"][card.card_type].bottom() }
+		left: { rules_text_computations["default_style"][card.card_type].left() }
+		width: { rules_text_computations["default_style"][card.card_type].width() }
+		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 16
 		angle:
 			{
@@ -565,6 +633,30 @@ card style:
 		symbol font:
 			name: weiss2-symbols
 			size: 12
+	export cardname:
+		bottom: 
+			{
+				if (styling.card_meta_type == "JP/EN import") then
+					other_name_bar_locations[card.card_type].name_bottom
+				else
+					-10
+			}
+		left: { other_name_bar_locations[card.card_type].name_left }
+		width: { other_name_bar_locations[card.card_type].name_width }
+		height: 12
+		z index: 18
+		angle: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		visible: { styling.card_meta_type == "JP/EN import" }
+		alignment: top center stretch if-overflow
+		font:
+			name: Agfa Rotis Semi Serif
+			size: 9
+			weight: bold
+			color: rgb(0,0,0)
 	trigger:
 		top: 14
 		left: 385
@@ -715,6 +807,25 @@ extra card field:
 	name: replay bar 4
 	editable: false
 	choice:	default
+# Benitez Fork Import
+extra card field:
+	type: choice
+	name: japbar
+	editable: false
+	save value: false
+	initial: default
+	choice: Yellow
+	choice: Green
+	choice: Red
+	choice: Blue
+	choice: Purple
+	choice: default
+extra card field:
+	type: choice
+	name: series
+	editable: false
+	save value: false
+	choice: default
 # # Traits # #
 extra card field:
 	type: choice
@@ -844,6 +955,7 @@ extra card field:
 	editable: false
 	save value: false
 	script: first_artist_name()
+
 # # #
 extra card style:
 	bottom bar:
@@ -882,8 +994,8 @@ extra card style:
 			}
 		top : 
 			{
-				if card.card_type == "character" then 538 - card_rules_height() - replay_box_height()
-				else if card.card_type == "event" then 552 - card_rules_height() - replay_box_height()
+				if card.card_type == "character" then 538 - card_rules_height() - replay_box_height() - (other_name_bar_height() / 2)
+				else if card.card_type == "event" then 552 - card_rules_height() - replay_box_height() - (other_name_bar_height() / 2)
 				else if card.card_type == "climax" then 13
 			}
 		width: 
@@ -922,7 +1034,8 @@ extra card style:
 			}
 		height:
 			script:
-				if card.rules_text != "" or card.replay_text != "" then max(19, card_rules_height() + replay_box_height())
+				if card.rules_text != "" or card.replay_text != "" then
+					max(19, card_rules_height() + replay_box_height()) + (if card.card_type != "climax" then (other_name_bar_height() / 2) else 0)
 				else 0
 		z index: 13
 		angle:
@@ -938,11 +1051,11 @@ extra card style:
 		left: 
 			{
 				if card.card_type == "character" or card.card_type == "event" then 20
-				else if card.card_type == "climax" then 65
+				else if card.card_type == "climax" then (65 + other_name_bar_height())
 			}
 		bottom: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height(), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
+				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height() + (other_name_bar_height() / 2), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
 				else if card.card_type == "climax" then 227
 			}
 		width:
@@ -1223,25 +1336,10 @@ extra card style:
 	# SP Rules Text
 	## ## ## ## ## ##
 	rules text copy1:
-		bottom:	
-			{
-				if card.card_type == "character" then 543 	- replay_box_height() + sp_specs.width
-				else if card.card_type == "event" then 557 	- replay_box_height() +	sp_specs.width
-				else if card.card_type == "climax" then 19						  + sp_specs.width
-				# previous was 16
-			}
-		left:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + sp_specs.width
-				else if card.card_type == "climax" then 17 + replay_box_height() + sp_specs.width
-			}
-		width: 
-			{
-				if card.card_type == "character" or card.card_type == "event" then 394
-				else if card.card_type == "climax" then 204
-				# previous was 209
-			}
-		height: { max(19, card_rules_height()) }
+		bottom: { rules_text_computations["default_style"][card.card_type].bottom() + sp_specs.width }
+		left: { rules_text_computations["default_style"][card.card_type].left() + sp_specs.width }
+		width: { rules_text_computations["default_style"][card.card_type].width() }
+		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1262,25 +1360,10 @@ extra card style:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy2:
-		bottom:	
-			{
-				if card.card_type == "character" then 543 	- replay_box_height() - sp_specs.width
-				else if card.card_type == "event" then 557 	- replay_box_height() - sp_specs.width
-				else if card.card_type == "climax" then 19						  - sp_specs.width
-				# previous was 16
-			}
-		left:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 26 - sp_specs.width
-				else if card.card_type == "climax" then 17 	+ replay_box_height() - sp_specs.width
-			}
-		width: 
-			{
-				if card.card_type == "character" or card.card_type == "event" then 394
-				else if card.card_type == "climax" then 204
-				# previous was 209
-			}
-		height: { max(19, card_rules_height()) }
+		bottom: { rules_text_computations["default_style"][card.card_type].bottom() - sp_specs.width }
+		left: { rules_text_computations["default_style"][card.card_type].left() - sp_specs.width }
+		width: { rules_text_computations["default_style"][card.card_type].width() }
+		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1301,25 +1384,10 @@ extra card style:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy3:
-		bottom:	
-			{
-				if card.card_type == "character" then 543 	- replay_box_height() + sp_specs.width
-				else if card.card_type == "event" then 557 	- replay_box_height() + sp_specs.width
-				else if card.card_type == "climax" then 19						  + sp_specs.width
-				# previous was 16
-			}
-		left:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 26 - sp_specs.width
-				else if card.card_type == "climax" then 17 + replay_box_height() - sp_specs.width
-			}
-		width: 
-			{
-				if card.card_type == "character" or card.card_type == "event" then 394
-				else if card.card_type == "climax" then 204
-				# previous was 209
-			}
-		height: { max(19, card_rules_height()) }
+		bottom: { rules_text_computations["default_style"][card.card_type].bottom() + sp_specs.width }
+		left: { rules_text_computations["default_style"][card.card_type].left() - sp_specs.width }
+		width: { rules_text_computations["default_style"][card.card_type].width() }
+		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1340,25 +1408,10 @@ extra card style:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy4:
-		bottom:	
-			{
-				if card.card_type == "character" then 543 	- replay_box_height() - sp_specs.width
-				else if card.card_type == "event" then 557 	- replay_box_height() - sp_specs.width
-				else if card.card_type == "climax" then 19						  - sp_specs.width
-				# previous was 16
-			}
-		left:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + sp_specs.width
-				else if card.card_type == "climax" then 17 + replay_box_height() + sp_specs.width
-			}
-		width: 
-			{
-				if card.card_type == "character" or card.card_type == "event" then 394
-				else if card.card_type == "climax" then 204
-				# previous was 209
-			}
-		height: { max(19, card_rules_height()) }
+		bottom: { rules_text_computations["default_style"][card.card_type].bottom() - sp_specs.width }
+		left: { rules_text_computations["default_style"][card.card_type].left() + sp_specs.width }
+		width: { rules_text_computations["default_style"][card.card_type].width() }
+		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1569,3 +1622,30 @@ extra card style:
 					else if get_side() == "schwarz" then rgb(244,244,0)
 					else rgb(244,244,0)
 				}
+	# JP Name Bar
+	japbar:
+		left: { other_name_bar_locations[card.card_type].left }
+		bottom: { other_name_bar_locations[card.card_type].bottom }
+		width: { other_name_bar_locations[card.card_type].width }
+		height: { other_name_bar_locations[card.card_type].height }
+		z index: 17
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		render style: image
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		render style: image
+		visible: { styling.card_meta_type == "JP/EN import" }
+		choice images:
+			Yellow: bars\jp_name_bar\other\yellow.png
+			Blue: bars\jp_name_bar\other\blue.png
+			Red: bars\jp_name_bar\other\red.png
+			Green: bars\jp_name_bar\other\green.png
+			Purple: bars\jp_name_bar\other\purple.png
+			default: { card_jp_name_color_bar(bar_type: other_name_bar_locations[card.card_type].type) }
