@@ -358,6 +358,12 @@ set field:
 	description: Removes all <sym> tags on card text when used. After enabling this option, you'll still need to load all card text to reflect all changes.
 	initial: no
 	save value: false
+set field:
+	type: boolean
+	name: rule of thirds
+	description: Adds the rule of thirds on all cards; but turn this off when you're printing cards.
+	initial: no
+	save value: false
 
 #### sorting
 card list color script:

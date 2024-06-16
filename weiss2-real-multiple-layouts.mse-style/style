@@ -955,9 +955,43 @@ extra card field:
 	editable: false
 	save value: false
 	script: first_artist_name()
-
+extra card field:
+	type: choice
+	name: rule of thirds
+	editable: false
+	save value: false
+	script:	if set.rule_of_thirds != "no" then "default" else "none"
+	choice: default
+	choice: none
 # # #
 extra card style:
+	rule of thirds:
+		top: { 0 }
+		left:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 448
+			}
+		width: 
+			{
+				if card.card_type == "character" or card.card_type == "event" then 448
+				else if card.card_type == "climax" then 626
+			}
+		height:  
+			{
+				if card.card_type == "character" or card.card_type == "event" then 626
+				else if card.card_type == "climax" then 448
+			}
+		render style: image
+		z index: 14
+		popup style: in place
+		angle:
+			{
+				if card.card_type == "character" or card.card_type == "event" then 0
+				else if card.card_type == "climax" then 270
+			}
+		choice images:
+			default: rule_of_thirds/guide.png
 	bottom bar:
 		left: 
 			{
