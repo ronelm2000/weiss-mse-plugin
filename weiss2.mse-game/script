@@ -308,6 +308,7 @@ sanitize_for_export := { input } +
 	remove_tag@(tag: "<cost") +
 	remove_tag@(tag: "<hidden") +
 	remove_tag@(tag: "<greek>") +
+	remove_tag@(tag: "<jp>") +
 	
 	# Remove other tags
 	remove_tag@(tag: "<b") +
@@ -410,6 +411,8 @@ auto_fix :=
 	
 	# step 3d: Add support for some special fonts
 	tag_contents@(tag: "<greek>", contents: { "<font-auto:Arial>{ input }</font-auto>" })+
+	tag_contents@(tag: "<jp>", contents: { "<font-auto:Meiryo><size-auto:7.4>{ input }</size-auto></font-auto>" })+
+
 		
 	# step 3: revert back <kw-a>
 	#tag_contents@(
@@ -435,28 +438,17 @@ auto_fix :=
 	tag_contents@(tag: "<i", contents: { "<color:rgba(66,66,66,255)>{input}</color>" }) +
 	
 	# Step 4: Add Wingdings						
-	replace@(match: "\\(([1-7])\\)", replace: "<atom-cost><cost:\\1></cost:\\1></atom-cost>") +
-	replace@(match: "<cost:([1-7])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
+	replace@(match: "\\((\\d*)\\)", replace: "<atom-cost><cost:\\1></cost:\\1></atom-cost>") +
+	replace@(match: "<cost:(\\d*)>", replace: "<cost:\\1><value:\\1></value:\\1>") +
 	tag_contents@(tag: "<cost" contents: {
-		get_cost := 	filter_text@(match: "<value:(\\d)>") 
+		get_cost := 	filter_text@(match: "<value:(\\d*)>") 
 					+	filter_text@(match: "\\d")
 					+	to_int@()
 		cost := get_cost(input) 
+		cost_map := "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳"
 		(
-		if (cost == 1) then
-			"<font-auto:Wingdings 2><size-auto:11>j</size-auto></font-auto>"
-		else if (cost == 2) then
-			"<font-auto:Wingdings><size-auto:11>‚</size-auto></font-auto>"
-		else if (cost == 3) then
-			"<font-auto:Wingdings><size-auto:11>ƒ</size-auto></font-auto>"
-		else if (cost == 4) then
-			"<font-auto:Wingdings><size-auto:11>„</size-auto></font-auto>" 
-		else if (cost == 5) then
-			"<font-auto:Wingdings><size-auto:11>…</size-auto></font-auto>"
-		else if (cost == 6) then
-			"<font-auto:Wingdings><size-auto:11>†</size-auto></font-auto>"
-		else if (cost == 7) then
-			"<font-auto:Wingdings 2><size-auto:11>p</size-auto></font-auto>"
+		if (cost > 0) then
+			("<font-auto:Meiryo><size-auto:8>" + cost_map[cost - 1] + "</size-auto></font-auto>")
 		else
 			""
 		)
