@@ -243,7 +243,7 @@ keyword:
 	keyword: otherwise, return on top
 	match: or_top
 	mode: reminder
-	reminder: If it is not, return the revealed card to its original place
+	reminder: Otherwise, return it to its original place
 keyword:
 	keyword: return on top
 	match: r_top
@@ -482,4 +482,14 @@ keyword:
 	keyword: Copy Original Card's Replay Text
 	match: original_replay_text!
 	mode: rule_shortcut
-	reminder: {find_original_card(card).replay_text}	
+	reminder: {find_original_card(card).replay_text}
+keyword:
+	keyword: Copy Another Card's Rule Text
+	match: copy_rules_<atom-param>name2</atom-param>!
+	mode: rule_shortcut
+	reminder: {find_card(param1).rules_text}
+keyword:
+	keyword: Copy Original Card's Replay Text
+	match: copy_replay_<atom-param>name2</atom-param>!
+	mode: rule_shortcut
+	reminder: {find_card(param1).replay_text}

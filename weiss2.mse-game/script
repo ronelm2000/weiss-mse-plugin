@@ -520,6 +520,14 @@ overridable_set_id := {
 		set.set_id
 }
 
+find_card := {
+	cid := remove_tags(input)
+	result := nil
+	for each c in filter_list(set, filter: { card_id(card: input) == cid }) do
+		result := c
+	result
+}
+
 card_serial := 
 {
 	if card.rarity == "PR"
