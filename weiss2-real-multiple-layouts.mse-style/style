@@ -18,9 +18,18 @@ card height: 626
 card dpi: 178
 	
 init script:
+	min_height := # (field input)
+	{
+		result := 999
+		for each line in input.layout.lines do (
+			if (result > line.height) then
+				result := line.height
+		)
+		result
+	}
 	layout_height := # (field input)
 	{
-		length(input.layout.lines) * input.layout.lines[0].height
+		length(input.layout.lines) * min_height(input)
 	}
 	card_rules_height :=
 	{
@@ -86,20 +95,102 @@ init script:
 	rules_text_computations := [
 		default_style: [
 			character: [
+				top: { 548 }
 				bottom: { 543 - replay_box_height() - (other_name_bar_height() / 2) },
 				left: { 26 },
 				width: { 394 }
 			],
 			event: [
+				top: { 562 }
 				bottom: { 557 - replay_box_height() - (other_name_bar_height() / 2) },
 				left: { 26 },
 				width: { 394 }
 			],
 			climax: [
+				top: { 228 }
 				bottom: { 19 },
 				left: { 17 + replay_box_height() },
 				width: { 204 }
 			],
+			height: { max(19, ceil(lines_height)) + 4 } # lines_height should always be computed in the field itself or it will be unoptimized
+		],
+		top_style: [
+			character: [
+				top: { 18 },
+				bottom: { 18 
+					+ rules_text_computations.top_style.height(lines_height: layout_height(card_style.rules_text)) 
+				},
+				left: { 76 },
+				width: { 294 }
+			],
+			event: [
+				top: { 18 },
+				bottom: { 18 + rules_text_computations.top_style.height(lines_height: layout_height(card_style.rules_text)) }
+				left: { 76 },
+				width: { 294 }
+			],
+			climax: [
+				top: { 228 }
+				bottom: { 19 },
+				left: { 17 + replay_box_height() },
+				width: { 204 }
+			],
+			height: { max(19, ceil(lines_height)) + 4 } # lines_height should always be computed in the field itself or it will be unoptimized
+		]
+	]
+	replay_text_computations := [
+		default_style: [
+			character: [
+				top: { 543 },
+				bottom: { 543 - (if card.replay_text != "" then 8) },
+				left: { 26 + 6 },
+				width: { 394 - 14 + 2}
+			],
+			event: [
+				top: { 557 },
+				bottom: { 557 - (if card.replay_text != "" then 8) }
+				left: { 26 + 6 },
+				width: { 394 - 14 + 2 }
+			],
+			climax: [
+				top: { 19 },
+				bottom: { 19 - (if card.replay_text != "" then -6) },
+				left: { 17 + 8 },
+				width: { 204 - 14 + 2 }
+			]
+			height: { max(19, ceil(lines_height)) + 4 } # lines_height should always be computed in the field itself or it will be unoptimized
+		],
+		top_style: [
+			character: [
+				top: {
+					style_ref := rules_text_computations["top_style"]["character"]
+					style_ref.bottom()
+				},
+				bottom: {
+					style_ref := rules_text_computations["top_style"]["character"]
+					style_ref.bottom() + replay_text_computations["top_style"].height(lines_height: layout_height(card_style.replay_text))
+				},
+				left: { 76 + 6 },
+				width: { 294 - 14 + 2 }
+			],
+			event: [
+				top: {
+					style_ref := rules_text_computations["top_style"]["event"]
+					style_ref.bottom()
+				},
+				bottom: {
+					style_ref := rules_text_computations["top_style"]["event"]
+					style_ref.bottom() + replay_text_computations["top_style"].height(lines_height: layout_height(card_style.replay_text))
+				},
+				left: { 76 + 6 },
+				width: { 294 - 14 + 2 }
+			],
+			climax: [
+				top: { 19 },
+				bottom: { 19 - (if card.replay_text != "" then -6) },
+				left: { 17 + 8 },
+				width: { 204 - 14 + 2 }
+			]
 			height: { max(19, ceil(lines_height)) + 4 } # lines_height should always be computed in the field itself or it will be unoptimized
 		]
 	]
@@ -108,6 +199,12 @@ init script:
 			replace(styling.trait_box_style, match: " ", replace: "_")
 		else
 			"triple_trait"
+	}
+	get_rules_box_style := {
+		if (styling.rules_box_style == "top") then
+			"top_style"
+		else
+			"default_style"
 	}
 	first_artist_name := {
 		result := ""
@@ -173,6 +270,13 @@ styling field:
 	choice: long trait
 	choice: triple trait
 	description: Determines the style of the trait boxes. Do note that, for long trait style, the IMS format is used instead of the Fubuki format. Note that entering any trait in the third trait locks you to triple trait style, regardless of this value.
+styling field:
+	type: choice
+	name: rules box style
+	choice: default
+	choice: top
+	initial: default
+	description: Determines the style and positioning of the rule boxes (includes the replay box).
 styling field:
 	type: boolean
 	name: show replay
@@ -253,13 +357,16 @@ card style:
 			}
 		mask:
 			{
-				if is_using_legacy_card_image(card) then (
-					if card.card_type == "character" then "character/mask.png"
-					else if card.card_type == "climax" then "climax/mask.png"
-					else if card.card_type == "event" then "event/mask.png"
-				) else (
-					card.card_type + "/mask2.png"
-				)
+				card.card_type 
+				+ "/" + (
+					if (is_using_legacy_card_image(card)) then
+						"mask"
+					else
+						"mask2"
+				) + (
+					if (set.rule_of_thirds == "yes") then
+						"_ro3"
+				) + ".png"
 			}
 		z index: 1
 		angle:
@@ -542,7 +649,11 @@ card style:
 	flavor text:
 		bottom: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height() + (other_name_bar_height() / 2), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
+				box_style := get_rules_box_style()
+				if (box_style == "top_style" and card.card_type != "climax") then
+					flavor_bottom(height: other_name_bar_height() / 2, rules: styling.card_meta_type != "original", event: card.card_type == "event")
+				else if card.card_type == "character" or card.card_type == "event" then
+					flavor_bottom(height: card_rules_height() + replay_box_height() + (other_name_bar_height() / 2), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
 				else if card.card_type == "climax" then 227
 			}
 		left: 
@@ -573,10 +684,10 @@ card style:
 			shadow displacement y: 0
 			shadow blur: 5
 	rules text:
-		bottom: { rules_text_computations["default_style"][card.card_type].bottom() }
-		left: { rules_text_computations["default_style"][card.card_type].left() }
-		width: { rules_text_computations["default_style"][card.card_type].width() }
-		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
+		bottom: { rules_text_computations[get_rules_box_style()][card.card_type].bottom() }
+		left: { rules_text_computations[get_rules_box_style()][card.card_type].left() }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		height: { rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 16
 		angle:
 			{
@@ -596,24 +707,18 @@ card style:
 	replay text:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)
-				#if card.card_type == "character" then 200
-				#else if card.card_type == "event" then 200
-				#else if card.card_type == "climax" then 19
-				# previous was 16
+				replay_text_computations[get_rules_box_style()][card.card_type].bottom()
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6
-				else if card.card_type == "climax" then 17 + 8
+				replay_text_computations[get_rules_box_style()][card.card_type].left()
 			}
 		width: 
 			{
 				if not styling.show_replay then 0
-				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
-				else if card.card_type == "climax" then 204 - 14 + 2
+				else replay_text_computations[get_rules_box_style()][card.card_type].width()
+				# else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
+				# else if card.card_type == "climax" then 204 - 14 + 2
 				# previous was 209
 			}
 		height: { max(10, replay_text_height()) }
@@ -955,59 +1060,39 @@ extra card field:
 	editable: false
 	save value: false
 	script: first_artist_name()
-extra card field:
-	type: choice
-	name: rule of thirds
-	editable: false
-	save value: false
-	script:	if set.rule_of_thirds != "no" then "default" else "none"
-	choice: default
-	choice: none
 # # #
 extra card style:
-	rule of thirds:
-		top: { 0 }
-		left:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 0
-				else if card.card_type == "climax" then 448
-			}
-		width: 
-			{
-				if card.card_type == "character" or card.card_type == "event" then 448
-				else if card.card_type == "climax" then 626
-			}
-		height:  
-			{
-				if card.card_type == "character" or card.card_type == "event" then 626
-				else if card.card_type == "climax" then 448
-			}
-		render style: image
-		z index: 14
-		popup style: in place
-		angle:
-			{
-				if card.card_type == "character" or card.card_type == "event" then 0
-				else if card.card_type == "climax" then 270
-			}
-		choice images:
-			default: rule_of_thirds/guide.png
 	bottom bar:
 		left: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 426
-				else if card.card_type == "climax" then 11
+				if (card.card_type == "character" or card.card_type == "event") then
+					452 - rules_text_computations[get_rules_box_style()][card.card_type].left()
+				else
+					rules_text_computations[get_rules_box_style()][card.card_type].left() - 5
 			}
-		top : 
+		top: 
 			{
-				if card.card_type == "character" then 548
-				else if card.card_type == "event" then 562
-				else if card.card_type == "climax" then 228
+				box_style := get_rules_box_style()
+				if (box_style == "top_style") then
+					rules_text_computations[box_style][card.card_type].top()
+					+ card_rules_height()
+					+ replay_box_height()
+					+ 5
+				else
+					rules_text_computations[box_style][card.card_type].bottom() 
+					+ (
+						if (card.card_type == "climax") then
+							rules_text_computations[box_style][card.card_type].width() + 2
+						else
+							0
+					)
+					+ 4
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 406
-				else if card.card_type == "climax" then 215
+				rules_text_computations[get_rules_box_style()][card.card_type].width() + 12
+				#				if card.card_type == "character" or card.card_type == "event" then 406
+				#				else if card.card_type == "climax" then 216
 			}
 		height: 5
 		z index: 11
@@ -1023,19 +1108,31 @@ extra card style:
 	top bar:
 		left: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 20
-				else if card.card_type == "climax" then 21 + card_rules_height() + replay_box_height()
+				rules_text_computations[get_rules_box_style()][card.card_type].left() 
+				+ (
+				   if (card.card_type == "climax") then
+					   4 + card_rules_height() + replay_box_height()
+				   else
+					   -6
+			   )
 			}
 		top : 
 			{
-				if card.card_type == "character" then 538 - card_rules_height() - replay_box_height() - (other_name_bar_height() / 2)
-				else if card.card_type == "event" then 552 - card_rules_height() - replay_box_height() - (other_name_bar_height() / 2)
-				else if card.card_type == "climax" then 13
+				rules_text_computations[get_rules_box_style()][card.card_type].top() 
+				- (
+					if (get_rules_box_style() == "default_style") then
+						if (card.card_type == "character" or card.card_type == "event") then
+							card_rules_height() + replay_box_height() + (other_name_bar_height() / 2) + 6
+						else
+							rules_text_computations[get_rules_box_style()][card.card_type].width() + 6
+					else
+						0
+				)
+				- 4			
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 406
-				else if card.card_type == "climax" then 215
+				rules_text_computations[get_rules_box_style()][card.card_type].width() + 12
 			}
 		height: 5
 		z index: 12
@@ -1051,25 +1148,38 @@ extra card style:
 	white bar:
 		left: 
 			{
-				if card.card_type == "character" then 20
-				else if card.card_type == "event" then 19
-				else if card.card_type == "climax" then 16
+				rules_text_computations[get_rules_box_style()][card.card_type].left() 
+				 + (
+					if (card.card_type == "climax") then
+						-1
+					else
+						-6
+				)
 			}
 		bottom: 
 			{
-				if card.card_type == "character" then 543
-				else if card.card_type == "event" then 557
-				else if card.card_type == "climax" then 13
+				rules_text_computations[get_rules_box_style()][card.card_type].bottom()
+				+ (
+					if (card.card_type == "climax") then
+						-6
+					else
+						0
+				)
+				+ replay_box_height()
 			}
 		width: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then 406
-				else if card.card_type == "climax" then 215
+				rules_text_computations[get_rules_box_style()][card.card_type].width() + 12
 			}
 		height:
 			script:
 				if card.rules_text != "" or card.replay_text != "" then
-					max(19, card_rules_height() + replay_box_height()) + (if card.card_type != "climax" then (other_name_bar_height() / 2) else 0)
+					max(19, card_rules_height() + replay_box_height()) 
+					+ (
+						if (get_rules_box_style() == "default_style" and card.card_type != "climax") then 
+							(other_name_bar_height() / 2) 
+						else 0
+					)
 				else 0
 		z index: 13
 		angle:
@@ -1089,7 +1199,11 @@ extra card style:
 			}
 		bottom: 
 			{
-				if card.card_type == "character" or card.card_type == "event" then flavor_bottom(height: card_rules_height() + replay_box_height() + (other_name_bar_height() / 2), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
+				box_style := get_rules_box_style()
+				if (box_style == "top_style" and card.card_type != "climax") then				
+					flavor_bottom(height: other_name_bar_height() / 2, rules: styling.card_meta_type != "original", event: card.card_type == "event")
+				else if (card.card_type == "character" or card.card_type == "event") then
+					flavor_bottom(height: card_rules_height() + replay_box_height() + (other_name_bar_height() / 2), rules: card.rules_text != "" or card.replay_text != "", event: card.card_type == "event")
 				else if card.card_type == "climax" then 227
 			}
 		width:

@@ -277,7 +277,7 @@ sanitize_for_export := { input } +
 	remove_tag@(tag: "<nospellcheck") +
 	
 	# Replace special tags
-	replace@(match: "<cost:([1-9])>", replace: "<cost:\\1><value:\\1></value:\\1>") +
+	replace@(match: "<cost:([0-9]?)>", replace: "<cost:\\1><value:\\1></value:\\1>") +
 	tag_contents@(tag: "<sym>", contents: {
 		text_input := to_text(input)
 		array := []
@@ -289,8 +289,8 @@ sanitize_for_export := { input } +
 			""
 	}) +
 	tag_contents@(tag: "<cost" contents: {
-		get_cost := 	filter_text@(match: "<value:(\\d)>") 
-					+	filter_text@(match: "\\d")
+		get_cost := 	filter_text@(match: "<value:(\\d*)>") 
+					+	filter_text@(match: "(\\d)")
 					+	to_int@()
 		cost := get_cost(input)
 		"({ cost })"
@@ -314,7 +314,10 @@ sanitize_for_export := { input } +
 	remove_tag@(tag: "<b") +
 	remove_tag@(tag: "<i") +
 	remove_tag@(tag: "<customita>") +
-	remove_tag@(tag: "<soft") +
+	remove_tag@(tag: "<soft") + 
+	remove_tag@(tag: "<size") +
+	remove_tag@(tag: "<") +
+	remove_tags@() + 
 	
 	# Remove double spaces
 	replace@(match: "  ", replace: " ") +
