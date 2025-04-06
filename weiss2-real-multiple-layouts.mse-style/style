@@ -194,6 +194,18 @@ init script:
 			height: { max(19, ceil(lines_height)) + 4 } # lines_height should always be computed in the field itself or it will be unoptimized
 		]
 	]
+	flavor_text_computations := [
+		white: [
+			font_color: { rgb(0,0,0) },
+			font_shadow_color: { rgba(255,255,255,120) },
+			flavor_bar: { "bars/flavorbar.png" }
+		],
+		black: [
+			font_color: { rgb(255,255,255) },
+			font_shadow_color: { rgba(0,0,0,120) },
+			flavor_bar: { "bars/flavorbar_black.png" }
+		]
+	]
 	get_trait_box_style := {
 		if card.trait_three == "" then
 			replace(styling.trait_box_style, match: " ", replace: "_")
@@ -277,6 +289,13 @@ styling field:
 	choice: top
 	initial: default
 	description: Determines the style and positioning of the rule boxes (includes the replay box).
+styling field:
+	type: choice
+	name: flavor box style
+	choice: white
+	choice: black
+	initial: white
+	description: Determines the style of the flavor text; white indicates what's been said, while black is the actor's thoughts.
 styling field:
 	type: boolean
 	name: show replay
@@ -678,8 +697,8 @@ card style:
 			name: Souvenir LT
 			size: 11
 			weight: normal
-			color: rgb(0,0,0)
-			shadow color: rgb(255,255,255,120) 
+			color: { flavor_text_computations[styling.flavor_box_style].font_color() }
+			shadow color: { flavor_text_computations[styling.flavor_box_style].font_shadow_color() }
 			shadow displacement x: 0
 			shadow displacement y: 0
 			shadow blur: 5
@@ -717,9 +736,6 @@ card style:
 			{
 				if not styling.show_replay then 0
 				else replay_text_computations[get_rules_box_style()][card.card_type].width()
-				# else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
-				# else if card.card_type == "climax" then 204 - 14 + 2
-				# previous was 209
 			}
 		height: { max(10, replay_text_height()) }
 		z index: 18
@@ -1217,8 +1233,7 @@ extra card style:
 				else if card.card_type == "climax" then 270
 			}
 		render style: image
-		choice images:
-			default: bars\flavorbar.png
+		image: {  flavor_text_computations[styling.flavor_box_style].flavor_bar() }
 	# Traits
 	trait bar left 1:
 		left: 
@@ -1479,10 +1494,10 @@ extra card style:
 	# SP Rules Text
 	## ## ## ## ## ##
 	rules text copy1:
-		bottom: { rules_text_computations["default_style"][card.card_type].bottom() + sp_specs.width }
-		left: { rules_text_computations["default_style"][card.card_type].left() + sp_specs.width }
-		width: { rules_text_computations["default_style"][card.card_type].width() }
-		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
+		bottom: { rules_text_computations[get_rules_box_style()][card.card_type].bottom() + sp_specs.width }
+		left: { rules_text_computations[get_rules_box_style()][card.card_type].left() + sp_specs.width }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		height: { rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1503,10 +1518,10 @@ extra card style:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy2:
-		bottom: { rules_text_computations["default_style"][card.card_type].bottom() - sp_specs.width }
-		left: { rules_text_computations["default_style"][card.card_type].left() - sp_specs.width }
-		width: { rules_text_computations["default_style"][card.card_type].width() }
-		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
+		bottom: { rules_text_computations[get_rules_box_style()][card.card_type].bottom() - sp_specs.width }
+		left: { rules_text_computations[get_rules_box_style()][card.card_type].left() - sp_specs.width }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		height: { rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1527,10 +1542,10 @@ extra card style:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy3:
-		bottom: { rules_text_computations["default_style"][card.card_type].bottom() + sp_specs.width }
-		left: { rules_text_computations["default_style"][card.card_type].left() - sp_specs.width }
-		width: { rules_text_computations["default_style"][card.card_type].width() }
-		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
+		bottom: { rules_text_computations[get_rules_box_style()][card.card_type].bottom() + sp_specs.width }
+		left: { rules_text_computations[get_rules_box_style()][card.card_type].left() - sp_specs.width }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		height: { rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1551,10 +1566,10 @@ extra card style:
 			name: weiss2-symbols-sp
 			size: 12
 	rules text copy4:
-		bottom: { rules_text_computations["default_style"][card.card_type].bottom() - sp_specs.width }
-		left: { rules_text_computations["default_style"][card.card_type].left() + sp_specs.width }
-		width: { rules_text_computations["default_style"][card.card_type].width() }
-		height: { rules_text_computations["default_style"].height(lines_height: layout_height(card_style.rules_text)) }
+		bottom: { rules_text_computations[get_rules_box_style()][card.card_type].bottom() - sp_specs.width }
+		left: { rules_text_computations[get_rules_box_style()][card.card_type].left() + sp_specs.width }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		height: { rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text)) }
 		z index: 15
 		angle:
 			{
@@ -1580,21 +1595,16 @@ extra card style:
 	replay text copy1:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8) 		+ sp_specs.width
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		+ sp_specs.width
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	+ sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].bottom() 	+ sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6	+ sp_specs.width
-				else if card.card_type == "climax" then 17 + 8								+ sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].left() 		+ sp_specs.width
 			}
 		width: 
 			{
 				if not styling.show_replay then 0
-				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
-				else if card.card_type == "climax" then 204 - 14 + 2
-				# previous was 209
+				else replay_text_computations[get_rules_box_style()][card.card_type].width()
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
@@ -1619,21 +1629,16 @@ extra card style:
 	replay text copy2:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8)		- sp_specs.width
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		- sp_specs.width
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	- sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].bottom() 	- sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6	- sp_specs.width
-				else if card.card_type == "climax" then 17 + 8								- sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].left() 		- sp_specs.width
 			}
 		width: 
 			{
 				if not styling.show_replay then 0
-				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
-				else if card.card_type == "climax" then 204 - 14 + 2
-				# previous was 209
+				else replay_text_computations[get_rules_box_style()][card.card_type].width()
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
@@ -1658,21 +1663,16 @@ extra card style:
 	replay text copy3:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8) 		+ sp_specs.width
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		+ sp_specs.width
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	+ sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].bottom() 	+ sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6	- sp_specs.width
-				else if card.card_type == "climax" then 17 + 8								- sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].left() 		- sp_specs.width
 			}
 		width: 
 			{
 				if not styling.show_replay then 0
-				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
-				else if card.card_type == "climax" then 204 - 14 + 2
-				# previous was 209
+				else replay_text_computations[get_rules_box_style()][card.card_type].width()
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
@@ -1697,21 +1697,16 @@ extra card style:
 	replay text copy4:
 		bottom:
 			{
-				if card.card_type == "character" then 543 - (if card.replay_text != "" then 8) 		- sp_specs.width
-				else if card.card_type == "event" then 557 - (if card.replay_text != "" then 8)		- sp_specs.width
-				else if card.card_type == "climax" then 19 - (if card.replay_text != "" then -6)	- sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].bottom() 	- sp_specs.width
 			}
 		left:
 			{
-				if card.card_type == "character" or card.card_type == "event" then 26 + 6	+ sp_specs.width
-				else if card.card_type == "climax" then 17 + 8								+ sp_specs.width
+				replay_text_computations[get_rules_box_style()][card.card_type].left() 		+ sp_specs.width
 			}
 		width: 
 			{
 				if not styling.show_replay then 0
-				else if card.card_type == "character" or card.card_type == "event" then 394 - 14 + 2
-				else if card.card_type == "climax" then 204 - 14 + 2
-				# previous was 209
+				else replay_text_computations[get_rules_box_style()][card.card_type].width()
 			}
 		height: { max(10, replay_text_height()) }
 		visible: { using_sp_override() }
