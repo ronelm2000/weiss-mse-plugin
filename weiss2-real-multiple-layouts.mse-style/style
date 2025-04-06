@@ -1175,11 +1175,6 @@ extra card style:
 			script:
 				if card.rules_text != "" or card.replay_text != "" then
 					max(19, card_rules_height() + replay_box_height()) 
-					+ (
-						if (get_rules_box_style() == "default_style" and card.card_type != "climax") then 
-							(other_name_bar_height() / 2) 
-						else 0
-					)
 				else 0
 		z index: 13
 		angle:
