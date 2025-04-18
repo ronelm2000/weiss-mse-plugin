@@ -1084,7 +1084,7 @@ extra card style:
 				if (card.card_type == "character" or card.card_type == "event") then
 					452 - rules_text_computations[get_rules_box_style()][card.card_type].left()
 				else
-					rules_text_computations[get_rules_box_style()][card.card_type].left() - 5
+					rules_text_computations[get_rules_box_style()][card.card_type].left() - 5 - replay_box_height()
 			}
 		top: 
 			{
@@ -1127,7 +1127,7 @@ extra card style:
 				rules_text_computations[get_rules_box_style()][card.card_type].left() 
 				+ (
 				   if (card.card_type == "climax") then
-					   4 + card_rules_height() + replay_box_height()
+					   4 + card_rules_height()
 				   else
 					   -6
 			   )
@@ -1167,7 +1167,7 @@ extra card style:
 				rules_text_computations[get_rules_box_style()][card.card_type].left() 
 				 + (
 					if (card.card_type == "climax") then
-						-1
+						-1 - replay_box_height()
 					else
 						-6
 				)
@@ -1177,7 +1177,7 @@ extra card style:
 				rules_text_computations[get_rules_box_style()][card.card_type].bottom()
 				+ (
 					if (card.card_type == "climax") then
-						-6
+						-6 - replay_box_height()
 					else
 						0
 				)
