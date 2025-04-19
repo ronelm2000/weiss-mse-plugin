@@ -100,7 +100,7 @@ keyword:
 	keyword: gate
 	match: gate
 	mode: trigger
-	reminder: <sym>^</sym>: When this card triggers, you may choose a climax in your waiting room and return it to your hand.
+	reminder: <sym>^</sym>: When this card triggers, you may choose a CX in your waiting room and return it to your hand.
 keyword:
 	keyword: standby
 	match: standby
@@ -150,53 +150,53 @@ keyword:
 	keyword: auto +2000p +1soul
 	match: cxg2k1
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, draw a card, choose one of your characters, and that character gets +2000 power and +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from hand, draw a card, choose one of your characters, and that character gets +2000 power and +1 soul until end of turn.
 keyword:
 	keyword: auto top deck to stock and +1 soul
 	match: cxgts
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, put the top card of your deck into your stock, and all of your characters get +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from hand, put the top card of your deck into your stock, and all of your characters get +1 soul until end of turn.
 keyword:
 	keyword: auto salvage a color to stock and +1 soul
 	match: cxgss<atom-param>color</atom-param>
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, choose up to one {color_to_word[remove_tags(param1)]} card in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from your hand, choose up to one {color_to_word[remove_tags(param1)]} card in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn.
 	rules: Color refers to a lowercase shortcut of "y", "g", "r","b", "p".
 keyword:
 	keyword: auto salvage a level 1 or lower to stock and +1 soul
 	match: cxgss1
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, choose up to 1 level 1 or lower character in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn. 
+	reminder: <sym>A|</sym>When this card is placed on your CX area from your hand, choose up to 1 level 1 or lower character in your waiting room, put it into your stock, and all of your characters get +1 soul until end of turn. 
 keyword:
 	keyword: auto draw a card and +1000 power
 	match: cxg1k+1
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, draw a card, and all of your characters get +1000 power until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from hand, draw a card, and all of your characters get +1000 power until end of turn.
 keyword:
 	keyword: auto draw a card and +3 soul
 	match: cxg3s
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from hand, draw a card, choose one of your characters, and that character gets +3 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from hand, draw a card, choose one of your characters, and that character gets +3 soul until end of turn.
 keyword:
 	keyword: auto do the standby
 	match: cxgds
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>*</sym> effect.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from your hand, perform the <sym>*</sym> effect.
 keyword:
 	keyword: auto do the magnify
 	match: cxgdm
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>M</sym> effect, choose 1 of your characters, and that character gets +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from your hand, perform the <sym>M</sym> effect, choose 1 of your characters, and that character gets +1 soul until end of turn.
 keyword:
 	keyword: auto do the anchor
 	match: cxgda
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, perform the <sym>N</sym> effect.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from your hand, perform the <sym>N</sym> effect.
 keyword:
 	keyword: auto split soul
 	match: cxg1ss
 	mode: cx_generics
-	reminder: <sym>A|</sym>When this card is placed on your climax area from your hand, draw a card, choose two of your characters, and those characters get +1 soul until end of turn.
+	reminder: <sym>A|</sym>When this card is placed on your CX area from your hand, draw a card, choose two of your characters, and those characters get +1 soul until end of turn.
 keyword:
 	keyword: encore
 	match: encore_e
@@ -206,12 +206,12 @@ keyword:
 	keyword: bond
 	match: bond<atom-param>name</atom-param>!
 	mode: reminder
-	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {param1} in your waiting room, and return it to your hand.
+	reminder: When this card is placed on stage from your hand or played, you may pay the cost. If you do, choose a card named {param1} in your waiting room, and return it to your hand.
 keyword:
 	keyword: bond (Noted Names)
 	match: bonds!
 	mode: reminder
-	reminder: When this card is played and placed on stage, you may pay the cost. If you do, choose a card named {if styling.bond_targets != "" then styling.bond_targets else card_utils.notes("bond")} in your waiting room, and return it to your hand.
+	reminder: When this card is placed on stage from your hand or played, you may pay the cost. If you do, choose a card named {if styling.bond_targets != "" then styling.bond_targets else card_utils.notes("bond")} in your waiting room, and return it to your hand.
 keyword:
 	keyword: great performance
 	match: gp_e
@@ -255,10 +255,10 @@ keyword:
 	mode: reminder
 	reminder: Damage may be canceled
 keyword:
-	keyword: Climax are Level 0
+	keyword: CX are Level 0
 	match: cx0!
 	mode: reminder
-	reminder: Climax are regarded as level 0
+	reminder: CX are regarded as level 0
 
 ###################
 # Symbol Shortcuts
@@ -457,7 +457,7 @@ keyword:
 	keyword: Musashi & Friends
 	match: musashi?
 	mode: rule_shortcut
-	reminder: <sym>A|</sym>During the turn that this card is placed on the stage from your hand, when damage dealt by this card is canceled, put the top card of your deck into your waiting room, and deal X damage to your opponent. X is equal to that card's level +1. <i>(Climax are regarded as level 0. Damage may be canceled)</i>
+	reminder: <sym>A|</sym>During the turn that this card is placed on the stage from your hand, when damage dealt by this card is canceled, put the top card of your deck into your waiting room, and deal X damage to your opponent. X is equal to that card's level +1. <i>(CX are regarded as level 0. Damage may be canceled)</i>
 keyword:
 	keyword: Trait
 	match: t:<atom-param>name2</atom-param>!
