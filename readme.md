@@ -14,9 +14,20 @@ This fork supports the newest mechanics, including "Link", "Choice", "Replay", "
 
 ## Installation
 ### Stable
-1. Get the latest release [here](https://github.com/ronelm2000/weiss-mse-plugin/releases).
-2. Run downloaded `weiss2.mse-installer` in [Magic Set Editor](https://github.com/twanvl/MagicSetEditor2/releases/) (2.1.2 is required.) Follow the instructions to all items in the provided plugin.
+1. Ensure all necessary files are downloaded.
+   - You can get the latest stable release [here](https://github.com/ronelm2000/weiss-mse-plugin/releases).
+   - You need [Magic Set Editor 2.1.2](https://github.com/twanvl/MagicSetEditor2/releases/) and not any other older versions.
+2. Run downloaded `weiss2.mse-installer` in MSE.
+   1. Go to the downloaded file.
+   2. Drag it.
+   3. Open your MSE installation folder.
+   4. Drop it into `MSE.exe`.
+   5. This will open MSE.
+   6. Click on "OK" to install all missing packages.
 3. Download provided `fonts.zip` and install all fonts in it.
+   1. Extract all files in the zip file.
+   2. The first file should be `__install_fonts.ps1`. Right-Click on it.
+   3. Click on `Run With PowerShell`.
 ### From Source
 1. Download the latest source file [here](https://github.com/ronelm2000/weiss-mse-plugin/archive/refs/heads/master.zip).
 2. Extract the Files on the data folder of your Magic Set Editor installation (release binaries on the link above)
