@@ -107,6 +107,32 @@ symbol:
 	image: link.png
 	image font size: 325
 	enabled: true
+# Turn Limit Symbols
+symbol:
+	code: α
+	image: 1_turn.png
+	image font size: 16
+	enabled: true
+symbol:
+	code: β
+	image: 2_turn.png
+	image font size: 16
+	enabled: true
+symbol:
+	code: γ
+	image: 3_turn.png
+	image font size: 16
+	enabled: true
+symbol:
+	code: δ
+	image: 4_turn.png
+	image font size: 16
+	enabled: true
+symbol:
+	code: ε
+	image: 5_turn.png
+	image font size: 16
+	enabled: true
 # climax triggers
 symbol:
 	code: !
@@ -190,6 +216,11 @@ insert symbol menu:
 		item: b
 		item: c
 		item: l
+		item: α
+		item: β
+		item: γ
+		item: δ
+		item: ε
 	item:
 		type: submenu
 		name: Trigger Icons

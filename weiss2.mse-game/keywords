@@ -283,7 +283,32 @@ keyword:
 	match: REPLAY
 	mode: symbol_shortcut
 	reminder: R|
-	
+keyword:
+	keyword: Once Per Turn
+	match: 1/TURN
+	mode: symbol_shortcut
+	reminder: α|
+keyword:
+	keyword: Twice Per Turn
+	match: 2/TURN
+	mode: symbol_shortcut
+	reminder: β|
+keyword:
+	keyword: Thrice Per Turn
+	match: 3/TURN
+	mode: symbol_shortcut
+	reminder: γ|
+keyword:
+	keyword: Four Times Per Turn
+	match: 4/TURN
+	mode: symbol_shortcut
+	reminder: δ|
+keyword:
+	keyword: Five Times Per Turn
+	match: 5/TURN
+	mode: symbol_shortcut
+	reminder: ε|
+
 keyword:
 	keyword: 1 Stock
 	match: 1?
