@@ -206,12 +206,12 @@ keyword:
 	keyword: bond
 	match: bond<atom-param>name</atom-param>!
 	mode: reminder
-	reminder: When this card is placed on stage from your hand or played, you may pay the cost. If you do, choose a card named {param1} in your waiting room, and return it to your hand.
+	reminder: When this character is played and placed on the stage or placed from hand to the stage, you may pay the cost. If you do, choose a card named {param1} in your waiting room, and return it to your hand.
 keyword:
 	keyword: bond (Noted Names)
 	match: bonds!
 	mode: reminder
-	reminder: When this card is placed on stage from your hand or played, you may pay the cost. If you do, choose a card named {if styling.bond_targets != "" then styling.bond_targets else card_utils.notes("bond")} in your waiting room, and return it to your hand.
+	reminder: When this character is played and placed on the stage or placed from hand to the stage, you may pay the cost. If you do, choose a card named {if styling.bond_targets != "" then styling.bond_targets else card_utils.notes("bond")} in your waiting room, and return it to your hand.
 keyword:
 	keyword: great performance
 	match: gp_e
