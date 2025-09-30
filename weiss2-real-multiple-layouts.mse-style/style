@@ -18,8 +18,8 @@ card height: 626
 card dpi: 178
 	
 init script:
-	rules_text_font_color := rgba(0,0,0,190)
-	rules_text_italic_font_color := rgba(66,66,66,180)
+	rules_text_font_color := rgba(20,20,20,250)
+	rules_text_italic_font_color := rgba(88,88,88,250)
 
 	min_height := # (field input)
 	{
@@ -199,12 +199,12 @@ init script:
 	]
 	flavor_text_computations := [
 		white: [
-			font_color: { rgb(0,0,0) },
+			font_color: { rgba(20,20,20,250) },
 			font_shadow_color: { rgba(255,255,255,120) },
 			flavor_bar: { "bars/flavorbar.png" }
 		],
 		black: [
-			font_color: { rgb(255,255,255) },
+			font_color: { rgba(255,255,255,250) },
 			font_shadow_color: { rgba(0,0,0,120) },
 			flavor_bar: { "bars/flavorbar_black.png" }
 		]
@@ -816,7 +816,7 @@ card style:
 			italic name: Vagabond Condensed Italic
 			size: { card_font_size }
 			weight: normal
-			color: rgba(0, 0, 0, 190)
+			color: { rules_text_font_color }
 		symbol font:
 			name: weiss2-symbols
 			size: 12
