@@ -109,6 +109,30 @@ card field:
 	card list alignment: center
 card field:
 	type: text
+	name: furitrait one
+	description: Furigana / sub-trait for the first trait.
+	card list column: 7
+	card list visible: false
+	card list width: 100
+	card list alignment: center
+card field:
+	type: text
+	name: furitrait two
+	description: Furigana / sub-trait for the second trait.
+	card list column: 8
+	card list visible: false
+	card list width: 100
+	card list alignment: center
+card field:
+	type: text
+	name: furitrait three
+	description: Furigana / sub-trait for the third trait.
+	card list column: 9
+	card list visible: false
+	card list width: 100
+	card list alignment: center
+card field:
+	type: text
 	name: power
 	script: numeric(value)
 	description: Power of the card.

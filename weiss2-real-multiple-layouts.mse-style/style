@@ -18,6 +18,9 @@ card height: 626
 card dpi: 178
 	
 init script:
+	rules_text_font_color := rgba(0,0,0,190)
+	rules_text_italic_font_color := rgba(66,66,66,180)
+
 	min_height := # (field input)
 	{
 		result := 999
@@ -563,12 +566,33 @@ card style:
 			size: 09
 			weight: bold
 			color: rgb(0,0,0)
+	furitrait one:
+		top: 581
+		left: { trait_box_locations[get_trait_box_style()][0].left }
+		width: { trait_box_locations[get_trait_box_style()][0].width }
+		height: 9
+		z index: 7
+		visible:
+			{
+				if card.card_type == "character" then true
+				else if card.card_type == "climax" or card.card_type == "event" then false
+			}
+		alignment: top center stretch if-overflow
+		font:
+			name: Vagabond
+			size: 05
+			max stretch: 0.3
+			shadow color: rgba(255,255,255,100)
+			shadow displacement x: 1
+			shadow displacement y: 1
+			weight: regular
+			color: rgb(5,5,5)
 	trait two:
 		top: 587
 		left: { trait_box_locations[get_trait_box_style()][1].left }
 		width: { trait_box_locations[get_trait_box_style()][1].width }
 		height: 14
-		z index: 7
+		z index: 6
 		visible:
 			{
 				if card.card_type == "character" then true
@@ -580,12 +604,33 @@ card style:
 			size: 09
 			weight: bold
 			color: rgb(0,0,0)
+	furitrait two:
+		top: 581
+		left: { trait_box_locations[get_trait_box_style()][1].left }
+		width: { trait_box_locations[get_trait_box_style()][1].width }
+		height: 9
+		z index: 7
+		visible:
+			{
+				if card.card_type == "character" then true
+				else if card.card_type == "climax" or card.card_type == "event" then false
+			}
+		alignment: top center stretch if-overflow
+		font:
+			name: Vagabond
+			size: 05
+			max stretch: 0.3
+			shadow color: rgba(255,255,255,100)
+			shadow displacement x: 1
+			shadow displacement y: 1
+			weight: regular
+			color: rgb(5,5,5)
 	trait three:
 		top: 587
 		left: { trait_box_locations[get_trait_box_style()][2].left }
 		width: { trait_box_locations[get_trait_box_style()][2].width }
 		height: 14
-		z index: 7
+		z index: 6
 		visible:
 			{
 				if card.card_type == "character" then true
@@ -597,6 +642,27 @@ card style:
 			size: 09
 			weight: bold
 			color: rgb(0,0,0)
+	furitrait three:
+		top: 581
+		left: { trait_box_locations[get_trait_box_style()][2].left }
+		width: { trait_box_locations[get_trait_box_style()][2].width }
+		height: 9
+		z index: 7
+		visible:
+			{
+				if card.card_type == "character" then true
+				else if card.card_type == "climax" or card.card_type == "event" then false
+			}
+		alignment: top center stretch if-overflow
+		font:
+			name: Vagabond
+			size: 05
+			max stretch: 0.3
+			shadow color: rgba(255,255,255,100)
+			shadow displacement x: 1
+			shadow displacement y: 1
+			weight: regular
+			color: rgb(5,5,5)
 	power:
 		top: 574
 		#top: 573
@@ -719,7 +785,7 @@ card style:
 			italic name: Vagabond Condensed Italic
 			size: { card_font_size }
 			weight: normal
-			color: rgba(0, 0, 0, 240)
+			color: { rules_text_font_color }
 		symbol font:
 			name: weiss2-symbols
 			size: 12
@@ -750,7 +816,7 @@ card style:
 			italic name: Vagabond Condensed Italic
 			size: { card_font_size }
 			weight: normal
-			color: rgba(0, 0, 0, 240)
+			color: rgba(0, 0, 0, 190)
 		symbol font:
 			name: weiss2-symbols
 			size: 12

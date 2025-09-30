@@ -25,17 +25,17 @@ scale text: true
 symbol:
 	code: S
 	image: act.png
-	image font size: 44
+	image font size: 22
 	enabled: true
 symbol:
 	code: A
 	image: auto.png
-	image font size: 44
+	image font size: 22
 	enabled: true
 symbol:
 	code: C
 	image: cont.png
-	image font size: 44
+	image font size: 22
 	enabled: true
 symbol:
 	code: R
@@ -100,12 +100,12 @@ symbol:
 symbol:
 	code: x
 	image: cx_combo.png
-	image font size: 54
+	image font size: 27
 	enabled: true
 symbol:
 	code: l
 	image: link.png
-	image font size: 325
+	image font size: 40
 	enabled: true
 # Turn Limit Symbols
 symbol:

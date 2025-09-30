@@ -438,7 +438,7 @@ auto_fix :=
 	
 	tag_contents@(tag: "<b", contents: { "<size-auto:{bold_font_size}>{input}</size-auto>" } + replace@(match: "[0-1]+", replace: { "</size-auto><size-auto:{bold_font_size_open_sans}><font-auto:Open Sans Bold>{input}</font-auto></size-auto><size-auto:{bold_font_size}>" })) +	
 	tag_contents@(tag: "<hidden>", contents: { "<color:rgba(0,0,0,0)>" + input + "</color>" }) +
-	tag_contents@(tag: "<i", contents: { "<color:rgba(66,66,66,255)>{input}</color>" }) +
+	tag_contents@(tag: "<i", contents: { "<color:{rules_text_italic_font_color}>{input}</color>" }) +
 	
 	# Step 4: Add Wingdings						
 	replace@(match: "\\((\\d*)\\)", replace: "<atom-cost><cost:\\1></cost:\\1></atom-cost>") +
