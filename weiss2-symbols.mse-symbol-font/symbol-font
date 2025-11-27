@@ -171,6 +171,15 @@ symbol:
 	image: choicetrigger.png
 	enabled: true
 symbol:
+	code: {
+	image: discovertrigger.png
+	enabled: true
+symbol:
+	code: }
+	image: chancetrigger.png
+	image font size: 16
+	enabled: true
+symbol:
 	code: +
 	image: soultrigger.png
 	enabled: true
@@ -233,6 +242,8 @@ insert symbol menu:
 		item: &
 		item: *
 		item: (
+		item: {
+		item: }
 		item: M
 		item: B
 		item: N

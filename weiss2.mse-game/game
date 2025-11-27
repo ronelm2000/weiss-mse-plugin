@@ -212,6 +212,8 @@ card field:
 	choice: c-soul
 	choice: standby
 	choice: choice
+	choice: discover
+	choice: chance
 	choice: magnify
 	choice: bank
 	choice: anchor
@@ -234,6 +236,8 @@ card field:
 	choice: c-soul
 	choice: standby
 	choice: choice
+	choice: discover
+	choice: chance
 	choice: magnify
 	choice: bank
 	choice: anchor

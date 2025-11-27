@@ -223,12 +223,12 @@ init script:
 	}
 	first_artist_name := {
 		result := ""
-		for each c in filter_list(set, filter: { card_id(card: input) == "E001" }) do
+		for each c in filter_list(set, filter: { card_id(card: input) == "E001" or card_id(card: input) == "001" }) do
 			result := c.artist_name
 	}
 	first_logo := {
 		result := "clear\\c-clear.png"
-		for each c in filter_list(set, filter: { card_id(card: input) == "E001" }) do
+		for each c in filter_list(set, filter: { card_id(card: input) == "E001" or card_id(card: input) == "001" }) do
 			result := c.logo		
 	}
 
@@ -864,6 +864,8 @@ card style:
 			c-soul: triggers\climaxsoul.png
 			standby: triggers\standby.png
 			choice: triggers\choice.png
+			discover: triggers\discover.png
+			chance: triggers\chance.png
 			magnify: triggers\magnify.png
 			bank: triggers\bank.png
 			anchor: triggers\anchor.png
@@ -896,6 +898,8 @@ card style:
 			c-soul: triggers\climaxsoul.png
 			standby: triggers\standby.png
 			choice: triggers\choice.png
+			discover: triggers\discover.png
+			chance: triggers\chance.png
 			magnify: triggers\magnify.png
 			bank: triggers\bank.png
 			anchor: triggers\anchor.png

@@ -117,6 +117,16 @@ keyword:
 	mode: trigger
 	reminder: <sym>)</sym>: When this card triggers, you may search your deck for up to 1 character with a level equal to or less than your level +1, reveal it to your opponent, put it into your hand, and shuffle your deck.
 keyword:
+	keyword: chance
+	match: chance!
+	mode: trigger
+	reminder: <sym>\}</sym>: When this card triggers, put this card into your waiting room, reveal up to 2 cards from the top of your deck, choose 1 of them, put it into your stock, and put the rest into your hand.
+keyword:
+	keyword: discover
+	match: discover!
+	mode: trigger
+	reminder: <sym>\{</sym>: When this card triggers, reveal up to 3 cards from the top of your deck, choose up to 1 character among them, put it into your hand, and put the rest into your waiting room.
+keyword:
 	keyword: bank
 	match: bank
 	mode: trigger
