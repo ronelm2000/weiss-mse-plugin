@@ -865,6 +865,7 @@ card style:
 			standby: triggers\standby.png
 			choice: triggers\choice.png
 			discover: triggers\discover.png
+			focus: triggers\focus.png
 			chance: triggers\chance.png
 			magnify: triggers\magnify.png
 			bank: triggers\bank.png
@@ -900,6 +901,7 @@ card style:
 			choice: triggers\choice.png
 			discover: triggers\discover.png
 			chance: triggers\chance.png
+			focus: triggers\focus.png
 			magnify: triggers\magnify.png
 			bank: triggers\bank.png
 			anchor: triggers\anchor.png

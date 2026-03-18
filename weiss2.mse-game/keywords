@@ -127,6 +127,11 @@ keyword:
 	mode: trigger
 	reminder: <sym>\{</sym>: When this card triggers, reveal up to 3 cards from the top of your deck, choose up to 1 character among them, put it into your hand, and put the rest into your waiting room.
 keyword:
+	keyword: focus
+	match: focus!
+	mode: trigger
+	reminder: <sym>;</sym>: When this card triggers, choose up to 1 event or cost 0 character in your waiting room, and return it into your hand.
+keyword:
 	keyword: bank
 	match: bank
 	mode: trigger
@@ -445,6 +450,21 @@ keyword:
 	match: CHOICE`
 	mode: symbol_shortcut
 	reminder: (
+keyword:
+	keyword: Discover Trigger
+	match: DISCOVER`
+	mode: symbol_shortcut
+	reminder: \{
+keyword:
+	keyword: Chance Trigger
+	match: CHANCE`
+	mode: symbol_shortcut
+	reminder: \}
+keyword:
+	keyword: Focus Trigger
+	match: FOCUS`
+	mode: symbol_shortcut
+	reminder: ;
 keyword:
 	keyword: Magnify Trigger
 	match: MAGNIFY`

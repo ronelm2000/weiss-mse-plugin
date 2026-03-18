@@ -180,6 +180,10 @@ symbol:
 	image font size: 16
 	enabled: true
 symbol:
+	code: ;
+	image: focustrigger.png
+	enabled: true
+symbol:
 	code: +
 	image: soultrigger.png
 	enabled: true
