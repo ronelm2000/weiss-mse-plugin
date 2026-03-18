@@ -111,12 +111,12 @@ symbol:
 symbol:
 	code: α
 	image: 1_turn.png
-	image font size: 16
+	image font size: 15
 	enabled: true
 symbol:
 	code: β
 	image: 2_turn.png
-	image font size: 16
+	image font size: 15
 	enabled: true
 symbol:
 	code: γ
@@ -248,6 +248,7 @@ insert symbol menu:
 		item: (
 		item: {
 		item: }
+		item: ;
 		item: M
 		item: B
 		item: N
