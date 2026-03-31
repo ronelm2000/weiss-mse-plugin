@@ -354,6 +354,14 @@ set field:
 	description: The letter-number-number of the set.
 set field:
 	type: choice
+	name: serial decimal format
+	description: The format for which the card id will use for its digit sub-value (01 vs 001)
+	initial: three digits
+	choice: two digits
+	choice: three digits
+	choice: four digits
+set field:
+	type: choice
 	name: side
 	description: The side which the set leans on (Weiss / Schwarz / Both)
 	choice: weiss
