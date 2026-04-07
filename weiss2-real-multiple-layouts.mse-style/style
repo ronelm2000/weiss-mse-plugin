@@ -223,12 +223,14 @@ init script:
 	}
 	first_artist_name := {
 		result := ""
-		for each c in filter_list(set, filter: { card_id(card: input) == "E001" or card_id(card: input) == "001" }) do
+		__first_card_id := first_card_id()
+		for each c in filter_list(set, filter: { card_id(card: input) == __first_card_id }) do
 			result := c.artist_name
 	}
 	first_logo := {
 		result := "clear\\c-clear.png"
-		for each c in filter_list(set, filter: { card_id(card: input) == "E001" or card_id(card: input) == "001" }) do
+		__first_card_id := first_card_id()
+		for each c in filter_list(set, filter: { card_id(card: input) == __first_card_id }) do
 			result := c.logo		
 	}
 

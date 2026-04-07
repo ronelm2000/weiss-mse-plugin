@@ -556,6 +556,10 @@ card_main_id_format := [
 	"four digits": ".4d"
 ]
 
+first_card_id := {
+	card_utils.to_language_prefix() + to_string(1, format: card_main_id_format[set.serial_decimal_format])
+}
+
 card_id := 
 {
 	input := (
