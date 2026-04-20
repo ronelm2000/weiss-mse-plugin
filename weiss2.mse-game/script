@@ -374,6 +374,11 @@ auto_fix :=
 	remove_tag@(tag: "<font") +
 	remove_tag@(tag: "<align") +
 	remove_tag@(tag: "<value") +
+	remove_tag@(tag: "<margin") +
+	remove_tag@(tag: "<margin-auto") +
+	remove_tag@(tag: "<margin-auto:0:0:8>") +
+	remove_tag@(tag: "<margin-auto:56:15:0>") +
+	remove_tag@(tag: "<margin-auto:0:55:0>") +
 	
 	# Step 0: Only use in emergencies
 	{
@@ -521,17 +526,31 @@ is_soul_legacy := {
 	length(split_text(soul, match: " - ")) > 1
 }
 
+get_soul := {
+	soul_pair := split_text(card.soul, match: " - ")
+	fixed_soul := soul_pair[0]
+	position(of: [fixed_soul], in: english_numbers)
+}
+
 card_colored_soul :=
 {
 	soul_pair := split_text(soul, match: " - ")
 	fixed_soul := soul_pair[0]
+	english_soul := position(of: [fixed_soul], in: english_numbers)
+
+	if (get_actual_version() == "v2") then (
+		base_path := "{foil_version_path()}character/{color}.png"
+	) else (
+		base_path := "character/{get_side()}/{color}.png"
+	)
 	if soul == "zero" then
-		input := "character/{get_side()}/{color}.png"
+		base_path
 	else (
-		input := masked_blend(light: "character/{get_side()}/{color}.png", 
+		masked_blend(
+			light: base_path, 
 			dark: "souls/" + position(of: [fixed_soul], in: english_numbers) + "s.png", 
 			mask: "souls/" + position(of: [fixed_soul], in: english_numbers) + "s_mask.png"
-			)
+		)
 	)
 }
 
@@ -581,15 +600,37 @@ card_id :=
 			+ foil_shortcut()
 }
 
+card_id_ns := # should be the same as card_id but card_shortcut is ommitted as it uses `styling`
+{
+	input := (
+				if (card.rarity == "PR") then "P"
+				else if (card.rarity == "TD") then "T"
+				else if (rarity_or_copy() == "PR") then "P"
+				else if (rarity_or_copy() == "TD") then "T"
+				else ""
+			)
+			+ (card_utils.to_language_prefix())
+			+ (
+				if (card.rarity == "PR") then to_string(pr_card_number(), format: ".2d")
+				else if (card.rarity == "TD") then to_string(td_card_number(), format: ".2d")
+				else if (not is_foil_or_alt_art(x: card)) then to_string(card_number(), format: card_main_id_format[set.serial_decimal_format])
+				else if (rarity_or_copy() == "PR") then to_string(alt_pr_card_number(), format: ".2d")
+				else if (rarity_or_copy() == "TD") then to_string(alt_td_card_number(), format: ".2d")
+				else to_string(card_number(), format: card_main_id_format[set.serial_decimal_format])
+			)
+}
+
 card_serial := 
 {
-	input := overridable_set_id() 
+	input := "<b>"
+			+ overridable_set_id() 
 			+ "/" 
 			+ set.subset_id 
 			+ "-" 
 			+ card_id()
 			+ " "
 			+ rarity_or_override_rarity(next_func: rarity_or_copy)
+			+ "</b>"
 }
 
 card_serial_no_rarity := 
@@ -623,9 +664,19 @@ foil_shortcut :=
 rarity_or_override_rarity :=
 {
 	if length(styling.rarity_override) > 0 then
-		styling.rarity_override
+		rarity_autofix(styling.rarity_override)
 	else
 		next_func()
+}
+
+rarity_autofix :=
+{
+	if (input == "SR2") then
+		"SR<sym>⁑</sym>"
+	else if (input == "SR3") then
+		"SR<sym>⁂</sym>"
+	else
+		input
 }
 
 alt_pr_card_number :=
@@ -767,11 +818,15 @@ alt_art_number_old :=
 
 is_foil_or_alt_art :=
 {
+	is_foil(x) or x.rarity == "(Alternate Art)"
+}
+
+is_foil :=
+{
 	x.rarity == "SP" 
 	or x.rarity == "SSP" 
 	or x.rarity == "RRR" 
-	or x.rarity == "SR" 
-	or x.rarity == "(Alternate Art)"
+	or x.rarity == "SR"
 }
 
 is_pr_or_td :=
@@ -984,8 +1039,10 @@ climax_and_character_colored_card :=
 {
 	if contains(card.color, match: " - ") then input := card.card_type + "/" + get_side() + "/yellow.png"
 	else if type == "character" then input := card_colored_soul(soul: soul, color: color)
+	else if (type == "climax" and get_actual_version() == "v2") then input := "{foil_version_path()}climax/{color}.png"
 	else if type == "climax" then input := "climax/" + get_side() + "/"  + color + ".png"
-	else if type == "event" then input := "event/" + get_side() + "/" + color + ".png"
+	else if (type == "event" and get_actual_version() == "v2") then input := "{foil_version_path()}event/{color}.png"
+	else if (type == "event") then input := "event/" + get_side() + "/" + color + ".png"
 	else input := ""
 }
 
