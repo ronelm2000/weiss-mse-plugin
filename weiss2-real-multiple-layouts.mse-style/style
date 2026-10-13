@@ -253,7 +253,7 @@ init script:
 	first_artist_name := {
 		result := ""
 		__first_card_id := first_card_id()
-		for each c in filter_list(set, filter: { card_id(card: input) == __first_card_id }) do
+		for each c in filter_list(set, filter: { card_id_ns(card: input) == __first_card_id }) do
 			result := c.artist_name
 	}
 	first_logo := {
@@ -722,7 +722,16 @@ card style:
 				result
 			}
 		height: 24
-		width: 204
+		width:
+			{
+				204
+				+ ( # adjusted because climax in foil v2 is larger for some reason
+					if (card.card_type == "climax" and get_actual_version() == "v2") then
+						17
+					else
+						0
+				)
+			}
 		z index: 5
 		angle:
 			{
@@ -902,6 +911,9 @@ card style:
 			size: 6.1
 			weight: normal
 			color: rgb(0,0,0)
+		symbol font:
+			name: weiss2-symbols
+			size: 13
 	rarity:
 		top: 
 			{

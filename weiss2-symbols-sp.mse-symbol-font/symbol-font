@@ -211,6 +211,16 @@ symbol:
 	code: |
 	image: spacer.png
 	enabled: true
+symbol:
+	code: ⁑
+	image: 2_asterisk.png
+	enabled: true
+	image font size: 52
+symbol:
+	code: ⁂
+	image: asterism.png
+	enabled: true
+	image font size: 52
 insert symbol menu:
 	item:
 		type: submenu
@@ -268,3 +278,5 @@ insert symbol menu:
 		type: submenu
 		name: Special
 		item: |
+		item: ⁑
+		item: ⁂
