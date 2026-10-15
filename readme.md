@@ -21,7 +21,7 @@ This fork supports the newest mechanics, including "Link", "Choice", "Replay", "
    1. Go to the downloaded file.
    2. Drag it.
    3. Open your MSE installation folder.
-   4. Drop it into `MSE.exe`.
+   4. Drop it into `magicseteditor.exe`.
    5. This will open MSE.
    6. Click on "OK" to install all missing packages.
 3. Download provided `fonts.zip` and install all fonts in it.
