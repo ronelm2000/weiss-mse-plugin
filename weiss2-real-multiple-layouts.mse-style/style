@@ -990,7 +990,7 @@ card style:
 			italic name: Vagabond Condensed Italic
 			size: { card_font_size }
 			weight: normal
-			color: { rgba(0,0,0,0) }
+			color: { if set.show_positioning_text then rgba(0,0,0,255) else rgba(0,0,0,0) }
 		symbol font:
 			name: weiss2-symbols-sp
 			size: 12
@@ -1021,7 +1021,7 @@ card style:
 			italic name: Vagabond Condensed Italic
 			size: { card_font_size }
 			weight: normal
-			color: { rgba(0,0,0,0) }
+			color: { if set.show_positioning_text then rgba(0,40,0,255) else rgba(0,0,0,0) }
 		symbol font:
 			name: weiss2-symbols-sp
 			size: 12
@@ -1242,15 +1242,12 @@ extra card field:
 			+ replace@(
 				match: "(</sep>)",
 				replace: {
-					if (get_rules_box_style() == "top_style") then
-						"</sep><margin:66:66:0><margin:0:66:0>"
-					else
-						"</sep><margin:55:55:0><margin:0:55:0>"
+					"</sep><margin-auto-outer:40:40:0><margin-auto-inner:0:40:0>"
 				}
 			) 
 			+ replace@(
 				match: "(<suffix>)"
-				replace: "</margin></margin><suffix>"
+				replace: "</margin-auto-inner></margin-auto-outer><suffix>"
 			)
 		)(result)
 # # Traits # #

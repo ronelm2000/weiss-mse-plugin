@@ -402,6 +402,12 @@ set field:
 	description: Only use in case of emergencies or if told to do so, as it forces irreperable changes to the set to fix certain issues when updating sets
 set field:
 	type: boolean
+	name: show positioning text
+	description: Shows normally hidden text that influence how the text box is positioned.
+	initial: no
+	save value: false
+set field:
+	type: boolean
 	name: nuke magic text
 	description: Removes all <sym> tags on card text when used. After enabling this option, you'll still need to load all card text to reflect all changes.
 	initial: no
