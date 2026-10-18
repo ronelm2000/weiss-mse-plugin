@@ -558,8 +558,13 @@ card style:
 				) else (
 					({ input }
 					+ {
-						if (card.card_type == "character") then 
-							card_image_utils.add_mask(input, mask: card_image_compute.soul_image_mask())
+						if (card.card_type == "character") then (
+							__soul_mask := card_image_compute.soul_image_mask()
+							if __soul_mask != "" then
+								card_image_utils.add_mask(input, mask: __soul_mask)
+							else
+								input
+						)
 						else
 							input
 					}
