@@ -184,6 +184,11 @@ symbol:
 	image: focustrigger.png
 	enabled: true
 symbol:
+	code: '
+	image: recovertrigger.png
+	enabled: true
+	image font size: 14
+symbol:
 	code: +
 	image: soultrigger.png
 	enabled: true

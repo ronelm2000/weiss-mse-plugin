@@ -215,6 +215,7 @@ card field:
 	choice: discover
 	choice: chance
 	choice: focus
+	choice: recover
 	choice: magnify
 	choice: bank
 	choice: anchor
@@ -240,6 +241,7 @@ card field:
 	choice: discover
 	choice: chance
 	choice: focus
+	choice: recover
 	choice: magnify
 	choice: bank
 	choice: anchor

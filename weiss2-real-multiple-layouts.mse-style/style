@@ -1077,6 +1077,7 @@ card style:
 			discover: triggers\discover.png
 			focus: triggers\focus.png
 			chance: triggers\chance.png
+			recover: triggers\recover.png
 			magnify: triggers\magnify.png
 			bank: triggers\bank.png
 			anchor: triggers\anchor.png
@@ -1112,6 +1113,7 @@ card style:
 			discover: triggers\discover.png
 			chance: triggers\chance.png
 			focus: triggers\focus.png
+			recover: triggers\recover.png
 			magnify: triggers\magnify.png
 			bank: triggers\bank.png
 			anchor: triggers\anchor.png
@@ -1424,6 +1426,10 @@ extra card style:
 			{
 				(
 						{ input }
+						+ {
+							if (card.card_type == "climax") then input - 1
+							else input
+						}
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
@@ -1449,7 +1455,7 @@ extra card style:
 					#)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].left())
 			}
-		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then 3 else 0) }
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
@@ -1923,6 +1929,10 @@ extra card style:
 			{
 				(
 						{ input }
+						+ {
+							if (card.card_type == "climax") then input - 1
+							else input
+						}
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
@@ -1954,7 +1964,7 @@ extra card style:
 					#)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].left())
 			}
-		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then 3 else 0) }
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
@@ -1994,6 +2004,10 @@ extra card style:
 			{
 				(
 						{ input }
+						+ {
+							if (card.card_type == "climax") then input - 1
+							else input
+						}
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
@@ -2011,6 +2025,7 @@ extra card style:
 					+ card_align_utils.shift_top.left@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 					)
 					+ card_align_utils.shift_top.bottom@(
 						top: sp_specs.width * -1
@@ -2024,7 +2039,7 @@ extra card style:
 					#)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].left())
 			}
-		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then 3 else 0) }
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
@@ -2064,6 +2079,10 @@ extra card style:
 			{
 				(
 						{ input }
+						+ {
+							if (card.card_type == "climax") then input - 1
+							else input
+						}
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
@@ -2081,6 +2100,7 @@ extra card style:
 					+ card_align_utils.shift_top.left@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 					)
 					+ card_align_utils.shift_top.bottom@(
 						top: sp_specs.width * -1
@@ -2094,7 +2114,7 @@ extra card style:
 					#)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].left())
 			}
-		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then 3 else 0) }
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
@@ -2134,6 +2154,10 @@ extra card style:
 			{
 				(
 						{ input }
+						+ {
+							if (card.card_type == "climax") then input + 1
+							else input
+						}
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
@@ -2151,6 +2175,7 @@ extra card style:
 					+ card_align_utils.shift_top.left@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 					)
 					+ card_align_utils.shift_top.bottom@(
 						top: sp_specs.width * 1
@@ -2164,7 +2189,7 @@ extra card style:
 					#)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].left())
 			}
-		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then 3 else 0) }
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
