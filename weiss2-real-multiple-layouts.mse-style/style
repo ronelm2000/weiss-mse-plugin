@@ -1230,7 +1230,7 @@ extra card field:
 	save value: false
 	description: it works if you see this
 	script:
-		result := combined_editor(field1: card.rules_text, separator: "\n<margin:0:0:3><size-auto:0>\n</size-auto:0></margin:0:0:3>", field2: card.replay_text, suffix: "<atom-nothing></atom-nothing>", hide_when_empty: true)
+		result := combined_editor(field1: card.rules_text, separator: "\n<margin:0:0:4><size-auto:0>\n</size-auto:0></margin:0:0:4>", field2: card.replay_text, suffix: "<atom-nothing></atom-nothing>", hide_when_empty: true)
 		(
 			{ input }
 			#+ remove_tag@("<margin-auto")
@@ -1427,6 +1427,7 @@ extra card style:
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 						)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].bottom())
 			}
@@ -1437,6 +1438,7 @@ extra card style:
 					+ card_align_utils.shift_top.left@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 					)
 					#+ card_align_utils.shift_top.left@(
 					#	top: -7
@@ -1452,6 +1454,7 @@ extra card style:
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
 				+ replay_box_height_v2(top_only: true)
+				- 2
 				+ (	if (card.replay_text == "") then 13 else 0 )
 				#+ 15
 				#+ (
@@ -1923,6 +1926,7 @@ extra card style:
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 						)
 						+ card_align_utils.shift_top.bottom@(
 							top: sp_specs.width
@@ -1936,6 +1940,7 @@ extra card style:
 					+ card_align_utils.shift_top.left@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 					)
 					+ card_align_utils.shift_top.bottom@(
 						top: sp_specs.width
@@ -1954,6 +1959,7 @@ extra card style:
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
 				+ replay_box_height_v2(top_only: true)
+				- 2
 				+ (	if (card.replay_text == "") then 13 else 0 )
 				#+ 15
 				#+ (
@@ -1991,6 +1997,7 @@ extra card style:
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 						)
 						+ card_align_utils.shift_top.bottom@(
 							top: sp_specs.width * -1
@@ -2021,6 +2028,7 @@ extra card style:
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
+				- 2
 				+ replay_box_height_v2(top_only: true)
 				+ (	if (card.replay_text == "") then 13 else 0 )
 				#+ 15
@@ -2059,6 +2067,7 @@ extra card style:
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 						)
 						+ card_align_utils.shift_top.bottom@(
 							top: sp_specs.width * 1
@@ -2089,6 +2098,7 @@ extra card style:
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
+				- 2
 				+ replay_box_height_v2(top_only: true)
 				+ (	if (card.replay_text == "") then 13 else 0 )
 				#+ 15
@@ -2127,6 +2137,7 @@ extra card style:
 						+ card_align_utils.shift_top.bottom@(
 							top: (if card.replay_text == "" then 0 else replay_box_height_v2(top_only: true))
 								+ (	if (card.replay_text == "") then 14 else 0 )
+								- 2
 						)
 						+ card_align_utils.shift_top.bottom@(
 							top: sp_specs.width * -1
@@ -2157,6 +2168,7 @@ extra card style:
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
+				- 2
 				+ replay_box_height_v2(top_only: true)
 				+ (	if (card.replay_text == "") then 13 else 0 )
 				#+ 15
