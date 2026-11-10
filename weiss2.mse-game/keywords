@@ -328,6 +328,11 @@ keyword:
 	match: 5/TURN
 	mode: symbol_shortcut
 	reminder: ε|
+keyword:
+	keyword: One Times Per Game
+	match: 1/GAME
+	mode: symbol_shortcut
+	reminder: ㄏ|
 
 keyword:
 	keyword: 1 Stock

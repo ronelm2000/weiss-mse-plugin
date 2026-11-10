@@ -133,6 +133,11 @@ symbol:
 	image: 5_turn.png
 	image font size: 16
 	enabled: true
+symbol:
+	code: ㄏ
+	image: 1_game.png
+	image font size: 22
+	enabled: true
 # climax triggers
 symbol:
 	code: !
@@ -249,6 +254,7 @@ insert symbol menu:
 		item: γ
 		item: δ
 		item: ε
+		item: ㄏ
 	item:
 		type: submenu
 		name: Trigger Icons
@@ -264,6 +270,7 @@ insert symbol menu:
 		item: {
 		item: }
 		item: ;
+		item: '
 		item: M
 		item: B
 		item: N
