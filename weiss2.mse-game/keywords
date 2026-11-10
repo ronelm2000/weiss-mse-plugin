@@ -135,7 +135,7 @@ keyword:
 	keyword: recover
 	match: recover!
 	mode: trigger
-	reminder: <sym>'</sym>: When this card triggers, put the bottom card of your clock into your waiting room, or choose up to 1 cost 0 or lower character, and return it into your hand.
+	reminder: <sym>'</sym>: When this card triggers, put the bottom card of your clock into your waiting room, or choose up to 1 cost 0 or lower character from your waiting room, and return it into your hand.
 keyword:
 	keyword: bank
 	match: bank
