@@ -1427,7 +1427,7 @@ extra card style:
 				(
 						{ input }
 						+ {
-							if (card.card_type == "climax") then input - 1
+							if (card.card_type == "climax") then input + 2
 							else input
 						}
 						+ card_align_utils.shift_top.bottom@(
@@ -1455,7 +1455,7 @@ extra card style:
 					#)
 				)(rules_text_computations[get_rules_box_style()][card.card_type].left())
 			}
-		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then 3 else 0) }
+		width: { rules_text_computations[get_rules_box_style()][card.card_type].width() + (if (card.card_type == "climax") then -1 else 0) }
 		height: 
 			{
 				rules_text_computations[get_rules_box_style()].height(lines_height: layout_height(card_style.rules_text))
